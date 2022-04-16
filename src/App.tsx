@@ -3,10 +3,10 @@ import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar/Navbar'
 import { Layout } from 'antd'
-import HeaderContainer from './components/Header/HeaderContainer'
+import Header from './components/Header/Header'
 import ProfileContainer from './components/Profile/ProfileContainer'
 import NotFound from './components/404/NotFound'
-import LoginForm from './components/Login/LoginForm'
+import LoginContainer from './components/Login/LoginContainer'
 
 const { Content } = Layout
 
@@ -15,14 +15,14 @@ const App: FC = () => {
         <Layout style={{
             minHeight: '100vh'
         }}>
-            <HeaderContainer/>
+            <Header/>
             <Layout>
                 <Navbar/>
                 <Layout style={{ padding: '0 24px 24px' }}>
                     <Content>
                         <Routes>
                             <Route path="/" element={<ProfileContainer/>}/>
-                            <Route path="/login" element={<LoginForm/>}/>
+                            <Route path="/login" element={<LoginContainer/>}/>
                             <Route
                                 path="*"
                                 element={<NotFound/>}

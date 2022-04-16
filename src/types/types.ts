@@ -43,7 +43,7 @@ export type DialogType = {
 }
 
 export type ProfileType = {
-    userId: number | null
+    id: number | null
     lookingForAJob: boolean
     lookingForAJobDescription: string
     fullName: string
@@ -54,6 +54,14 @@ export type ProfileType = {
     password: string
     rememberMe: boolean
     captcha: string
+}
+
+export type AuthProfileType = {
+    email:  string | null,
+    login: string | null,
+    isAuth: boolean,
+    photos: PhotosType | null,
+    id: number | null,
 }
 
 export type LoginType = {

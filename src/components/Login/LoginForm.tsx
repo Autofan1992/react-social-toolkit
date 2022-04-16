@@ -1,54 +1,27 @@
-import React from 'react'
-import { useAppDispatch, useAppSelector } from '../../redux/hooks'
-import { Field, Form, Formik, FormikHelpers } from 'formik'
-import { login } from '../../redux/reducers/auth-reducer'
+import React, { FC } from 'react'
+import { Field, Form, FormikProps } from 'formik'
 import { LoginType } from '../../types/types'
-import { getAuthState } from '../../redux/selectors/selectors'
 
-const LoginForm = () => {
-    const dispatch = useAppDispatch()
-    const { captchaUrl } = useAppSelector(getAuthState)
-
+const LoginForm: FC<PropsType & FormikProps<LoginType>> = ({ captchaUrl, errors, error, touched, isSubmitting }) => {
     return (
-        <Formik
-            initialValues={{
-                email: '',
-                password: '',
-                rememberMe: false,
-                captcha: ''
-            }}
-            onSubmit={(
-                values: LoginType,
-                { setSubmitting }: FormikHelpers<LoginType>
-            ) => {
-                dispatch(login(values))
-                setSubmitting(false)
-            }}
-        >
-            <Form>
-                <Field
-                    name="email"
-                    placeholder="john@acme.com"
-                    type="email"
-                />
-                <Field
-                    name="password"
-                    placeholader="enter your password"
-                    type="password"
-                />
-                <Field
-                    name="rememberMe"
-                    type="checkbox"
-                />
-                <Field
-                    name="captcha"
-                    placeholder="enter symbols from image"
-                    type="text"
-                />
-                <button type="submit">Submit</button>
-            </Form>
-        </Formik>
+        <Form>
+            <h1>{error}</h1>
+            <Field type="email" name="email"/>
+            {touched.email && errors.email && <div>{errors.email}</div>}
+
+            <Field type="password" name="password"/>
+            {touched.password && errors.password && <div>{errors.password}</div>}
+
+            <button type="submit" disabled={isSubmitting}>
+                Submit
+            </button>
+        </Form>
     )
 }
 
 export default LoginForm
+
+type PropsType = {
+    captchaUrl: string | null
+    error: string | null
+}

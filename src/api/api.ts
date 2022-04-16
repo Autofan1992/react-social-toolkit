@@ -6,6 +6,10 @@ export type APIResponseType<D = {}, RC = ResultCodesEnum> = {
     messages: Array<string>
 }
 
+export type APIResponseErrorType = {
+    message: string
+}
+
 export const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
     withCredentials: true,

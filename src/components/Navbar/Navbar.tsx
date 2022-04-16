@@ -15,7 +15,7 @@ const Navbar: FC = () => {
                     marginTop: 0
                 }}>
                     <NavLink className={({ isActive }) => isActive ? 'active' : undefined}
-                             to="/profile">Profile</NavLink>
+                             to="/">Profile</NavLink>
                 </Menu.Item>
                 <Menu.Item key="2">
                     <NavLink className={({ isActive }) => isActive ? 'active' : undefined}

@@ -1,104 +1,121 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { LoginType, PhotosType, ProfileType } from '../../types/types'
+import { AuthProfileType, LoginType } from '../../types/types'
 import { CaptchaResultCode, ResultCodesEnum } from '../../api/api'
 import { authAPI } from '../../api/auth-api'
 
-const authSlice = createSlice({
-    name: 'authReducer',
-    initialState: {
-        userId: null as number | null,
-        email: null as string | null,
-        login: null as string | null,
-        userPhoto: null as PhotosType | null,
-        isAuth: false as boolean,
-        authError: null as string | null,
-        captchaUrl: null as string | null,
-        isFetching: false
-    },
-    reducers: {
-        setAuthUserData: (state, { payload }: PayloadAction<{
-            isAuth: boolean,
-            userId: number | null,
-            email: string | null,
-            login: string | null,
-            userPhoto: PhotosType | null
-        }>) => {
-            return {
-                ...state,
-                ...payload
-            }
-        },
-        setIsFetching: (state, { payload }: PayloadAction<boolean>) => {
-            state.isFetching = payload
-        },
-        setCaptcha: (state, { payload }: PayloadAction<string>) => {
-            state.captchaUrl = payload
-        }
-    }
-})
+const initialState = {
+    profile: {
+        email: null,
+        login: null,
+        isAuth: false,
+        photos: null,
+        id: null,
+    } as AuthProfileType,
+    error: null as string | null,
+    captchaUrl: null as string | null,
+    isFetching: false
+}
 
-export const getAuthUserData = createAsyncThunk(
+export const fetchAuthUserData = createAsyncThunk(
     'auth/getAuthUserData',
-    async (_, { dispatch }) => {
-        const userData = await authAPI.getAuthInfo()
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await authAPI.getAuthInfo()
 
-        if (userData.resultCode === ResultCodesEnum.Success) {
-            const { id, email, login } = userData.data
-            const authData = await authAPI.getAuthProfile(id)
+            if (response.resultCode === ResultCodesEnum.Success) {
+                const { id, email, login } = response.data
+                const { photos } = await authAPI.getAuthProfile(id)
 
-            dispatch(setAuthUserData({
-                isAuth: true,
-                userId: id,
-                email,
-                login,
-                userPhoto: authData.photos
-            }))
+                return { id, email, login, photos, isAuth: true }
+            }
+
+            return rejectWithValue(response.messages[0])
+        } catch (error) {
+            return rejectWithValue(error)
         }
     })
 
 export const login = createAsyncThunk(
     'auth/login',
-    async ({ email, password, rememberMe, captcha }: LoginType, { dispatch }) => {
-        debugger
+    async (values: LoginType, { dispatch, rejectWithValue }) => {
         try {
-            dispatch(setIsFetching(true))
-            const loginData = await authAPI.loginRequest(email, password, rememberMe, captcha)
+            const response = await authAPI.loginRequest(values)
 
-            if (loginData.resultCode === ResultCodesEnum.Success) {
-                // logged in, sending profile request
-                await dispatch(getAuthUserData())
-            } else if (loginData.resultCode > ResultCodesEnum.Success && loginData.resultCode < CaptchaResultCode.CaptchaIsRequired) {
-                // error in form fields
-                //dispatch(stopSubmit('loginForm', { _error: 'Проверьте логин и/или пароль' }))
+            if (response.resultCode === ResultCodesEnum.Success) {
+                await dispatch(fetchAuthUserData())
             }
-            if (loginData.resultCode === CaptchaResultCode.CaptchaIsRequired) {
-                // many wrong requests, sending captcha request
-                //dispatch(stopSubmit('loginForm', { _error: 'Проверьте логин и/или пароль, а также введите символы изображенные на картинке в поле ниже' }))
-                const captchaData = await authAPI.getCaptchaURL()
-                dispatch(setCaptcha(captchaData.url))
+            if (response.resultCode === CaptchaResultCode.CaptchaIsRequired) {
+                const { url } = await authAPI.getCaptchaURL()
+
+                await dispatch(setCaptcha(url))
+                return rejectWithValue(response.messages[0])
+            }
+            if (response.resultCode > ResultCodesEnum.Success && response.resultCode < CaptchaResultCode.CaptchaIsRequired) {
+                return rejectWithValue(response.messages[0])
             }
         } catch (e) {
-            console.log(e)
-            window.alert('Something went wrong')
-        } finally {
-            dispatch(setIsFetching(false))
+            return rejectWithValue(e)
         }
     })
 
 export const logout = createAsyncThunk(
     'auth/logout',
-    async (_, { dispatch }) => {
-        const data = await authAPI.logoutRequest()
-        if (data.resultCode === ResultCodesEnum.Success) {
-            dispatch(setAuthUserData({
-                isAuth: false,
-                userId: null,
-                email: null,
-                login: null,
-                userPhoto: null
-            }))
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await authAPI.logoutRequest()
+            if (response.resultCode === ResultCodesEnum.Success) {
+                return {
+                    isAuth: false,
+                    id: null,
+                    email: null,
+                    login: null,
+                    userPhoto: null
+                }
+            }
+        } catch (e) {
+            rejectWithValue(e)
         }
     })
 
-export const { setAuthUserData, setIsFetching, setCaptcha } = authSlice.actions
+const setError = (state: InitialStateType, { payload }: PayloadAction<string>) => {
+    state.isFetching = false
+    state.error = payload
+}
+const setIsFetching = (state: InitialStateType) => {
+    state.isFetching = true
+}
+
+const authSlice = createSlice({
+    name: 'authReducer',
+    initialState,
+    reducers: {
+        setAuthUserData: (state, { payload }: PayloadAction<AuthProfileType>) => {
+            state.profile = payload
+        },
+        setCaptcha: (state, { payload }: PayloadAction<string>) => {
+            state.captchaUrl = payload
+        }
+    }, extraReducers: {
+        [fetchAuthUserData.pending.type]: setIsFetching,
+        [fetchAuthUserData.fulfilled.type]: (state, { payload }: PayloadAction<AuthProfileType>) => {
+            state.profile = payload
+            state.isFetching = false
+        },
+        [fetchAuthUserData.rejected.type]: setError,
+        [login.pending.type]: setIsFetching,
+        [login.fulfilled.type]: (state, { payload }: PayloadAction<string>) => {
+            state.isFetching = false
+        },
+        [login.rejected.type]: setError,
+        [logout.pending.type]: setIsFetching,
+        [logout.fulfilled.type]: (state, { payload }: PayloadAction<AuthProfileType>) => {
+            state.profile = payload
+            state.isFetching = false
+        },
+        [logout.rejected.type]: setError
+    }
+})
+
+export const { setCaptcha } = authSlice.actions
 export default authSlice.reducer
+type InitialStateType = typeof initialState

@@ -1,4 +1,4 @@
-import { ProfileType } from '../types/types'
+import { LoginType, ProfileType } from '../types/types'
 import { APIResponseType, CaptchaResultCode, instance, ResultCodesEnum } from './api'
 
 type AuthInfoDataType = {
@@ -19,13 +19,8 @@ export const authAPI = {
         .then(res => res.data),
     getAuthProfile: (id: number) => instance
         .get<ProfileType>(`profile/${id}`).then(res => res.data),
-    loginRequest: (email: string, password: string, rememberMe: boolean, captcha: string) => instance
-        .post<APIResponseType<AuthDataType, ResultCodesEnum | CaptchaResultCode>>(`auth/login`, {
-            email,
-            password,
-            rememberMe,
-            captcha
-        })
+    loginRequest: (values: LoginType) => instance
+        .post<APIResponseType<AuthDataType, ResultCodesEnum | CaptchaResultCode>>(`auth/login`, values)
         .then(res => res.data),
     getCaptchaURL: () => instance
         .get<CaptchaResponseType>(`security/get-captcha-url`)

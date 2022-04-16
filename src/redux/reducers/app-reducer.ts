@@ -1,12 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunkType } from '../store'
+import { fetchAuthUserData } from './auth-reducer'
+
+const initialState = {
+    initialized: false as boolean,
+    requestSuccess: undefined as boolean | undefined
+}
 
 const appSlice = createSlice({
     name: 'appReducer',
-    initialState: {
-        initialized: false as boolean,
-        requestSuccess: undefined as boolean | undefined
-    },
+    initialState,
     reducers: {
         setInitializingSuccess: (state) => {
             state.initialized = true
@@ -25,10 +28,10 @@ export const setRequestSuccessToggle = (requestSuccess: boolean): AppThunkType =
 }
 
 export const initializeApp = (): AppThunkType => async dispatch => {
-    //await appSlice.actions.getAuthUserData()
+    await dispatch(fetchAuthUserData())
     dispatch(setInitializingSuccess())
 }
 
 export const { setInitializingSuccess, setRequestSuccess } = appSlice.actions
-
 export default appSlice.reducer
+type InitialStateType = typeof initialState
