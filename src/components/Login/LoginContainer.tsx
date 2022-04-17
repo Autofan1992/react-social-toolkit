@@ -9,20 +9,20 @@ import { FormikErrors, withFormik } from 'formik'
 
 const LoginContainer: FC = () => {
     const dispatch = useAppDispatch()
-    const { captchaUrl, error } = useAppSelector(getAuthState)
+    const { captchaUrl, error: serverError } = useAppSelector(getAuthState)
     useAuthRedirect()
 
-    const FormikLoginForm = withFormik<OwnProps, LoginType>({
-        mapPropsToValues: props => {
+    const FormikLoginForm = withFormik<OwnPropsType, LoginType>({
+        mapPropsToValues: (props)  => {
             return {
                 email: '',
                 password: '',
                 rememberMe: false,
                 captcha: ''
-            }
+            };
         },
-        validate: (values: LoginType, { error }) => {
-            let errors: FormikErrors<LoginType> = {}
+        validate: (values: LoginType) => {
+            const errors: FormikErrors<LoginType> = {}
             if (!values.email) {
                 errors.email = 'Required'
             } else if (!values.email) {
@@ -30,20 +30,20 @@ const LoginContainer: FC = () => {
             }
             return errors
         },
-        handleSubmit: (values, { props, setSubmitting }) => {
+        handleSubmit: (values, { setSubmitting }) => {
             dispatch(login(values))
             setSubmitting(false)
         },
     })(LoginForm)
 
     return (
-        <FormikLoginForm captchaUrl={captchaUrl} error={error}/>
+        <FormikLoginForm captchaUrl={captchaUrl} serverError={serverError}/>
     )
 }
 
 export default LoginContainer
 
-type OwnProps = {
+type OwnPropsType = {
     captchaUrl: string | null
-    error: string | null
+    serverError: string | null
 }

@@ -1,5 +1,4 @@
-import React from 'react'
-import { Button, Col, Layout, Row, Typography } from 'antd'
+import { Button, Col, Layout, Row, Skeleton, Space, Typography } from 'antd'
 import logo from '../../images/logo.svg'
 import { NavLink } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
@@ -14,34 +13,43 @@ const { Paragraph } = Typography
 const Header = () => {
     const dispatch = useAppDispatch()
     const { id, login, photos, isAuth } = useAppSelector(getAuthState).profile
+    const { isFetching } = useAppSelector(getAuthState)
 
     useAuthRedirect()
 
-    return (
-        <HeaderANTD className="header">
-            <Row justify="space-between">
-                <Col className="logo">
-                    <img src={logo} alt="logo"/>
-                </Col>
-                <Col>
-                    {isAuth
-                        ? <div>
-                            <NavLink to={`/profile/${id}`}>
-                                <div>
-                                    <img src={photos?.small ?? avatar} alt="avatar"/>
-                                </div>
-                            </NavLink>
-                            <div className="text-center">
-                                <Paragraph>{login}</Paragraph>
-                                <Button onClick={() => dispatch(logout())}>Logout</Button>
-                            </div>
+    return <HeaderANTD className="header" style={{
+        lineHeight: 1
+    }}>
+        <Row justify="space-between" align="middle" style={{
+            minHeight: '64px'
+        }}>
+            <Col md={2} className="logo">
+                <img src={logo} alt="logo"/>
+            </Col>
+            <Col md={2}>
+                <Skeleton avatar active paragraph={false} loading={isFetching} />
+                {!isFetching && (isAuth
+                    ? <Space>
+                        <NavLink to={`/profile/${id}`}>
+                            <img src={photos?.small ?? avatar} alt="avatar" width="50px"/>
+                        </NavLink>
+                        <div style={{
+                            textAlign: 'center'
+                        }}>
+                            <Paragraph style={{
+                                color: '#fff',
+                                marginBottom: '.5em'
+                            }}>{login}</Paragraph>
+                            <Button size="small" onClick={() => dispatch(logout())}>Logout</Button>
                         </div>
-                        : <NavLink to="/login">Login</NavLink>
-                    }
-                </Col>
-            </Row>
-        </HeaderANTD>
-    )
+                    </Space>
+                    : <div style={{
+                        textAlign: 'center'
+                    }}><NavLink to="/login">Login</NavLink></div>)
+                }
+            </Col>
+        </Row>
+    </HeaderANTD>
 }
 
 export default Header

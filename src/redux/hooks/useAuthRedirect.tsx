@@ -1,19 +1,16 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useAppSelector } from './hooks'
-import { getAuthState } from '../selectors/selectors'
+import { getAppState, getAuthState } from '../selectors/selectors'
 import { useNavigate } from 'react-router-dom'
 
 const useAuthRedirect = () => {
     const { isAuth } = useAppSelector(getAuthState).profile
+    const { initialized } = useAppSelector(getAppState)
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (isAuth) {
-            navigate('/')
-        } else {
-            navigate('/login')
-        }
-    }, [isAuth])
+        initialized && !isAuth ? navigate('/login') : navigate('/')
+    }, [initialized, isAuth])
 }
 
 export default useAuthRedirect

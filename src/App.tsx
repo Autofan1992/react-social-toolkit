@@ -7,19 +7,24 @@ import Header from './components/Header/Header'
 import ProfileContainer from './components/Profile/ProfileContainer'
 import NotFound from './components/404/NotFound'
 import LoginContainer from './components/Login/LoginContainer'
+import { useAppSelector } from './redux/hooks/hooks'
+import { getAppState } from './redux/selectors/selectors'
+import Preloader from './components/common/Preloader/Preloader'
 
 const { Content } = Layout
 
 const App: FC = () => {
-    return (
-        <Layout style={{
-            minHeight: '100vh'
-        }}>
-            <Header/>
-            <Layout>
-                <Navbar/>
-                <Layout style={{ padding: '0 24px 24px' }}>
-                    <Content>
+    const { initialized } = useAppSelector(getAppState)
+
+    return <Layout style={{
+        minHeight: '100vh'
+    }}>
+        <Header/>
+        <Layout>
+            <Navbar/>
+            <Layout style={{ padding: '0 24px 24px' }}>
+                {initialized
+                    ? <Content>
                         <Routes>
                             <Route path="/" element={<ProfileContainer/>}/>
                             <Route path="/login" element={<LoginContainer/>}/>
@@ -29,10 +34,11 @@ const App: FC = () => {
                             />
                         </Routes>
                     </Content>
-                </Layout>
+                    : <Preloader/>
+                }
             </Layout>
         </Layout>
-    )
+    </Layout>
 }
 
 /*

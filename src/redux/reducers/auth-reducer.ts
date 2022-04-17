@@ -44,13 +44,13 @@ export const login = createAsyncThunk(
             if (response.resultCode === ResultCodesEnum.Success) {
                 await dispatch(fetchAuthUserData())
             }
-            if (response.resultCode === CaptchaResultCode.CaptchaIsRequired) {
+            else if (response.resultCode === CaptchaResultCode.CaptchaIsRequired) {
                 const { url } = await authAPI.getCaptchaURL()
 
                 await dispatch(setCaptcha(url))
                 return rejectWithValue(response.messages[0])
             }
-            if (response.resultCode > ResultCodesEnum.Success && response.resultCode < CaptchaResultCode.CaptchaIsRequired) {
+            else if (response.resultCode > ResultCodesEnum.Success && response.resultCode < CaptchaResultCode.CaptchaIsRequired) {
                 return rejectWithValue(response.messages[0])
             }
         } catch (e) {
@@ -89,9 +89,6 @@ const authSlice = createSlice({
     name: 'authReducer',
     initialState,
     reducers: {
-        setAuthUserData: (state, { payload }: PayloadAction<AuthProfileType>) => {
-            state.profile = payload
-        },
         setCaptcha: (state, { payload }: PayloadAction<string>) => {
             state.captchaUrl = payload
         }
@@ -103,14 +100,16 @@ const authSlice = createSlice({
         },
         [fetchAuthUserData.rejected.type]: setError,
         [login.pending.type]: setIsFetching,
-        [login.fulfilled.type]: (state, { payload }: PayloadAction<string>) => {
+        [login.fulfilled.type]: (state) => {
             state.isFetching = false
+            state.error = null
         },
         [login.rejected.type]: setError,
         [logout.pending.type]: setIsFetching,
         [logout.fulfilled.type]: (state, { payload }: PayloadAction<AuthProfileType>) => {
             state.profile = payload
             state.isFetching = false
+            state.error = null
         },
         [logout.rejected.type]: setError
     }
