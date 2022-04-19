@@ -1,4 +1,4 @@
-import preloader from '../../../images/preloader.svg'
+import { Spin } from 'antd'
 
 const Preloader = () => {
     return <div style={{
@@ -7,7 +7,7 @@ const Preloader = () => {
         left: '50%',
         transform: 'translate(-50%, -50%)'
     }}>
-        <img src={preloader} alt=""/>
+        <Spin size='large'/>
     </div>
 }
 

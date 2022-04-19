@@ -1,25 +1,30 @@
-import React, { FC } from 'react'
+import React, { FC, memo, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
 import { getAuthState } from '../../redux/selectors/selectors'
-import useAuthRedirect from '../../redux/hooks/useAuthRedirect'
 import LoginForm from './LoginForm'
 import { login } from '../../redux/reducers/auth-reducer'
-import { LoginType } from '../../types/types'
+import { APIRespondErrorType, LoginType } from '../../types/types'
 import { FormikErrors, withFormik } from 'formik'
+import { useNavigate } from 'react-router-dom'
 
-const LoginContainer: FC = () => {
+const LoginContainer: FC = memo(() => {
     const dispatch = useAppDispatch()
-    const { captchaUrl, error: serverError } = useAppSelector(getAuthState)
-    useAuthRedirect()
+    const navigate = useNavigate()
+    const { captchaUrl, error: serverError, profile, isFetching } = useAppSelector(getAuthState)
+    const { isAuth } = profile
 
-    const FormikLoginForm = withFormik<OwnPropsType, LoginType>({
-        mapPropsToValues: (props)  => {
+    useEffect(() => {
+        if (isAuth) navigate('/')
+    }, [isAuth, navigate])
+
+    const FormikLoginForm = withFormik<APIRespondErrorType & OwnPropsType, LoginType>({
+        mapPropsToValues: () => {
             return {
                 email: '',
                 password: '',
                 rememberMe: false,
                 captcha: ''
-            };
+            }
         },
         validate: (values: LoginType) => {
             const errors: FormikErrors<LoginType> = {}
@@ -30,20 +35,19 @@ const LoginContainer: FC = () => {
             }
             return errors
         },
-        handleSubmit: (values, { setSubmitting }) => {
+        handleSubmit: (values) => {
             dispatch(login(values))
-            setSubmitting(false)
         },
     })(LoginForm)
 
     return (
-        <FormikLoginForm captchaUrl={captchaUrl} serverError={serverError}/>
+        <FormikLoginForm captchaUrl={captchaUrl} serverError={serverError} isFetching={isFetching}/>
     )
-}
+})
 
 export default LoginContainer
 
 type OwnPropsType = {
     captchaUrl: string | null
-    serverError: string | null
+    isFetching: boolean
 }

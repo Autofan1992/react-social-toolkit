@@ -1,10 +1,12 @@
 import { AnyAction, combineReducers, configureStore, ThunkAction } from '@reduxjs/toolkit'
 import appReducer from './reducers/app-reducer'
 import authReducer from './reducers/auth-reducer'
+import dialogsReducer from './reducers/dialogs-reducer'
 
 const rootReducer = combineReducers({
     app: appReducer,
-    auth: authReducer
+    auth: authReducer,
+    dialogs: dialogsReducer
 })
 
 const store = configureStore({

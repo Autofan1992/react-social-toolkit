@@ -1,12 +1,14 @@
-import { FC, useEffect } from 'react'
+import { FC, memo, useEffect } from 'react'
 import './App.css'
 import App from './App'
-import { useAppDispatch } from './redux/hooks/hooks'
+import { useAppDispatch, useAppSelector } from './redux/hooks/hooks'
 import { initializeApp } from './redux/reducers/app-reducer'
+import { getAppState } from './redux/selectors/selectors'
 
-const AppContainer: FC = () => {
+const AppContainer: FC = memo(() => {
     const handleAllUnhandledErrors = (reason: any) => alert(reason.reason)
     const dispatch = useAppDispatch()
+    const { initialized } = useAppSelector(getAppState)
 
     useEffect(() => {
         dispatch(initializeApp())
@@ -15,9 +17,9 @@ const AppContainer: FC = () => {
         return function cleanup() {
             window.removeEventListener('unhandledrejection', handleAllUnhandledErrors)
         }
-    }, [])
+    }, [dispatch])
 
-    return <App/>
-}
+    return <App initialized={initialized}/>
+})
 
 export default AppContainer

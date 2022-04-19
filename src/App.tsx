@@ -1,25 +1,22 @@
-import React, { FC } from 'react'
+import { FC } from 'react'
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar/Navbar'
 import { Layout } from 'antd'
-import Header from './components/Header/Header'
 import ProfileContainer from './components/Profile/ProfileContainer'
-import NotFound from './components/404/NotFound'
+import NotFound from './components/common/404/NotFound'
 import LoginContainer from './components/Login/LoginContainer'
-import { useAppSelector } from './redux/hooks/hooks'
-import { getAppState } from './redux/selectors/selectors'
 import Preloader from './components/common/Preloader/Preloader'
+import HeaderContainer from './components/Header/HeaderContainer'
+import DialogsContainer from './components/Dialogs/DialogsContainer'
 
 const { Content } = Layout
 
-const App: FC = () => {
-    const { initialized } = useAppSelector(getAppState)
-
+const App: FC<PropsType> = ({ initialized }) => {
     return <Layout style={{
         minHeight: '100vh'
     }}>
-        <Header/>
+        <HeaderContainer/>
         <Layout>
             <Navbar/>
             <Layout style={{ padding: '0 24px 24px' }}>
@@ -28,6 +25,7 @@ const App: FC = () => {
                         <Routes>
                             <Route path="/" element={<ProfileContainer/>}/>
                             <Route path="/login" element={<LoginContainer/>}/>
+                            <Route path="/dialogs" element={<DialogsContainer/>}/>
                             <Route
                                 path="*"
                                 element={<NotFound/>}
@@ -54,3 +52,7 @@ const App: FC = () => {
                                 <Route path="*" element={<NotFound/>}/>*/
 
 export default App
+
+type PropsType = {
+    initialized: boolean
+}

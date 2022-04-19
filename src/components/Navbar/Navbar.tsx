@@ -1,54 +1,57 @@
 import React, { FC } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Layout, Menu } from 'antd'
 
-const { Sider } = Layout
+const { Sider: SideBar } = Layout
 
 const Navbar: FC = () => {
-    return <Sider className="site-layout-background">
+    const { pathname } = useLocation()
+
+    return <SideBar className="site-layout-background">
         <Menu
             theme="dark"
             defaultSelectedKeys={['1']}
+            selectedKeys={[pathname]}
         >
-            <Menu.Item key="1" style={{
+            <Menu.Item key="/" style={{
                 marginTop: 0
             }}>
-                <NavLink className={({ isActive }) => isActive ? 'active' : undefined}
-                         to="/">Profile</NavLink>
+                <Link
+                    to="/">Profile</Link>
             </Menu.Item>
-            <Menu.Item key="2">
-                <NavLink className={({ isActive }) => isActive ? 'active' : undefined}
-                         to="/dialogs">Messages</NavLink>
+            <Menu.Item key="/dialogs">
+                <Link
+                    to="/dialogs">Messages</Link>
             </Menu.Item>
-            <Menu.Item key="3">
-                <NavLink className={({ isActive }) => isActive ? 'active' : undefined} to="/news">News</NavLink>
+            <Menu.Item key="/news">
+                <Link to="/news">News</Link>
             </Menu.Item>
-            <Menu.Item key="4">
-                <NavLink className={({ isActive }) => isActive ? 'active' : undefined}
-                         to="/music">Music</NavLink>
+            <Menu.Item key="/music">
+                <Link
+                    to="/music">Music</Link>
             </Menu.Item>
-            <Menu.Item key="5">
-                <NavLink className={({ isActive }) => isActive ? 'active' : undefined}
-                         to="/settings">Settings</NavLink>
+            <Menu.Item key="/settings">
+                <Link
+                    to="/settings">Settings</Link>
             </Menu.Item>
-            <Menu.Item key="6">
-                <NavLink className={({ isActive }) => isActive ? 'active' : undefined}
-                         to="/users">Users</NavLink>
+            <Menu.Item key="/users">
+                <Link
+                    to="/users">Users</Link>
             </Menu.Item>
-            <Menu.Item key="7">
-                <NavLink className={({ isActive }) => isActive ? 'active' : undefined} to="/todolist">Todo
-                    List</NavLink>
+            <Menu.Item key="/todolist">
+                <Link to="/todolist">Todo
+                    List</Link>
             </Menu.Item>
-            <Menu.Item key="8">
-                <NavLink className={({ isActive }) => isActive ? 'active' : undefined}
-                         to="/weather">Weather</NavLink>
+            <Menu.Item key="/weather">
+                <Link
+                    to="/weather">Weather</Link>
             </Menu.Item>
-            <Menu.Item key="9">
-                <NavLink className={({ isActive }) => isActive ? 'active' : undefined}
-                         to="/budgets">Budgets</NavLink>
+            <Menu.Item key="/budgets">
+                <Link
+                    to="/budgets">Budgets</Link>
             </Menu.Item>
         </Menu>
-    </Sider>
+    </SideBar>
 }
 
 export default Navbar

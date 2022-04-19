@@ -1,21 +1,15 @@
 import { Button, Col, Layout, Row, Skeleton, Space, Typography } from 'antd'
 import logo from '../../images/logo.svg'
 import { NavLink } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import { getAuthState } from '../../redux/selectors/selectors'
-import { logout } from '../../redux/reducers/auth-reducer'
 import avatar from '../../images/user.svg'
-import useAuthRedirect from '../../redux/hooks/useAuthRedirect'
+import { PhotosType } from '../../types/types'
+import { FC } from 'react'
 
 const { Header: HeaderANTD } = Layout
 const { Paragraph } = Typography
 
-const Header = () => {
-    const dispatch = useAppDispatch()
-    const { id, login, photos, isAuth } = useAppSelector(getAuthState).profile
-    const { isFetching } = useAppSelector(getAuthState)
-
-    useAuthRedirect()
+const Header: FC<PropsType> = (
+    { handleLogout, isFetching, photos, isAuth, id, login }) => {
 
     return <HeaderANTD className="header" style={{
         lineHeight: 1
@@ -27,7 +21,7 @@ const Header = () => {
                 <img src={logo} alt="logo"/>
             </Col>
             <Col md={2}>
-                <Skeleton avatar active paragraph={false} loading={isFetching} />
+                <Skeleton avatar active paragraph={false} loading={isFetching}/>
                 {!isFetching && (isAuth
                     ? <Space>
                         <NavLink to={`/profile/${id}`}>
@@ -40,7 +34,7 @@ const Header = () => {
                                 color: '#fff',
                                 marginBottom: '.5em'
                             }}>{login}</Paragraph>
-                            <Button size="small" onClick={() => dispatch(logout())}>Logout</Button>
+                            <Button size="small" onClick={handleLogout}>Logout</Button>
                         </div>
                     </Space>
                     : <div style={{
@@ -53,3 +47,12 @@ const Header = () => {
 }
 
 export default Header
+
+type PropsType = {
+    isFetching: boolean
+    id: number | null
+    login: string | null
+    isAuth: boolean
+    photos: PhotosType | null
+    handleLogout: () => void
+}

@@ -38,7 +38,7 @@ export type MessageType = {
 }
 
 export type DialogType = {
-    id: number
+    id: string
     name: string
 }
 
@@ -120,4 +120,8 @@ export type WeatherDataType = {
 export type SearchRequestType = {
     text: string
     friend: boolean
+}
+
+export type APIRespondErrorType = {
+    serverError: string | null
 }

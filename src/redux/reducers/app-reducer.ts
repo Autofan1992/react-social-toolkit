@@ -34,4 +34,3 @@ export const initializeApp = (): AppThunkType => async dispatch => {
 
 export const { setInitializingSuccess, setRequestSuccess } = appSlice.actions
 export default appSlice.reducer
-type InitialStateType = typeof initialState
