@@ -20,6 +20,7 @@ export default Paginator
 type PropsType = {
     pageSize: number
     currentPage: number
+    term?: string | undefined
     disabled: boolean
     totalItemsCount: number
     onPageChange: (pageNum: number, pageSize: number) => void

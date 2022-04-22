@@ -6,6 +6,7 @@ import { login } from '../../redux/reducers/auth-reducer'
 import { APIRespondErrorType, LoginType } from '../../types/types'
 import { FormikErrors, withFormik } from 'formik'
 import { useNavigate } from 'react-router-dom'
+import { isValidEmail } from '../../helpers/validators'
 
 const LoginContainer: FC = memo(() => {
     const dispatch = useAppDispatch()
@@ -28,10 +29,13 @@ const LoginContainer: FC = memo(() => {
         },
         validate: (values: LoginType) => {
             const errors: FormikErrors<LoginType> = {}
-            if (!values.email) {
+            if (values.email.length < 2) {
                 errors.email = 'Required'
-            } else if (!values.email) {
+            } else if (!isValidEmail(values.email)) {
                 errors.email = 'Invalid email address'
+            }
+            if (values.password.length < 2) {
+                errors.password = 'Required'
             }
             return errors
         },

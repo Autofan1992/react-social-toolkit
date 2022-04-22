@@ -1,7 +1,8 @@
 import { FormikProps } from 'formik'
 import { FC } from 'react'
 import { MessageType } from '../../../types/types'
-import { Form, Input, SubmitButton } from 'formik-antd'
+import { Form, SubmitButton } from 'formik-antd'
+import { createTextAreaField } from '../../../helpers/CustomField'
 
 const MessageForm: FC<FormikProps<MessageType>> = ({ errors, touched, isSubmitting }) => {
     return <Form
@@ -9,7 +10,10 @@ const MessageForm: FC<FormikProps<MessageType>> = ({ errors, touched, isSubmitti
             marginTop: '30px'
         }}
     >
-        <Input.TextArea name="message" status={(touched.message && errors.message) ? 'error' : ''}/>
+
+        {createTextAreaField<InputNames>('Type your message', 'message', {
+            status: (touched.message && errors.message) && 'error'
+        })}
 
         <div style={{
             textAlign: 'center',
@@ -23,3 +27,5 @@ const MessageForm: FC<FormikProps<MessageType>> = ({ errors, touched, isSubmitti
 }
 
 export default MessageForm
+
+type InputNames = keyof MessageType

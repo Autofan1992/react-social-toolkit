@@ -118,8 +118,15 @@ export type WeatherDataType = {
 }
 
 export type SearchRequestType = {
-    text: string
-    friend: boolean
+    term: string
+    friend: boolean | undefined
+}
+
+export type fetchUsersType = {
+    currentPage?: number,
+    pageSize?: number
+    term?: string
+    friend?: boolean | undefined
 }
 
 export type APIRespondErrorType = {

@@ -17,10 +17,15 @@ export const toggleUserFollow = createAsyncThunk(
     'users/toggleUserFollow',
     async ({ userId, followed }: { userId: number, followed: boolean }, { rejectWithValue }) => {
         const followMethod = followed ? userAPI.unfollowUserRequest : userAPI.followUserRequest
-        try {
-            const { resultCode } = await followMethod(userId)
 
-            if (resultCode === ResultCodesEnum.Success) return userId
+        try {
+            const data = await followMethod(userId)
+
+            if (data.resultCode === ResultCodesEnum.Success) {
+                return userId
+            } else {
+                return rejectWithValue(data.messages[0])
+            }
         } catch (error) {
             return rejectWithValue(error)
         }
@@ -28,12 +33,18 @@ export const toggleUserFollow = createAsyncThunk(
 
 export const fetchUsers = createAsyncThunk(
     'users/fetchUsers',
-    async ({ pageNum, pageSize }: { pageNum: number, pageSize: number }, { rejectWithValue }) => {
+    async (
+        {
+            currentPage = 1,
+            pageSize = 5,
+            term,
+            friend
+        }: { currentPage?: number, pageSize?: number, term: string, friend: boolean | undefined }, { rejectWithValue }) => {
         try {
-            const data = await userAPI.getUsers(pageNum, pageSize)
+            const data = await userAPI.getUsers(currentPage, pageSize, term, friend)
             const { items: users, totalCount } = data
 
-            return { users, totalCount, pageNum }
+            return { users, totalCount, currentPage }
         } catch (error) {
             return rejectWithValue(error)
         }
@@ -42,12 +53,7 @@ export const fetchUsers = createAsyncThunk(
 const usersSlice = createSlice({
     name: 'usersReducer',
     initialState,
-    reducers: {
-        setCurrentPage: (state, { payload }: PayloadAction<{ pageNum: number, pageSize: number }>) => {
-            state.currentPage = payload.pageNum
-            state.pageSize = payload.pageSize
-        }
-    },
+    reducers: {},
     extraReducers: {
         [toggleUserFollow.pending.type]: (state, { meta }: { meta: { arg: { userId: number } } }) => {
             state.followInProgress.push(meta.arg.userId)
@@ -58,17 +64,18 @@ const usersSlice = createSlice({
             state.users.map(user => user.id === payload ? user.followed = !user.followed : user)
         },
         [toggleUserFollow.rejected.type]: (state, { payload }: PayloadAction<string>) => {
+            state.followInProgress = []
             state.error = payload
         },
         [fetchUsers.pending.type]: (state) => {
             state.isFetching = true
         },
-        [fetchUsers.fulfilled.type]: (state, { payload }: PayloadAction<{ users: Array<UserType>, totalCount: number, pageNum: number }>) => {
+        [fetchUsers.fulfilled.type]: (state, { payload }: PayloadAction<{ users: Array<UserType>, totalCount: number, currentPage: number }>) => {
             state.isFetching = false
             state.error = null
             state.users = payload.users
             state.totalUsersCount = payload.totalCount
-            state.currentPage = payload.pageNum
+            state.currentPage = payload.currentPage
         },
         [fetchUsers.rejected.type]: (state, { payload }: PayloadAction<string>) => {
             state.isFetching = false
@@ -76,7 +83,5 @@ const usersSlice = createSlice({
         }
     }
 })
-
-export const { setCurrentPage } = usersSlice.actions
 
 export default usersSlice.reducer

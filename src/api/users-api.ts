@@ -10,11 +10,8 @@ type UsersResponseType<I = [], RC = ResultCodesEnum> = {
 }
 
 export const userAPI = {
-    getUsers: (currentPage: number, pageSize: number) => instance
-        .get<UsersResponseType<Array<UserType>>>(`users?page=${currentPage}&count=${pageSize}`)
-        .then(res => res.data),
-    searchUsers: (name: string, friend = false) => instance
-        .get<UsersResponseType<Array<UserType>>>(`users?term=${name}${friend ? `&friend=true` : ``}`)
+    getUsers: (pageNum: number, pageSize: number, term: string, friend: boolean | undefined) => instance
+        .get<UsersResponseType<Array<UserType>>>(`users?page=${pageNum}&count=${pageSize}${term ? `&term=${term}` : ''}${friend ? `&friend=${friend}` : ''}`)
         .then(res => res.data),
     unfollowUserRequest: (userId: number) => instance
         .delete<UsersResponseType>(`follow/${userId}`)

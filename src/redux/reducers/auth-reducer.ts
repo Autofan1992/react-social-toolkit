@@ -80,6 +80,7 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setCaptcha: (state, { payload }: PayloadAction<string>) => {
+            state.error = null
             state.captchaUrl = payload
         }
     }, extraReducers: {
@@ -90,9 +91,9 @@ const authSlice = createSlice({
             state.isFetching = false
             state.error = null
             state.profile = payload
-
         },
         [fetchAuthUserData.rejected.type]: (state, { payload }: PayloadAction<string>) => {
+            state.isFetching = false
             state.error = payload
         },
         [login.pending.type]: (state) => {
@@ -103,6 +104,7 @@ const authSlice = createSlice({
             state.error = null
         },
         [login.rejected.type]: (state, { payload }: PayloadAction<string>) => {
+            state.isFetching = false
             state.error = payload
         },
         [logout.pending.type]: (state) => {
@@ -114,6 +116,7 @@ const authSlice = createSlice({
             state.profile = payload
         },
         [logout.rejected.type]: (state, {payload}: PayloadAction<string>) => {
+            state.isFetching = false
             state.error = payload
         }
     }

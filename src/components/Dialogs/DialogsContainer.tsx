@@ -17,11 +17,9 @@ const DialogsContainer = memo(() => {
     useAuthRedirect()
 
     const FormikMessageForm = withFormik<{}, Omit<MessageType, 'id'>>({
-        mapPropsToValues: () => {
-            return {
-                message: ''
-            }
-        },
+        mapPropsToValues: () => ({
+            message: ''
+        }),
         validate: (values: Omit<MessageType, 'id'>) => {
             const errors: FormikErrors<Omit<MessageType, 'id'>> = {}
             if (!values.message) {

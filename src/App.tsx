@@ -25,6 +25,7 @@ const App: FC<PropsType> = ({ initialized }) => {
                     ? <Content>
                         <Routes>
                             <Route path="/" element={<ProfileContainer/>}/>
+                            <Route path="/user/:userId" element={<ProfileContainer/>}/>
                             <Route path="/login" element={<LoginContainer/>}/>
                             <Route path="/dialogs" element={<DialogsContainer/>}/>
                             <Route path="/users" element={<UsersContainer/>}/>
@@ -42,7 +43,7 @@ const App: FC<PropsType> = ({ initialized }) => {
 }
 
 /*
-                                <Route path="/profile/:userId?" element={<SuspenseProfile/>}/>
+
                                 <Route path="/news" element={<News/>}/>
                                 <Route path="/music" element={<Music/>}/>
                                 <Route path="/settings" element={<Settings/>}/>
