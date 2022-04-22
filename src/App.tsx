@@ -9,6 +9,7 @@ import LoginContainer from './components/Login/LoginContainer'
 import Preloader from './components/common/Preloader/Preloader'
 import HeaderContainer from './components/Header/HeaderContainer'
 import DialogsContainer from './components/Dialogs/DialogsContainer'
+import UsersContainer from './components/Users/UsersContainer'
 
 const { Content } = Layout
 
@@ -26,6 +27,7 @@ const App: FC<PropsType> = ({ initialized }) => {
                             <Route path="/" element={<ProfileContainer/>}/>
                             <Route path="/login" element={<LoginContainer/>}/>
                             <Route path="/dialogs" element={<DialogsContainer/>}/>
+                            <Route path="/users" element={<UsersContainer/>}/>
                             <Route
                                 path="*"
                                 element={<NotFound/>}
@@ -40,13 +42,12 @@ const App: FC<PropsType> = ({ initialized }) => {
 }
 
 /*
-                                <Route path="/dialogs" element={<DialogsContainer/>}/>
                                 <Route path="/profile/:userId?" element={<SuspenseProfile/>}/>
                                 <Route path="/news" element={<News/>}/>
                                 <Route path="/music" element={<Music/>}/>
                                 <Route path="/settings" element={<Settings/>}/>
                                 <Route path="/todolist" element={<ToDoListContainer/>}/>
-                                <Route path="/users" element={<UsersContainer/>}/>
+
                                 <Route path="/weather" element={<WeatherContainer/>}/>
                                 <Route path="/budgets" element={<BudgetsContainer/>}/>
                                 <Route path="*" element={<NotFound/>}/>*/

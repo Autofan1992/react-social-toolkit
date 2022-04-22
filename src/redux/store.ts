@@ -2,11 +2,13 @@ import { AnyAction, combineReducers, configureStore, ThunkAction } from '@reduxj
 import appReducer from './reducers/app-reducer'
 import authReducer from './reducers/auth-reducer'
 import dialogsReducer from './reducers/dialogs-reducer'
+import usersReducers from './reducers/users-reducers'
 
 const rootReducer = combineReducers({
     app: appReducer,
     auth: authReducer,
-    dialogs: dialogsReducer
+    dialogs: dialogsReducer,
+    users: usersReducers
 })
 
 const store = configureStore({

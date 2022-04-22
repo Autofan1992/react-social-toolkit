@@ -4,6 +4,8 @@ import { DialogType, MessageType } from '../../types/types'
 const initialState = {
     dialogs: [] as Array<DialogType>,
     messages: [] as Array<MessageType>,
+    isFetching: false,
+    error: null as string | null
 }
 
 const dialogsSlice = createSlice({

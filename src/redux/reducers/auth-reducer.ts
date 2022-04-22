@@ -43,14 +43,12 @@ export const login = createAsyncThunk(
 
             if (response.resultCode === ResultCodesEnum.Success) {
                 await dispatch(fetchAuthUserData())
-            }
-            else if (response.resultCode === CaptchaResultCode.CaptchaIsRequired) {
+            } else if (response.resultCode === CaptchaResultCode.CaptchaIsRequired) {
                 const { url } = await authAPI.getCaptchaURL()
 
                 await dispatch(setCaptcha(url))
                 return rejectWithValue(response.messages[0])
-            }
-            else if (response.resultCode > ResultCodesEnum.Success && response.resultCode < CaptchaResultCode.CaptchaIsRequired) {
+            } else if (response.resultCode > ResultCodesEnum.Success && response.resultCode < CaptchaResultCode.CaptchaIsRequired) {
                 return rejectWithValue(response.messages[0])
             }
         } catch (e) {
@@ -77,14 +75,6 @@ export const logout = createAsyncThunk(
         }
     })
 
-const setError = (state: InitialStateType, { payload }: PayloadAction<string>) => {
-    state.isFetching = false
-    state.error = payload
-}
-const setIsFetching = (state: InitialStateType) => {
-    state.isFetching = true
-}
-
 const authSlice = createSlice({
     name: 'authReducer',
     initialState,
@@ -93,28 +83,41 @@ const authSlice = createSlice({
             state.captchaUrl = payload
         }
     }, extraReducers: {
-        [fetchAuthUserData.pending.type]: setIsFetching,
-        [fetchAuthUserData.fulfilled.type]: (state, { payload }: PayloadAction<AuthProfileType>) => {
-            state.profile = payload
-            state.isFetching = false
+        [fetchAuthUserData.pending.type]: (state) => {
+            state.isFetching = true
         },
-        [fetchAuthUserData.rejected.type]: setError,
-        [login.pending.type]: setIsFetching,
+        [fetchAuthUserData.fulfilled.type]: (state, { payload }: PayloadAction<AuthProfileType>) => {
+            state.isFetching = false
+            state.error = null
+            state.profile = payload
+
+        },
+        [fetchAuthUserData.rejected.type]: (state, { payload }: PayloadAction<string>) => {
+            state.error = payload
+        },
+        [login.pending.type]: (state) => {
+            state.isFetching = true
+        },
         [login.fulfilled.type]: (state) => {
             state.isFetching = false
             state.error = null
         },
-        [login.rejected.type]: setError,
-        [logout.pending.type]: setIsFetching,
+        [login.rejected.type]: (state, { payload }: PayloadAction<string>) => {
+            state.error = payload
+        },
+        [logout.pending.type]: (state) => {
+            state.isFetching = true
+        },
         [logout.fulfilled.type]: (state, { payload }: PayloadAction<AuthProfileType>) => {
-            state.profile = payload
             state.isFetching = false
             state.error = null
+            state.profile = payload
         },
-        [logout.rejected.type]: setError
+        [logout.rejected.type]: (state, {payload}: PayloadAction<string>) => {
+            state.error = payload
+        }
     }
 })
 
 export const { setCaptcha } = authSlice.actions
 export default authSlice.reducer
-type InitialStateType = typeof initialState
