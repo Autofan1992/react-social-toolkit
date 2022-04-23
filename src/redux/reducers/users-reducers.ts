@@ -19,12 +19,12 @@ export const toggleUserFollow = createAsyncThunk(
         const followMethod = followed ? userAPI.unfollowUserRequest : userAPI.followUserRequest
 
         try {
-            const data = await followMethod(userId)
+            const { resultCode, messages } = await followMethod(userId)
 
-            if (data.resultCode === ResultCodesEnum.Success) {
+            if (resultCode === ResultCodesEnum.Success) {
                 return userId
             } else {
-                return rejectWithValue(data.messages[0])
+                return rejectWithValue(messages[0])
             }
         } catch (error) {
             return rejectWithValue(error)
@@ -41,8 +41,7 @@ export const fetchUsers = createAsyncThunk(
             friend
         }: { currentPage?: number, pageSize?: number, term: string, friend: boolean | undefined }, { rejectWithValue }) => {
         try {
-            const data = await userAPI.getUsers(currentPage, pageSize, term, friend)
-            const { items: users, totalCount } = data
+            const { items: users, totalCount } = await userAPI.getUsers(currentPage, pageSize, term, friend)
 
             return { users, totalCount, currentPage }
         } catch (error) {

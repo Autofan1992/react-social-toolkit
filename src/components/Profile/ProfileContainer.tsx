@@ -1,6 +1,11 @@
-import React from 'react'
+import { FC } from 'react'
+import { useParams } from 'react-router-dom'
 
-const ProfileContainer = () => {
+const ProfileContainer: FC = () => {
+    const { userId } = useParams()
+
+    console.log(userId)
+
     return (
         <div>
             <h1>Profile</h1>

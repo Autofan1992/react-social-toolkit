@@ -20,16 +20,16 @@ export const fetchAuthUserData = createAsyncThunk(
     'auth/getAuthUserData',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await authAPI.getAuthInfo()
+            const { resultCode, messages, data } = await authAPI.getAuthInfo()
 
-            if (response.resultCode === ResultCodesEnum.Success) {
-                const { id, email, login } = response.data
+            if (resultCode === ResultCodesEnum.Success) {
+                const { id, email, login } = data
                 const { photos } = await authAPI.getAuthProfile(id)
 
                 return { id, email, login, photos, isAuth: true }
             }
 
-            return rejectWithValue(response.messages[0])
+            return rejectWithValue(messages[0])
         } catch (error) {
             return rejectWithValue(error)
         }
@@ -39,18 +39,17 @@ export const login = createAsyncThunk(
     'auth/login',
     async (values: LoginType, { dispatch, rejectWithValue }) => {
         try {
-            const response = await authAPI.loginRequest(values)
+            const { resultCode, messages } = await authAPI.loginRequest(values)
 
-            if (response.resultCode === ResultCodesEnum.Success) {
+            if (resultCode === ResultCodesEnum.Success) {
                 await dispatch(fetchAuthUserData())
-            } else if (response.resultCode === CaptchaResultCode.CaptchaIsRequired) {
+            } else if (resultCode === CaptchaResultCode.CaptchaIsRequired) {
                 const { url } = await authAPI.getCaptchaURL()
 
                 await dispatch(setCaptcha(url))
-                return rejectWithValue(response.messages[0])
-            } else if (response.resultCode > ResultCodesEnum.Success && response.resultCode < CaptchaResultCode.CaptchaIsRequired) {
-                return rejectWithValue(response.messages[0])
+                return rejectWithValue(messages[0])
             }
+            return rejectWithValue(messages[0])
         } catch (e) {
             return rejectWithValue(e)
         }
@@ -60,8 +59,8 @@ export const logout = createAsyncThunk(
     'auth/logout',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await authAPI.logoutRequest()
-            if (response.resultCode === ResultCodesEnum.Success) {
+            const { data, messages, resultCode } = await authAPI.logoutRequest()
+            if (resultCode === ResultCodesEnum.Success) {
                 return {
                     isAuth: false,
                     id: null,
@@ -70,8 +69,9 @@ export const logout = createAsyncThunk(
                     userPhoto: null
                 }
             }
+            return rejectWithValue(messages[0])
         } catch (e) {
-            rejectWithValue(e)
+            return rejectWithValue(e)
         }
     })
 
@@ -115,7 +115,7 @@ const authSlice = createSlice({
             state.error = null
             state.profile = payload
         },
-        [logout.rejected.type]: (state, {payload}: PayloadAction<string>) => {
+        [logout.rejected.type]: (state, { payload }: PayloadAction<string>) => {
             state.isFetching = false
             state.error = payload
         }

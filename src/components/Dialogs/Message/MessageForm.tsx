@@ -1,31 +1,51 @@
-import { FormikProps } from 'formik'
+import { Formik } from 'formik'
 import { FC } from 'react'
 import { MessageType } from '../../../types/types'
 import { Form, SubmitButton } from 'formik-antd'
 import { createTextAreaField } from '../../../helpers/CustomField'
+import * as Yup from 'yup'
 
-const MessageForm: FC<FormikProps<MessageType>> = ({ errors, touched, isSubmitting }) => {
-    return <Form
-        style={{
-            marginTop: '30px'
-        }}
-    >
+const MessageSchema = Yup.object().shape({
+    message: Yup.string()
+        .min(2, 'Too Short!')
+        .max(1000, 'Too Long!')
+        .required('Required'),
+})
 
-        {createTextAreaField<InputNames>('Type your message', 'message', {
-            status: (touched.message && errors.message) && 'error'
-        })}
-
-        <div style={{
-            textAlign: 'center',
-            marginTop: '30px'
+const MessageForm: FC<PropsType> = ({ handleAddMessage }) => {
+    return <Formik
+        initialValues={{
+            message: ''
+        } as MessageType}
+        validationSchema={MessageSchema}
+        onSubmit={({ message }, { setSubmitting }) => {
+            handleAddMessage(message)
+            setSubmitting(false)
         }}>
-            <SubmitButton size="large" type="primary" htmlType="submit" disabled={isSubmitting}>
-                Add message
-            </SubmitButton>
-        </div>
-    </Form>
+        {({ errors, touched, isSubmitting }) => (
+            <Form>
+                {createTextAreaField<InputNames>('Type your message', 'message', {
+                    status: (touched.message && errors.message) && 'error',
+                    placeholder: errors.message
+                })}
+                <div style={{
+                    textAlign: 'center',
+                    marginTop: '30px'
+                }}>
+                    <SubmitButton size="large" type="primary" htmlType="submit" disabled={isSubmitting}>
+                        Add message
+                    </SubmitButton>
+                </div>
+            </Form>
+        )}
+    </Formik>
 }
 
 export default MessageForm
 
 type InputNames = keyof MessageType
+
+type PropsType = {
+    handleAddMessage: (message: string) => void
+}
+

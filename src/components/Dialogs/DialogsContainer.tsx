@@ -1,12 +1,10 @@
 import useAuthRedirect from '../hooks/useAuthRedirect'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
 import { getDialogsState } from '../../redux/selectors/selectors'
-import { addMessage } from '../../redux/reducers/dialogs-reducer'
 import React, { memo } from 'react'
-import { FormikErrors, withFormik } from 'formik'
-import { MessageType } from '../../types/types'
 import MessageForm from './Message/MessageForm'
 import { Col, Layout, List, Row, Typography } from 'antd'
+import { addMessage } from '../../redux/reducers/dialogs-reducer'
 
 const { Content } = Layout
 
@@ -16,22 +14,9 @@ const DialogsContainer = memo(() => {
 
     useAuthRedirect()
 
-    const FormikMessageForm = withFormik<{}, Omit<MessageType, 'id'>>({
-        mapPropsToValues: () => ({
-            message: ''
-        }),
-        validate: (values: Omit<MessageType, 'id'>) => {
-            const errors: FormikErrors<Omit<MessageType, 'id'>> = {}
-            if (!values.message) {
-                errors.message = 'Required'
-            }
-            return errors
-        },
-        handleSubmit: ({ message }, { setSubmitting }) => {
-            dispatch(addMessage(message))
-            setSubmitting(false)
-        },
-    })(MessageForm)
+    const handleAddMessage = (message: string) => {
+        dispatch(addMessage(message))
+    }
 
     return <Content style={{ padding: '50px 0' }}>
         <Row gutter={24}>
@@ -56,7 +41,7 @@ const DialogsContainer = memo(() => {
                                 <Typography.Text mark>Message:</Typography.Text> {item.message}
                             </List.Item>
                         )}/>
-                    <FormikMessageForm/>
+                    <MessageForm handleAddMessage={handleAddMessage}/>
                 </>
             </Col>
         </Row>
