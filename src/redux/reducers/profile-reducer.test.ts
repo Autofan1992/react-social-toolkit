@@ -40,11 +40,7 @@ test('should add text in post with id = 0', () => {
         isFetching: false as boolean,
         error: null as string | null,
     }
-    expect(profileReducer(previousState, addPost({
-        id: 0,
-        post: 'Mykola is Senior dev',
-        likesCount: 0
-    }))).toEqual(
+    expect(profileReducer(previousState, addPost('Mykola is Senior dev'))).toEqual(
         {
             posts: [
                 {

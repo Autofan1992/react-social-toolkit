@@ -38,10 +38,10 @@ const LoginForm: FC<PropsType> = (
                 captcha: ''
             } as LoginType}
             validationSchema={SignupSchema}
-            onSubmit={(values) => {
+            onSubmit={(values, {setSubmitting}) => {
                 handleLogin(values)
-            }}
-        >
+                setSubmitting(false)
+            }}>
             {({ touched, errors }) => (
                 <Form>
                     {createTextField<InputNames>('Type your email', 'email', 'email', {

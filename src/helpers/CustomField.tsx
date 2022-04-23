@@ -1,4 +1,4 @@
-import { Input, Select, SelectProps } from 'formik-antd'
+import { Input, Select, SelectProps, Checkbox } from 'formik-antd'
 
 const { Option } = Select
 
@@ -8,6 +8,11 @@ export const createTextField = <NP extends string>(
     type?: string,
     props = {},
 ) => <Input placeholder={placeholder} name={name} type={type} {...props}/>
+
+export const createCheckbox = <NP extends string>(
+    name: NP,
+    props = {},
+) => <Checkbox name={name} {...props}/>
 
 export const createTextAreaField = <NP extends string>(
     placeholder: string | undefined,

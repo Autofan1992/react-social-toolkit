@@ -33,13 +33,10 @@ export const fetchUserStatus = createAsyncThunk(
 
 export const setUserStatus = createAsyncThunk(
     'profile/setUserStatus',
-    async (status: string, { rejectWithValue }) => {
+    async (status: string, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const { resultCode, messages, data } = await profileAPI.setStatus(status)
-            if (resultCode === ResultCodesEnum.Success) {
-                return data
-            }
-            return rejectWithValue(messages[0])
+            await profileAPI.setStatus(status)
+            return fulfillWithValue(status)
         } catch (e) {
             return rejectWithValue(e)
         }
@@ -77,10 +74,10 @@ const profileSlice = createSlice({
     name: 'profileReducer',
     initialState,
     reducers: {
-        addPost: (state, { payload }: PayloadAction<PostType>) => {
+        addPost: (state, { payload }: PayloadAction<string>) => {
             state.posts.unshift({
                 id: state.posts.length,
-                post: payload.post,
+                post: payload,
                 likesCount: 0
             })
         },
@@ -119,7 +116,7 @@ const profileSlice = createSlice({
         [setUserStatus.pending.type]: (state) => {
             state.isFetching = true
         },
-        [setUserStatus.fulfilled.type]: (state, { payload }: PayloadAction<string>) => {
+        [setUserStatus.fulfilled.type]: (state, {payload}: PayloadAction<string>) => {
             state.isFetching = false
             state.error = null
             state.status = payload
@@ -143,10 +140,9 @@ const profileSlice = createSlice({
         [saveUserProfile.pending.type]: (state) => {
             state.isFetching = true
         },
-        [saveUserProfile.fulfilled.type]: (state, { payload }: PayloadAction<PhotosType>) => {
+        [saveUserProfile.fulfilled.type]: (state) => {
             state.isFetching = false
             state.error = null
-            if (state.profile) state.profile.photos = payload
         },
         [saveUserProfile.rejected.type]: (state, { payload }: PayloadAction<string>) => {
             state.isFetching = false

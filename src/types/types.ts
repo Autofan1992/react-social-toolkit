@@ -50,10 +50,6 @@ export type ProfileType = {
     contacts: ContactsType
     photos: PhotosType
     aboutMe: string
-    email: string
-    password: string
-    rememberMe: boolean
-    captcha: string
 }
 
 export type AuthProfileType = {

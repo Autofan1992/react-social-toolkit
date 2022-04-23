@@ -1,0 +1,41 @@
+.thumbImg img {
+  height: 400px;
+  width: 100%;
+}
+
+.authorInfo {
+  padding: 15px;
+  margin: 0 0 30px;
+
+  .topInfo {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: 5fr 7fr;
+    margin: 0 0 15px;
+  }
+
+  .about {
+    margin: 30px 0;
+  }
+
+  .contacts a {
+    padding-right: 20px;
+  }
+}
+
+.profileInfo {
+  .avatar {
+    display: inline-block;
+    position: relative;
+    max-width: 150px;
+
+    .icon {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 2;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  }
+}
