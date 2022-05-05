@@ -59,7 +59,7 @@ export const logout = createAsyncThunk(
     'auth/logout',
     async (_, { rejectWithValue }) => {
         try {
-            const { data, messages, resultCode } = await authAPI.logoutRequest()
+            const { messages, resultCode } = await authAPI.logoutRequest()
             if (resultCode === ResultCodesEnum.Success) {
                 return {
                     isAuth: false,

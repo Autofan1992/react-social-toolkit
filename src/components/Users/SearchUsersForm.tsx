@@ -2,20 +2,18 @@ import { FC } from 'react'
 import { Formik } from 'formik'
 import { SearchRequestType } from '../../types/types'
 import { createSelectField, createTextField } from '../../helpers/CustomField'
-import Preloader from '../common/Preloader/Preloader'
 import { Form, SubmitButton } from 'formik-antd'
 import { Col, Row } from 'antd'
 
 const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching, serverError }) => {
     return <Formik
-        initialValues={{ term: term, friend: friend }}
+        initialValues={{ term, friend }}
         onSubmit={({ friend, term }) => {
             handleSearch({ friend, term })
         }}
     >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, isSubmitting }) => (
             <Form>
-
                 <Row gutter={12}>
                     <Col md={4}>{createTextField<InputNames>('Type user name to start search', 'term', undefined, {
                         onInput: handleSubmit
@@ -43,12 +41,9 @@ const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching
                         }
                     )}</Col>
                     <Col>
-                        <SubmitButton type="primary">Search
-                        </SubmitButton>
+                        <SubmitButton type="primary" loading={isSubmitting && isFetching}>Search</SubmitButton>
                     </Col>
                 </Row>
-
-                {isFetching && <Preloader/>}
 
                 {serverError &&
                     <div style={{
@@ -56,8 +51,6 @@ const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching
                         margin: '15px 0'
                     }}>{serverError}</div>
                 }
-
-
             </Form>)}
     </Formik>
 }

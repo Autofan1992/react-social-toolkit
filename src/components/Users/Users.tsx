@@ -5,8 +5,11 @@ import { Link } from 'react-router-dom'
 import avatar from '../../images/user.svg'
 
 const Users: FC<PropsType> = ({ users, followInProgress, toggleFollowing, isFetching }) => {
-    return <div>
+    return <>
         <List
+            style={{
+                flexGrow: '1'
+            }}
             itemLayout="horizontal"
             dataSource={users}
             renderItem={user => (
@@ -30,8 +33,7 @@ const Users: FC<PropsType> = ({ users, followInProgress, toggleFollowing, isFetc
                 </List.Item>
             )}
         />
-        {!isFetching && !users.length && <div>Users not found</div>}
-    </div>
+    </>
 }
 
 export default Users

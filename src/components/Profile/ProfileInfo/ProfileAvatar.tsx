@@ -1,6 +1,5 @@
 import { ChangeEvent, FC } from 'react'
 import Preloader from '../../common/Preloader/Preloader'
-import styles from './ProfileInfo.module.scss'
 import userPhoto from '../../../images/user.svg'
 import { EditOutlined } from '@ant-design/icons'
 
@@ -11,19 +10,29 @@ const ProfileAvatar: FC<PropsType> = ({ isProfileId, avatar, savePhoto, isFetchi
     }
 
     return (
-        <div className={styles.avatar}>
+        <div>
             {isFetching && <Preloader/>}
-            <label style={{ display: 'block' }}>
+            <div style={{
+                display: 'block',
+                position: 'relative',
+                maxWidth: 150
+            }}>
                 <img src={avatar ?? userPhoto} alt="avatar"/>
                 {isProfileId &&
                     <>
                         <input type="file" onChange={handleAvatarChange} style={{ display: 'none' }}/>
-                        <div className={`${styles.icon} ant-typography-edit`}>
+                        <label className="ant-typography-edit" style={{
+                            position: 'absolute',
+                            top: 10,
+                            right: 10,
+                            zIndex: 20,
+                            fontSize: '1.5rem'
+                        }}>
                             <EditOutlined/>
-                        </div>
+                        </label>
                     </>
                 }
-            </label>
+            </div>
         </div>
     )
 }

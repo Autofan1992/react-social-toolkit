@@ -12,8 +12,8 @@ const AppContainer: FC = memo(() => {
 
     useEffect(() => {
         dispatch(initializeApp())
-
         window.addEventListener('unhandledrejection', handleAllUnhandledErrors)
+
         return function cleanup() {
             window.removeEventListener('unhandledrejection', handleAllUnhandledErrors)
         }

@@ -5,6 +5,8 @@ import ProfileStatus from './ProfileStatus'
 import { ProfileType } from '../../../types/types'
 import PostsContainer from '../MyPosts/PostsContainer'
 import Preloader from '../../common/Preloader/Preloader'
+import profileThumbnailBig from '../../../images/profile-thumbnail-big.jpg'
+import { Space } from 'antd'
 
 const ProfileInfo: FC<PropsType> = (
     {
@@ -22,20 +24,18 @@ const ProfileInfo: FC<PropsType> = (
 
     return <>
         <div>
-            {/* <div style={{
-                textAlign: 'center'
-            }}>
-                <img src={profileThumbnailBig} alt="thumbnail" style={{
-                    maxWidth: '800px',
-                }}/>
-            </div> */}
+            <div style={{
+                margin: '-30px -30px 0',
+                height: '30vh',
+                background: `url(${profileThumbnailBig}) no-repeat center / cover`
+            }}></div>
             <div>
                 {isProfileId &&
                     <div className="text-end">
                         <button onClick={toggleEditMode} className="btn btn-link">Edit profile</button>
                     </div>
                 }
-                <div>
+                <Space>
                     <ProfileAvatar
                         isProfileId={isProfileId}
                         avatar={(profile.photos.large ?? profile.photos.small) || avatar}
@@ -59,7 +59,7 @@ const ProfileInfo: FC<PropsType> = (
                                 <span>My skills:</span> {profile.lookingForAJobDescription}
                             </p>}
                     </div>
-                </div>
+                </Space>
                 <div>
                     <p><b>About me</b></p>
                     <p>{profile.aboutMe}</p>

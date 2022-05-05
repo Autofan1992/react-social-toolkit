@@ -35,11 +35,11 @@ export const fetchUsers = createAsyncThunk(
     'users/fetchUsers',
     async (
         {
-            currentPage = 1,
-            pageSize = 5,
+            currentPage,
+            pageSize,
             term,
             friend
-        }: { currentPage?: number, pageSize?: number, term: string, friend: boolean | undefined }, { rejectWithValue }) => {
+        }: { currentPage: number, pageSize: number, term: string, friend: boolean | undefined }, { rejectWithValue }) => {
         try {
             const { items: users, totalCount } = await userAPI.getUsers(currentPage, pageSize, term, friend)
 

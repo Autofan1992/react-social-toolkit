@@ -38,17 +38,9 @@ const Navbar: FC = () => {
                 <Link
                     to="/users">Users</Link>
             </Menu.Item>
-            <Menu.Item key="/todolist">
-                <Link to="/todolist">Todo
-                    List</Link>
-            </Menu.Item>
             <Menu.Item key="/weather">
                 <Link
                     to="/weather">Weather</Link>
-            </Menu.Item>
-            <Menu.Item key="/budgets">
-                <Link
-                    to="/budgets">Budgets</Link>
             </Menu.Item>
         </Menu>
     </SideBar>

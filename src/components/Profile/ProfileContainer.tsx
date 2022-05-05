@@ -31,7 +31,7 @@ const ProfileContainer: FC = memo(() => {
             dispatch(fetchUserProfile(userId))
             dispatch(fetchUserStatus(userId))
         }
-    }, [urlUserId, profileUserId, fetchUserProfile, fetchUserStatus, dispatch])
+    }, [urlUserId, profileUserId, dispatch])
 
     if (!profile) return <Preloader/>
 

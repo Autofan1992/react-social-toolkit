@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 import { EditOutlined } from '@ant-design/icons'
 import { Typography } from 'antd'
-import styles from './ProfileInfo.module.scss'
 
 const { Paragraph} = Typography
 
@@ -18,7 +17,7 @@ const ProfileStatus: FC<PropsType> = ({ status, updateUserStatus, isProfileId })
 
     return (
         <>
-            <div className={styles.profileStatus}>
+            <div>
                 <Paragraph
                     editable={isProfileId && {
                         icon: <EditOutlined/>,

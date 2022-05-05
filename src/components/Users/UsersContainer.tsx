@@ -7,6 +7,7 @@ import Paginator from '../common/Paginator/Paginator'
 import SearchUsersForm from './SearchUsersForm'
 import { useSearchParams } from 'react-router-dom'
 import { debounce } from 'lodash'
+import { Divider } from 'antd'
 
 const UsersContainer: FC = memo(() => {
     const dispatch = useAppDispatch()
@@ -28,7 +29,7 @@ const UsersContainer: FC = memo(() => {
 
     useEffect(() => {
         dispatch(fetchUsers({ currentPage, pageSize, term, friend }))
-    }, [dispatch, currentPage, pageSize, friend, term])
+    }, [dispatch])
 
     const toggleFollowUser = (userId: number, followed: boolean) => {
         dispatch(toggleUserFollow({ userId, followed }))
@@ -42,17 +43,27 @@ const UsersContainer: FC = memo(() => {
         const friendToBoolean = friend === 'true' ? true : friendParam === 'false' ? false : undefined
 
         setSearchParams({ term, friend })
-        dispatch(fetchUsers({ friend: friendToBoolean, term }))
+        dispatch(fetchUsers({ currentPage: 1, pageSize: 5, friend: friendToBoolean, term }))
     }, 1000)
 
-    return <>
-        <SearchUsersForm handleSearch={handleSearch} term={term} friend={friendParam} serverError={error}
-                         isFetching={isFetching}/>
+    return <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%'
+    }}>
+        <SearchUsersForm
+            handleSearch={handleSearch}
+            term={term} friend={friendParam}
+            serverError={error}
+            isFetching={isFetching}
+        />
+        <Divider/>
         <Users
             users={users}
             isFetching={isFetching}
             toggleFollowing={toggleFollowUser}
-            followInProgress={followInProgress}/>
+            followInProgress={followInProgress}
+        />
         <Paginator
             onPageChange={onPageChange}
             totalItemsCount={totalUsersCount}
@@ -60,7 +71,7 @@ const UsersContainer: FC = memo(() => {
             pageSize={pageSize}
             disabled={isFetching}
         />
-    </>
+    </div>
 })
 
 export default UsersContainer
