@@ -1,19 +1,18 @@
 import { FC } from 'react'
 import { Pagination } from 'antd'
+import styles from './Paginator.module.scss'
 
-const Paginator: FC<PropsType> = ({ onPageChange, currentPage, totalItemsCount, pageSize, disabled }) =>
-    <Pagination
+const Paginator: FC<PropsType> = ({ onPageChange, currentPage, totalItemsCount, pageSize, disabled }) => {
+    return <Pagination
+        className={styles.paginator}
         defaultPageSize={pageSize}
         current={currentPage}
         total={totalItemsCount}
         onChange={onPageChange}
         disabled={disabled}
         pageSizeOptions={[5, 10, 15, 20]}
-        style={{
-            textAlign: 'center',
-            margin: '50px 0 0'
-        }}
     />
+}
 
 export default Paginator
 

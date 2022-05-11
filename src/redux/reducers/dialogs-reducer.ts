@@ -9,7 +9,7 @@ const initialState = {
 }
 
 const dialogsSlice = createSlice({
-    name: 'dialogsReducer',
+    name: 'dialogs',
     initialState,
     reducers: {
         addMessage: (state, { payload }: PayloadAction<string>) => {

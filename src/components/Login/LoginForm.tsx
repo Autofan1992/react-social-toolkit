@@ -4,6 +4,7 @@ import { LoginType } from '../../types/types'
 import { Form, SubmitButton } from 'formik-antd'
 import { createTextField } from '../../helpers/CustomField'
 import * as Yup from 'yup'
+import styles from './Login.module.scss'
 
 const SignupSchema = Yup.object().shape({
     password: Yup.string()
@@ -23,13 +24,7 @@ const LoginForm: FC<PropsType> = (
         isFetching
     }) => {
 
-    return <div style={{
-        maxWidth: '400px',
-        display: 'flex',
-        alignItems: 'center',
-        margin: 'auto',
-        height: '100%'
-    }}>
+    return <div className={styles.loginFormBlock}>
         <Formik
             initialValues={{
                 email: '',
@@ -38,7 +33,7 @@ const LoginForm: FC<PropsType> = (
                 captcha: ''
             } as LoginType}
             validationSchema={SignupSchema}
-            onSubmit={(values, {setSubmitting}) => {
+            onSubmit={(values, { setSubmitting }) => {
                 handleLogin(values)
                 setSubmitting(false)
             }}>
@@ -59,10 +54,7 @@ const LoginForm: FC<PropsType> = (
 
                     {captchaUrl &&
                         <>
-                            <div style={{
-                                textAlign: 'center',
-                                marginBottom: '15px'
-                            }}>
+                            <div className="text-center">
                                 <img src={captchaUrl} alt="captcha"/>
                             </div>
                             {createTextField<InputNames>('Type symbols from image', 'captcha', undefined, {
@@ -72,19 +64,14 @@ const LoginForm: FC<PropsType> = (
                     }
 
                     {serverError &&
-                        <div style={{
-                            textAlign: 'center',
-                            margin: '15px 0'
-                        }}>{serverError}</div>
+                        <div className="text-center my-3">{serverError}</div>
                     }
 
                     <SubmitButton
                         size="large"
                         type="primary"
                         disabled={isFetching}
-                        style={{
-                            width: '100%'
-                        }}>Submit
+                        className="w-100">Submit
                     </SubmitButton>
                 </Form>
             )}

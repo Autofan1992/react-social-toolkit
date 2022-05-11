@@ -2,14 +2,16 @@ import { FC } from 'react'
 import { UserType } from '../../types/types'
 import { Avatar, Button, List, Skeleton } from 'antd'
 import { Link } from 'react-router-dom'
-import avatar from '../../images/user.svg'
+import avatar from '../../assets/images/user.svg'
+import { toggleUserFollow } from '../../redux/reducers/users-reducers'
+import { useAppDispatch } from '../../redux/hooks/hooks'
 
-const Users: FC<PropsType> = ({ users, followInProgress, toggleFollowing, isFetching }) => {
+const Users: FC<PropsType> = ({ users, followInProgress, isFetching }) => {
+    const dispatch = useAppDispatch()
+
     return <>
         <List
-            style={{
-                flexGrow: '1'
-            }}
+            className='flex-grow-1'
             itemLayout="horizontal"
             dataSource={users}
             renderItem={user => (
@@ -18,7 +20,7 @@ const Users: FC<PropsType> = ({ users, followInProgress, toggleFollowing, isFetc
                         type="primary"
                         size="large"
                         loading={followInProgress.some(id => id === user.id)}
-                        onClick={() => toggleFollowing(user.id, user.followed)}
+                        onClick={() => dispatch(toggleUserFollow({ id: user.id, followed: user.followed }))}
                     >
                         {!user.followed ? 'Follow' : 'Unfollow'}
                     </Button>]}
@@ -41,6 +43,5 @@ export default Users
 type PropsType = {
     users: Array<UserType>
     isFetching: boolean
-    toggleFollowing: (userId: number, followed: boolean) => void
     followInProgress: Array<number>
 }

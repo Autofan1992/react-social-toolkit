@@ -19,7 +19,8 @@ const HeaderContainer: FC = () => {
         login={login}
         id={id}
         photos={photos}
-        handleLogout={handleLogout}/>
+        handleLogout={handleLogout}
+    />
 }
 
 export default HeaderContainer

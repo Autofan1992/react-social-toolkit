@@ -1,9 +1,8 @@
 import { FC, memo, useEffect } from 'react'
-import './App.css'
 import App from './App'
-import { useAppDispatch, useAppSelector } from './redux/hooks/hooks'
-import { initializeApp } from './redux/reducers/app-reducer'
-import { getAppState } from './redux/selectors/selectors'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
+import { initializeApp } from '../../redux/reducers/app-reducer'
+import { getAppState } from '../../redux/selectors/selectors'
 
 const AppContainer: FC = memo(() => {
     const handleAllUnhandledErrors = (reason: any) => alert(reason.reason)

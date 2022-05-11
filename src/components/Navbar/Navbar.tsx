@@ -13,9 +13,7 @@ const Navbar: FC = () => {
             defaultSelectedKeys={['1']}
             selectedKeys={[pathname]}
         >
-            <Menu.Item key="/" style={{
-                marginTop: 0
-            }}>
+            <Menu.Item key="/" className="mt-0">
                 <Link
                     to="/">Profile</Link>
             </Menu.Item>

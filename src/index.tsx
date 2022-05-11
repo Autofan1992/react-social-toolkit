@@ -2,16 +2,17 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import store from './redux/store'
-import AppContainer from './AppContainer'
+import AppContainer from './components/App/AppContainer'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import 'antd/dist/antd.min.css'
-import './index.css'
 import ProfileContainer from './components/Profile/ProfileContainer'
 import LoginContainer from './components/Login/LoginContainer'
-import DialogsContainer from './components/Dialogs/DialogsContainer'
+import Dialogs from './components/Dialogs/Dialogs'
 import UsersContainer from './components/Users/UsersContainer'
 import NotFound from './components/common/404/NotFound'
 import reportWebVitals from './reportWebVitals'
+import 'antd/dist/antd.min.css'
+import './assets/plugins/bootstrap/bootstrap-utilities.min.css'
+import './index.css'
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -25,7 +26,7 @@ root.render(
                     <Route path="/" element={<AppContainer/>}>
                         <Route index element={<ProfileContainer/>}/>
                         <Route path="login" element={<LoginContainer/>}/>
-                        <Route path="dialogs" element={<DialogsContainer/>}/>
+                        <Route path="dialogs" element={<Dialogs/>}/>
                         <Route path="users" element={<UsersContainer/>}/>
                         <Route path="users/:userId" element={<ProfileContainer/>}/>
                         <Route path="*" element={<NotFound/>}/>

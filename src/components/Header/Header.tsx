@@ -1,9 +1,10 @@
 import { Button, Col, Layout, Row, Skeleton, Space, Typography } from 'antd'
-import logo from '../../images/logo.svg'
+import logo from '../../assets/images/logo.svg'
 import { NavLink } from 'react-router-dom'
-import avatar from '../../images/user.svg'
+import avatar from '../../assets/images/user.svg'
 import { PhotosType } from '../../types/types'
 import { FC } from 'react'
+import styles from './Header.module.scss'
 
 const { Header: HeaderANTD } = Layout
 const { Paragraph } = Typography
@@ -11,12 +12,8 @@ const { Paragraph } = Typography
 const Header: FC<PropsType> = (
     { handleLogout, isFetching, photos, isAuth, id, login }) => {
 
-    return <HeaderANTD className="header" style={{
-        lineHeight: 1
-    }}>
-        <Row justify="space-between" align="middle" style={{
-            minHeight: '64px'
-        }}>
+    return <HeaderANTD className={styles.header}>
+        <Row className={styles.headerRow} justify="space-between" align="middle">
             <Col md={2} className="logo">
                 <img src={logo} alt="logo"/>
             </Col>
@@ -27,19 +24,14 @@ const Header: FC<PropsType> = (
                         <NavLink to={`/profile/${id}`}>
                             <img src={photos?.small ?? avatar} alt="avatar" width="50px"/>
                         </NavLink>
-                        <div style={{
-                            textAlign: 'center'
-                        }}>
-                            <Paragraph style={{
-                                color: '#fff',
-                                marginBottom: '.5em'
-                            }}>{login}</Paragraph>
+                        <div className="text-center">
+                            <Paragraph className={styles.loginTxt}>{login}</Paragraph>
                             <Button size="small" onClick={handleLogout}>Logout</Button>
                         </div>
                     </Space>
-                    : <div style={{
-                        textAlign: 'center'
-                    }}><NavLink to="/login">Login</NavLink></div>)
+                    : <div className="text-center">
+                        <NavLink to="/login">Login</NavLink>
+                    </div>)
                 }
             </Col>
         </Row>

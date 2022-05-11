@@ -11,63 +11,43 @@ const initialState = {
     error: null as string | null,
 }
 
-export const fetchUserProfile = createAsyncThunk(
+export const fetchUserProfile = createAsyncThunk<ProfileType, number>(
     'profile/fetchUserProfile',
-    async (userId: number, { rejectWithValue }) => {
-        try {
-            return await profileAPI.getProfile(userId)
-        } catch (e) {
-            return rejectWithValue(e)
-        }
+    async (userId) => {
+        return await profileAPI.getProfile(userId)
     })
 
-export const fetchUserStatus = createAsyncThunk(
+export const fetchUserStatus = createAsyncThunk<string, number>(
     'profile/fetchUserStatus',
-    async (userId: number, { rejectWithValue }) => {
-        try {
-            return await profileAPI.getStatus(userId)
-        } catch (e) {
-            return rejectWithValue(e)
-        }
+    async (userId) => {
+        return await profileAPI.getStatus(userId)
     })
 
-export const setUserStatus = createAsyncThunk(
+export const setUserStatus = createAsyncThunk<string, string, { rejectValue: string }>(
     'profile/setUserStatus',
-    async (status: string, { rejectWithValue, fulfillWithValue }) => {
-        try {
-            await profileAPI.setStatus(status)
-            return fulfillWithValue(status)
-        } catch (e) {
-            return rejectWithValue(e)
-        }
+    async (status, { rejectWithValue }) => {
+        const { data, resultCode, messages } = await profileAPI.setStatus(status)
+
+        if (resultCode === ResultCodesEnum.Success) return data
+        return rejectWithValue(messages[0])
     })
 
-export const setUserAvatar = createAsyncThunk(
+export const setUserAvatar = createAsyncThunk<PhotosType, File, { rejectValue: string }>(
     'profile/setUserAvatar',
     async (avatar: File, { rejectWithValue }) => {
-        try {
-            const { resultCode, messages, data } = await profileAPI.setAvatar(avatar)
-            if (resultCode === ResultCodesEnum.Success) {
-                return data.photos
-            }
-            return rejectWithValue(messages[0])
-        } catch (e) {
-            return rejectWithValue(e)
-        }
+        const { resultCode, messages, data } = await profileAPI.setAvatar(avatar)
+
+        if (resultCode === ResultCodesEnum.Success) return data.photos
+        return rejectWithValue(messages[0])
     })
 
-export const saveUserProfile = createAsyncThunk(
+export const saveUserProfile = createAsyncThunk<void, ProfileType, { rejectValue: string }>(
     'profile/saveUserProfile',
     async (values: ProfileType, { rejectWithValue }) => {
-        try {
-            const { resultCode, data, messages } = await profileAPI.saveProfile(values)
-            if (resultCode === ResultCodesEnum.Success) {
-                return data
-            }
-            return rejectWithValue(messages[0])
-        } catch (e) {
-            return rejectWithValue(e)
-        }
+        const { resultCode, messages } = await profileAPI.saveProfile(values)
+
+        if (resultCode === ResultCodesEnum.Success) return
+        return rejectWithValue(messages[0])
     })
 
 const profileSlice = createSlice({
@@ -88,66 +68,60 @@ const profileSlice = createSlice({
             state.posts.map(post => post.id === payload ? ++post.likesCount : post)
         }
     },
-    extraReducers: {
-        [fetchUserProfile.pending.type]: (state) => {
-            state.isFetching = true
-        },
-        [fetchUserProfile.fulfilled.type]: (state, { payload }: PayloadAction<ProfileType>) => {
-            state.isFetching = false
-            state.error = null
-            state.profile = payload
-        },
-        [fetchUserProfile.rejected.type]: (state, { payload }: PayloadAction<string>) => {
-            state.isFetching = false
-            state.error = payload
-        },
-        [fetchUserStatus.pending.type]: (state) => {
-            state.isFetching = true
-        },
-        [fetchUserStatus.fulfilled.type]: (state, { payload }: PayloadAction<string>) => {
-            state.isFetching = false
-            state.error = null
-            state.status = payload
-        },
-        [fetchUserStatus.rejected.type]: (state, { payload }: PayloadAction<string>) => {
-            state.isFetching = false
-            state.error = payload
-        },
-        [setUserStatus.pending.type]: (state) => {
-            state.isFetching = true
-        },
-        [setUserStatus.fulfilled.type]: (state, {payload}: PayloadAction<string>) => {
-            state.isFetching = false
-            state.error = null
-            state.status = payload
-        },
-        [setUserStatus.rejected.type]: (state, { payload }: PayloadAction<string>) => {
-            state.isFetching = false
-            state.error = payload
-        },
-        [setUserAvatar.pending.type]: (state) => {
-            state.isFetching = true
-        },
-        [setUserAvatar.fulfilled.type]: (state, { payload }: PayloadAction<PhotosType>) => {
-            state.isFetching = false
-            state.error = null
-            if (state.profile) state.profile.photos = payload
-        },
-        [setUserAvatar.rejected.type]: (state, { payload }: PayloadAction<string>) => {
-            state.isFetching = false
-            state.error = payload
-        },
-        [saveUserProfile.pending.type]: (state) => {
-            state.isFetching = true
-        },
-        [saveUserProfile.fulfilled.type]: (state) => {
-            state.isFetching = false
-            state.error = null
-        },
-        [saveUserProfile.rejected.type]: (state, { payload }: PayloadAction<string>) => {
-            state.isFetching = false
-            state.error = payload
-        },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchUserProfile.pending, (state) => {
+                state.isFetching = true
+                state.error = null
+            })
+            .addCase(fetchUserProfile.fulfilled, (state, { payload }) => {
+                state.isFetching = false
+                state.profile = payload
+            })
+            .addCase(fetchUserStatus.pending, (state) => {
+                state.isFetching = true
+                state.error = null
+            })
+            .addCase(fetchUserStatus.fulfilled, (state, { payload }) => {
+                state.isFetching = false
+                state.status = payload
+            })
+            .addCase(setUserStatus.pending, (state) => {
+                state.isFetching = true
+                state.error = null
+            })
+            .addCase(setUserStatus.fulfilled, (state, { payload }) => {
+                state.isFetching = false
+                state.status = payload
+            })
+            .addCase(setUserStatus.rejected, (state, { payload }) => {
+                state.isFetching = false
+                if (payload) state.error = payload
+            })
+            .addCase(setUserAvatar.pending, (state) => {
+                state.isFetching = true
+                state.error = null
+            })
+            .addCase(setUserAvatar.fulfilled, (state, { payload }) => {
+                state.isFetching = false
+                if (state.profile) state.profile.photos = payload
+            })
+            .addCase(setUserAvatar.rejected, (state, { payload }) => {
+                state.isFetching = false
+                if (payload) state.error = payload
+            })
+            .addCase(saveUserProfile.pending, (state) => {
+                state.isFetching = true
+                state.error = null
+            })
+            .addCase(saveUserProfile.fulfilled, (state) => {
+                state.isFetching = false
+                state.error = null
+            })
+            .addCase(saveUserProfile.rejected, (state, { payload }) => {
+                state.isFetching = false
+                if (payload) state.error = payload
+            })
     }
 })
 

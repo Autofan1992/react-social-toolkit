@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { UserType } from '../../types/types'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { fetchUsersType, UserType } from '../../types/types'
 import { userAPI } from '../../api/users-api'
 import { ResultCodesEnum } from '../../api/api'
 
@@ -13,25 +13,17 @@ const initialState = {
     error: null as string | null
 }
 
-export const toggleUserFollow = createAsyncThunk(
+export const toggleUserFollow = createAsyncThunk<number, { id: number, followed: boolean }, { rejectValue: string }>(
     'users/toggleUserFollow',
-    async ({ userId, followed }: { userId: number, followed: boolean }, { rejectWithValue }) => {
+    async ({ id, followed }, { rejectWithValue }) => {
         const followMethod = followed ? userAPI.unfollowUserRequest : userAPI.followUserRequest
+        const { resultCode, messages } = await followMethod(id)
 
-        try {
-            const { resultCode, messages } = await followMethod(userId)
-
-            if (resultCode === ResultCodesEnum.Success) {
-                return userId
-            } else {
-                return rejectWithValue(messages[0])
-            }
-        } catch (error) {
-            return rejectWithValue(error)
-        }
+        if (resultCode === ResultCodesEnum.Success) return id
+        return rejectWithValue(messages[0])
     })
 
-export const fetchUsers = createAsyncThunk(
+export const fetchUsers = createAsyncThunk<{ users: Array<UserType>, totalCount: number, currentPage: number }, fetchUsersType>(
     'users/fetchUsers',
     async (
         {
@@ -39,47 +31,40 @@ export const fetchUsers = createAsyncThunk(
             pageSize,
             term,
             friend
-        }: { currentPage: number, pageSize: number, term: string, friend: boolean | undefined }, { rejectWithValue }) => {
-        try {
-            const { items: users, totalCount } = await userAPI.getUsers(currentPage, pageSize, term, friend)
+        }) => {
+        const { items: users, totalCount } = await userAPI.getUsers(currentPage, pageSize, term, friend)
 
-            return { users, totalCount, currentPage }
-        } catch (error) {
-            return rejectWithValue(error)
-        }
+        return { users, totalCount, currentPage }
     })
 
 const usersSlice = createSlice({
-    name: 'usersReducer',
+    name: 'users',
     initialState,
     reducers: {},
-    extraReducers: {
-        [toggleUserFollow.pending.type]: (state, { meta }: { meta: { arg: { userId: number } } }) => {
-            state.followInProgress.push(meta.arg.userId)
-        },
-        [toggleUserFollow.fulfilled.type]: (state, { payload }: PayloadAction<number>) => {
-            state.error = null
-            state.followInProgress = state.followInProgress.filter(id => id !== payload)
-            state.users.map(user => user.id === payload ? user.followed = !user.followed : user)
-        },
-        [toggleUserFollow.rejected.type]: (state, { payload }: PayloadAction<string>) => {
-            state.followInProgress = []
-            state.error = payload
-        },
-        [fetchUsers.pending.type]: (state) => {
-            state.isFetching = true
-        },
-        [fetchUsers.fulfilled.type]: (state, { payload }: PayloadAction<{ users: Array<UserType>, totalCount: number, currentPage: number }>) => {
-            state.isFetching = false
-            state.error = null
-            state.users = payload.users
-            state.totalUsersCount = payload.totalCount
-            state.currentPage = payload.currentPage
-        },
-        [fetchUsers.rejected.type]: (state, { payload }: PayloadAction<string>) => {
-            state.isFetching = false
-            state.error = payload
-        }
+    extraReducers: (builder) => {
+        builder
+            .addCase(toggleUserFollow.pending, (state, { meta }) => {
+                state.isFetching = true
+                state.followInProgress.push(meta.arg.id)
+            })
+            .addCase(toggleUserFollow.fulfilled, (state, { payload }) => {
+                state.isFetching = false
+                state.followInProgress = state.followInProgress.filter(id => id !== payload)
+                state.users.map(user => user.id === payload ? user.followed = !user.followed : user)
+            })
+            .addCase(toggleUserFollow.rejected, (state, { payload }) => {
+                state.isFetching = false
+                if (payload) state.error = payload
+            })
+            .addCase(fetchUsers.pending, (state) => {
+                state.isFetching = true
+            })
+            .addCase(fetchUsers.fulfilled, (state, { payload }) => {
+                state.isFetching = false
+                state.users = payload.users
+                state.totalUsersCount = payload.totalCount
+                state.currentPage = payload.currentPage
+            })
     }
 })
 

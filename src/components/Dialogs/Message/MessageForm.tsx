@@ -4,6 +4,7 @@ import { MessageType } from '../../../types/types'
 import { Form, SubmitButton } from 'formik-antd'
 import { createTextAreaField } from '../../../helpers/CustomField'
 import * as Yup from 'yup'
+import styles from './MessageForm.module.scss'
 
 const MessageSchema = Yup.object().shape({
     message: Yup.string()
@@ -28,10 +29,7 @@ const MessageForm: FC<PropsType> = ({ handleAddMessage }) => {
                     status: (touched.message && errors.message) && 'error',
                     placeholder: errors.message
                 })}
-                <div style={{
-                    textAlign: 'center',
-                    marginTop: '30px'
-                }}>
+                <div className={styles.forBtn}>
                     <SubmitButton size="large" type="primary" htmlType="submit" disabled={isSubmitting}>
                         Add message
                     </SubmitButton>

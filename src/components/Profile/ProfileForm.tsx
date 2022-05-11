@@ -5,6 +5,8 @@ import { ProfileType } from '../../types/types'
 import { createCheckbox, createTextAreaField, createTextField } from '../../helpers/CustomField'
 import * as Yup from 'yup'
 import { Col, Row } from 'antd'
+import { useAppDispatch } from '../../redux/hooks/hooks'
+import { saveUserProfile } from '../../redux/reducers/profile-reducer'
 
 const ProfileSchema = Yup.object().shape({
     aboutMe: Yup.string()
@@ -20,17 +22,18 @@ const ProfileSchema = Yup.object().shape({
 const ProfileForm: FC<PropsType> = (
     {
         profile,
-        saveProfile,
         isFetching,
         serverError,
     }) => {
+    const dispatch = useAppDispatch()
+
     return <Formik
         initialValues={
             profile as ProfileType
         }
         validationSchema={ProfileSchema}
         onSubmit={(values, { setSubmitting }) => {
-            saveProfile(values)
+            dispatch(saveUserProfile(values))
             setSubmitting(false)
         }}>
         {({ errors, touched }) => (
@@ -54,8 +57,8 @@ const ProfileForm: FC<PropsType> = (
                             </div>
                         </div>
                         <div>
-                            <div style={{ display: 'flex' }}>
-                                <p style={{ marginRight: '.5rem' }}>
+                            <div className="d-flex">
+                                <p className="me-2">
                                     <span>Looking for a job</span>
                                 </p>
                                 {createCheckbox<InputNames>('lookingForAJob')}
@@ -91,14 +94,8 @@ const ProfileForm: FC<PropsType> = (
                         </Row>
                     </Col>
                 </Row>
-                {serverError && <div style={{
-                    textAlign: 'center',
-                    margin: '30px 0'
-                }}>{serverError}</div>}
-                <div style={{
-                    marginTop: 30,
-                    textAlign: 'center'
-                }}>
+                {serverError && <div className="text-center my-5">{serverError}</div>}
+                <div className="text-center mt-5">
                     <SubmitButton
                         type="primary"
                         size="large"
@@ -116,7 +113,6 @@ export default ProfileForm
 type InputNames = keyof ProfileType
 
 export type PropsType = {
-    saveProfile: (values: ProfileType) => void
     profile: ProfileType
     isProfileId: boolean
     isFetching: boolean

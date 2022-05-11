@@ -16,109 +16,102 @@ const initialState = {
     isFetching: false
 }
 
-export const fetchAuthUserData = createAsyncThunk(
+export const fetchAuthUserData = createAsyncThunk<AuthProfileType, undefined, { rejectValue: string }>(
     'auth/getAuthUserData',
     async (_, { rejectWithValue }) => {
-        try {
-            const { resultCode, messages, data } = await authAPI.getAuthInfo()
+        const { resultCode, messages, data } = await authAPI.getAuthInfo()
 
-            if (resultCode === ResultCodesEnum.Success) {
-                const { id, email, login } = data
-                const { photos } = await authAPI.getAuthProfile(id)
+        if (resultCode === ResultCodesEnum.Success) {
+            const { id, email, login } = data
+            const { photos } = await authAPI.getAuthProfile(id)
 
-                return { id, email, login, photos, isAuth: true }
-            }
-
-            return rejectWithValue(messages[0])
-        } catch (error) {
-            return rejectWithValue(error)
+            return { id, email, login, photos, isAuth: true }
         }
+
+        return rejectWithValue(messages[0])
     })
 
-export const login = createAsyncThunk(
+export const login = createAsyncThunk<void, LoginType, { rejectValue: string }>(
     'auth/login',
-    async (values: LoginType, { dispatch, rejectWithValue }) => {
-        try {
-            const { resultCode, messages } = await authAPI.loginRequest(values)
+    async (values, { dispatch, rejectWithValue }) => {
+        const { resultCode, messages } = await authAPI.loginRequest(values)
 
-            if (resultCode === ResultCodesEnum.Success) {
-                await dispatch(fetchAuthUserData())
-            } else if (resultCode === CaptchaResultCode.CaptchaIsRequired) {
-                const { url } = await authAPI.getCaptchaURL()
+        if (resultCode === ResultCodesEnum.Success) {
+            await dispatch(fetchAuthUserData())
+            return
+        } else if (resultCode === CaptchaResultCode.CaptchaIsRequired) {
+            const { url } = await authAPI.getCaptchaURL()
 
-                await dispatch(setCaptcha(url))
-                return rejectWithValue(messages[0])
-            }
+            dispatch(setCaptcha(url))
             return rejectWithValue(messages[0])
-        } catch (e) {
-            return rejectWithValue(e)
         }
+
+        return rejectWithValue(messages[0])
     })
 
-export const logout = createAsyncThunk(
+export const logout = createAsyncThunk<AuthProfileType, undefined, { rejectValue: string }>(
     'auth/logout',
     async (_, { rejectWithValue }) => {
-        try {
-            const { messages, resultCode } = await authAPI.logoutRequest()
-            if (resultCode === ResultCodesEnum.Success) {
-                return {
-                    isAuth: false,
-                    id: null,
-                    email: null,
-                    login: null,
-                    userPhoto: null
-                }
+        const { messages, resultCode } = await authAPI.logoutRequest()
+
+        if (resultCode === ResultCodesEnum.Success) {
+            return {
+                isAuth: false,
+                id: null,
+                email: null,
+                login: null,
+                photos: null
             }
-            return rejectWithValue(messages[0])
-        } catch (e) {
-            return rejectWithValue(e)
         }
+        return rejectWithValue(messages[0])
     })
 
 const authSlice = createSlice({
-    name: 'authReducer',
+    name: 'auth',
     initialState,
     reducers: {
         setCaptcha: (state, { payload }: PayloadAction<string>) => {
             state.error = null
             state.captchaUrl = payload
         }
-    }, extraReducers: {
-        [fetchAuthUserData.pending.type]: (state) => {
-            state.isFetching = true
-        },
-        [fetchAuthUserData.fulfilled.type]: (state, { payload }: PayloadAction<AuthProfileType>) => {
-            state.isFetching = false
-            state.error = null
-            state.profile = payload
-        },
-        [fetchAuthUserData.rejected.type]: (state, { payload }: PayloadAction<string>) => {
-            state.isFetching = false
-            state.error = payload
-        },
-        [login.pending.type]: (state) => {
-            state.isFetching = true
-        },
-        [login.fulfilled.type]: (state) => {
-            state.isFetching = false
-            state.error = null
-        },
-        [login.rejected.type]: (state, { payload }: PayloadAction<string>) => {
-            state.isFetching = false
-            state.error = payload
-        },
-        [logout.pending.type]: (state) => {
-            state.isFetching = true
-        },
-        [logout.fulfilled.type]: (state, { payload }: PayloadAction<AuthProfileType>) => {
-            state.isFetching = false
-            state.error = null
-            state.profile = payload
-        },
-        [logout.rejected.type]: (state, { payload }: PayloadAction<string>) => {
-            state.isFetching = false
-            state.error = payload
-        }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchAuthUserData.pending, (state) => {
+                state.isFetching = true
+                state.error = null
+            })
+            .addCase(fetchAuthUserData.fulfilled, (state, { payload }) => {
+                state.isFetching = false
+                state.profile = payload
+            })
+            .addCase(fetchAuthUserData.rejected, (state, { payload }) => {
+                state.isFetching = false
+                if (payload) state.error = payload
+            })
+            .addCase(login.pending, (state) => {
+                state.isFetching = true
+                state.error = null
+            })
+            .addCase(login.fulfilled, (state) => {
+                state.isFetching = false
+            })
+            .addCase(login.rejected, (state, { payload }) => {
+                state.isFetching = false
+                if (payload) state.error = payload
+            })
+            .addCase(logout.pending, (state) => {
+                state.isFetching = true
+                state.error = null
+            })
+            .addCase(logout.fulfilled, (state, { payload }) => {
+                state.isFetching = false
+                state.profile = payload
+            })
+            .addCase(logout.rejected, (state, { payload }) => {
+                state.isFetching = false
+                if (payload) state.error = payload
+            })
     }
 })
 

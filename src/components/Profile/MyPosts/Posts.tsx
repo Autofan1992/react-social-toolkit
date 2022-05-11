@@ -1,13 +1,22 @@
 import { FC } from 'react'
-import { PostType } from '../../../types/types'
-import Post from './Post/Post'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks/hooks'
+import { getProfileState } from '../../../redux/selectors/selectors'
+import { addPost, deletePost, likePost } from '../../../redux/reducers/profile-reducer'
 import PostForm from './PostForm'
+import Post from './Post/Post'
 
-const Posts: FC<PropsType> = ({ addPost, deletePost, likePost, posts }) => {
+const Posts: FC = () => {
+    const dispatch = useAppDispatch()
+    const { posts } = useAppSelector(getProfileState)
+
+    const handleAddPost = (post: string) => dispatch(addPost(post))
+    const handleDeletePost = (id: number) => dispatch(deletePost(id))
+    const handleLikePost = (id: number) => dispatch(likePost(id))
+
     return <div>
         <h2>My posts</h2>
         <div>
-            <PostForm addPost={addPost}/>
+            <PostForm addPost={handleAddPost}/>
         </div>
         <ul>
             {posts
@@ -15,19 +24,12 @@ const Posts: FC<PropsType> = ({ addPost, deletePost, likePost, posts }) => {
                     key={p.id} id={p.id}
                     post={p.post}
                     likesCount={p.likesCount}
-                    likePost={likePost}
-                    deletePost={deletePost}
+                    likePost={handleLikePost}
+                    deletePost={handleDeletePost}
                 />)
             }
         </ul>
     </div>
-}
-
-type PropsType = {
-    addPost: (post: string) => void
-    deletePost: (id: number) => void
-    likePost: (id: number) => void
-    posts: Array<PostType>
 }
 
 export default Posts

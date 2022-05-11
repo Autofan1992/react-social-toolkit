@@ -67,30 +67,6 @@ export type LoginType = {
     captcha: string | null
 }
 
-export type TodoType = {
-    id: number
-    text: string
-    complete: boolean
-}
-
-export type BudgetType = {
-    id: string
-    name: string
-    max: number
-}
-
-export type ExpenseType = {
-    id: string
-    budgetId: string
-    amount: number
-    description: string
-}
-
-export type CurrentBudgetType = {
-    id: string
-    name: string
-}
-
 export type WeatherType = {
     description: string
     icon: string
@@ -119,12 +95,8 @@ export type SearchRequestType = {
 }
 
 export type fetchUsersType = {
-    currentPage?: number,
-    pageSize?: number
-    term?: string
-    friend?: boolean | undefined
-}
-
-export type APIRespondErrorType = {
-    serverError: string | null
+    currentPage: number,
+    pageSize: number
+    term: string
+    friend: boolean | undefined
 }

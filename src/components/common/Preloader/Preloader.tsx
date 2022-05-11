@@ -1,13 +1,9 @@
 import { Spin } from 'antd'
+import styles from './Preloader.module.scss'
 
 const Preloader = () => {
-    return <div style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)'
-    }}>
-        <Spin size='large'/>
+    return <div className={styles.preloader}>
+        <Spin size="large"/>
     </div>
 }
 

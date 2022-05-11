@@ -9,7 +9,7 @@ export const profileAPI = {
         .get<string>(`profile/status/${userId}`)
         .then(res => res.data),
     setStatus: (status: string) => instance
-        .put<APIResponseType>(`profile/status`, { status })
+        .put<APIResponseType<string>>(`profile/status`, { status })
         .then(res => res.data),
     setAvatar: (avatar: File) => {
         const formData = new FormData()

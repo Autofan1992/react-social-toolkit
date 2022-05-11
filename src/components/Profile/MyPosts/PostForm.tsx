@@ -29,10 +29,7 @@ const PostForm: FC<PropsType> = (
                     status: (touched.post && errors.post) && 'error',
                     placeholder: errors.post
                 })}
-                <div style={{
-                    textAlign: 'center',
-                    marginTop: '30px'
-                }}>
+                <div className='text-center mt-5'>
                     <SubmitButton size="large" type="primary" htmlType="submit" disabled={isSubmitting}>
                         Add message
                     </SubmitButton>

@@ -2,15 +2,8 @@ import { FC, memo, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
 import { getAuthState, getProfileState } from '../../redux/selectors/selectors'
-import {
-    fetchUserProfile,
-    fetchUserStatus,
-    saveUserProfile,
-    setUserAvatar,
-    setUserStatus
-} from '../../redux/reducers/profile-reducer'
+import { fetchUserProfile, fetchUserStatus } from '../../redux/reducers/profile-reducer'
 import useAuthRedirect from '../hooks/useAuthRedirect'
-import { ProfileType } from '../../types/types'
 import ProfileForm from './ProfileForm'
 import ProfileInfo from './ProfileInfo/ProfileInfo'
 import Preloader from '../common/Preloader/Preloader'
@@ -39,36 +32,22 @@ const ProfileContainer: FC = memo(() => {
         setEditMode(!editMode)
     }
 
-    const handleSaveProfile = (values: ProfileType) => {
-        dispatch(saveUserProfile(values))
-    }
-
-    const handleStatusUpdate = (status: string) => {
-        dispatch(setUserStatus(status))
-    }
-
-    const handleAvatarUpdate = (avatar: File) => {
-        dispatch(setUserAvatar(avatar))
-    }
-
     return (
         <>
-            {editMode ?
-                <ProfileForm
+            {editMode
+                ? <ProfileForm
                     serverError={error}
                     isProfileId={isProfileId}
                     isFetching={isFetching}
                     toggleEditMode={toggleEditMode}
                     profile={profile}
-                    saveProfile={handleSaveProfile}/> :
-                <ProfileInfo
+                />
+                : <ProfileInfo
                     serverError={error}
                     isFetching={isFetching}
                     profile={profile}
                     isProfileId={isProfileId}
                     status={status}
-                    updateUserStatus={handleStatusUpdate}
-                    updateUserAvatar={handleAvatarUpdate}
                     toggleEditMode={toggleEditMode}
                 />}
         </>

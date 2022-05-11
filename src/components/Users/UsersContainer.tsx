@@ -2,7 +2,7 @@ import { FC, memo, useEffect } from 'react'
 import Users from './Users'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
 import { getUsersState } from '../../redux/selectors/selectors'
-import { fetchUsers, toggleUserFollow } from '../../redux/reducers/users-reducers'
+import { fetchUsers } from '../../redux/reducers/users-reducers'
 import Paginator from '../common/Paginator/Paginator'
 import SearchUsersForm from './SearchUsersForm'
 import { useSearchParams } from 'react-router-dom'
@@ -31,9 +31,6 @@ const UsersContainer: FC = memo(() => {
         dispatch(fetchUsers({ currentPage, pageSize, term, friend }))
     }, [dispatch])
 
-    const toggleFollowUser = (userId: number, followed: boolean) => {
-        dispatch(toggleUserFollow({ userId, followed }))
-    }
 
     const onPageChange = (currentPage: number, pageSize: number) => {
         dispatch(fetchUsers({ currentPage, pageSize, term, friend }))
@@ -46,11 +43,7 @@ const UsersContainer: FC = memo(() => {
         dispatch(fetchUsers({ currentPage: 1, pageSize: 5, friend: friendToBoolean, term }))
     }, 1000)
 
-    return <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%'
-    }}>
+    return <div className="d-flex flex-column h-100">
         <SearchUsersForm
             handleSearch={handleSearch}
             term={term} friend={friendParam}
@@ -61,7 +54,6 @@ const UsersContainer: FC = memo(() => {
         <Users
             users={users}
             isFetching={isFetching}
-            toggleFollowing={toggleFollowUser}
             followInProgress={followInProgress}
         />
         <Paginator

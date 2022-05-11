@@ -1,10 +1,13 @@
 import { FC, useEffect, useState } from 'react'
 import { EditOutlined } from '@ant-design/icons'
 import { Typography } from 'antd'
+import { useAppDispatch } from '../../../redux/hooks/hooks'
+import { setUserStatus } from '../../../redux/reducers/profile-reducer'
 
 const { Paragraph} = Typography
 
-const ProfileStatus: FC<PropsType> = ({ status, updateUserStatus, isProfileId }) => {
+const ProfileStatus: FC<PropsType> = ({ status, isProfileId }) => {
+    const dispatch = useAppDispatch()
     const [currentStatus, setStatus] = useState(status)
 
     useEffect(() => {
@@ -12,7 +15,7 @@ const ProfileStatus: FC<PropsType> = ({ status, updateUserStatus, isProfileId })
     }, [status])
 
     const handleStatusUpdate = (text: string) => {
-        if (text !== status) updateUserStatus(text)
+        if (text !== status) dispatch(setUserStatus(text))
     }
 
     return (
@@ -34,6 +37,5 @@ export default ProfileStatus
 
 type PropsType = {
     status: string | null
-    updateUserStatus: (status: string) => void
     isProfileId: boolean
 }

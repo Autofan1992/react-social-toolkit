@@ -1,33 +1,33 @@
 import { ChangeEvent, FC } from 'react'
 import Preloader from '../../common/Preloader/Preloader'
-import userPhoto from '../../../images/user.svg'
+import userPhoto from '../../../assets/images/user.svg'
 import { EditOutlined } from '@ant-design/icons'
+import { useAppDispatch } from '../../../redux/hooks/hooks'
+import { setUserAvatar } from '../../../redux/reducers/profile-reducer'
+import styles from '../Profile.module.scss'
 
-const ProfileAvatar: FC<PropsType> = ({ isProfileId, avatar, savePhoto, isFetching }) => {
+type PropsType = {
+    isProfileId: boolean
+    avatar: string
+    isFetching: boolean
+}
+
+const ProfileAvatar: FC<PropsType> = ({ isProfileId, avatar, isFetching }) => {
+    const dispatch = useAppDispatch()
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return
-        savePhoto(e.target.files[0])
+        dispatch(setUserAvatar(e.target.files[0]))
     }
 
     return (
         <div>
             {isFetching && <Preloader/>}
-            <div style={{
-                display: 'block',
-                position: 'relative',
-                maxWidth: 150
-            }}>
+            <div className={`${styles.profileAvatar} d-block position-relative`}>
                 <img src={avatar ?? userPhoto} alt="avatar"/>
                 {isProfileId &&
                     <>
-                        <input type="file" onChange={handleAvatarChange} style={{ display: 'none' }}/>
-                        <label className="ant-typography-edit" style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 10,
-                            zIndex: 20,
-                            fontSize: '1.5rem'
-                        }}>
+                        <input type="file" onChange={handleAvatarChange} className="d-none"/>
+                        <label className={`ant-typography-edit fs-4 ${styles.avatarLabel}`} >
                             <EditOutlined/>
                         </label>
                     </>
@@ -35,13 +35,6 @@ const ProfileAvatar: FC<PropsType> = ({ isProfileId, avatar, savePhoto, isFetchi
             </div>
         </div>
     )
-}
-
-type PropsType = {
-    isProfileId: boolean
-    avatar: string
-    savePhoto: (avatar: File) => void
-    isFetching: boolean
 }
 
 export default ProfileAvatar

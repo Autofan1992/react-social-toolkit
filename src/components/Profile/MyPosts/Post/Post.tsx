@@ -1,6 +1,7 @@
-import avatar from '../../../../images/user.svg'
+import avatar from '../../../../assets/images/user.svg'
+import { FC } from 'react'
 
-const Post = ({ post, id, likePost, deletePost, likesCount }: PropsType) => {
+const Post: FC<PropsType> = ({ post, id, likePost, deletePost, likesCount }) => {
     return (
         <li>
             <div className="d-flex">
@@ -13,8 +14,10 @@ const Post = ({ post, id, likePost, deletePost, likesCount }: PropsType) => {
             <div className="d-flex">
                 {!likesCount ? 'Click thumb up' :
                     <span className="me-2">Likes: {likesCount}</span>}
-                <span className="ms-auto"
-                      onClick={() => likePost(id)}>👍</span>
+                <span
+                    className="ms-auto"
+                    onClick={() => likePost(id)}
+                >👍</span>
             </div>
             <div className="d-flex">
                 <button onClick={() => deletePost(id)}>Delete post</button>

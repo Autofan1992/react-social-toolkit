@@ -4,6 +4,7 @@ import { SearchRequestType } from '../../types/types'
 import { createSelectField, createTextField } from '../../helpers/CustomField'
 import { Form, SubmitButton } from 'formik-antd'
 import { Col, Row } from 'antd'
+import styles from './Users.module.scss'
 
 const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching, serverError }) => {
     return <Formik
@@ -34,10 +35,7 @@ const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching
                             }
                         ],
                         {
-                            style: {
-                                width: '100%',
-                                maxWidth: 300
-                            }
+                            className: styles.searchInput
                         }
                     )}</Col>
                     <Col>
@@ -46,10 +44,7 @@ const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching
                 </Row>
 
                 {serverError &&
-                    <div style={{
-                        textAlign: 'center',
-                        margin: '15px 0'
-                    }}>{serverError}</div>
+                    <div className="text-center my-5">{serverError}</div>
                 }
             </Form>)}
     </Formik>

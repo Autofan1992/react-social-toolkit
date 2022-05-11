@@ -1,12 +1,12 @@
 import { FC } from 'react'
 import ProfileAvatar from './ProfileAvatar'
-import avatar from '../../../images/user.svg'
+import avatar from '../../../assets/images/user.svg'
 import ProfileStatus from './ProfileStatus'
 import { ProfileType } from '../../../types/types'
-import PostsContainer from '../MyPosts/PostsContainer'
+import Posts from '../MyPosts/Posts'
 import Preloader from '../../common/Preloader/Preloader'
-import profileThumbnailBig from '../../../images/profile-thumbnail-big.jpg'
 import { Space } from 'antd'
+import styles from '../Profile.module.scss'
 
 const ProfileInfo: FC<PropsType> = (
     {
@@ -15,20 +15,13 @@ const ProfileInfo: FC<PropsType> = (
         isFetching,
         profile,
         status,
-        updateUserAvatar,
-        updateUserStatus,
         serverError
     }) => {
-
     if (isFetching) return <Preloader/>
 
     return <>
         <div>
-            <div style={{
-                margin: '-30px -30px 0',
-                height: '30vh',
-                background: `url(${profileThumbnailBig}) no-repeat center / cover`
-            }}></div>
+            <div className={styles.profileBg}></div>
             <div>
                 {isProfileId &&
                     <div className="text-end">
@@ -39,14 +32,12 @@ const ProfileInfo: FC<PropsType> = (
                     <ProfileAvatar
                         isProfileId={isProfileId}
                         avatar={(profile.photos.large ?? profile.photos.small) || avatar}
-                        savePhoto={updateUserAvatar}
                         isFetching={isFetching}
                     />
                     <div>
                         <ProfileStatus
                             isProfileId={isProfileId}
                             status={status}
-                            updateUserStatus={updateUserStatus}
                         />
                         <p>
                             <span>Full name:</span> {profile.fullName}
@@ -73,7 +64,7 @@ const ProfileInfo: FC<PropsType> = (
                 </div>
             </div>
         </div>
-        <PostsContainer/>
+        <Posts/>
     </>
 }
 
@@ -83,8 +74,6 @@ export type PropsType = {
     profile: ProfileType
     status: string | null
     isProfileId: boolean
-    updateUserStatus: (status: string) => void
-    updateUserAvatar: (avatar: File) => void
     isFetching: boolean
     toggleEditMode: () => void
     serverError: string | null
