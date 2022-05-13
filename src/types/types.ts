@@ -43,7 +43,7 @@ export type DialogType = {
 }
 
 export type ProfileType = {
-    id: number | null
+    userId: number | null
     lookingForAJob: boolean
     lookingForAJobDescription: string
     fullName: string
@@ -52,12 +52,10 @@ export type ProfileType = {
     aboutMe: string
 }
 
-export type AuthProfileType = {
-    email:  string | null,
-    login: string | null,
-    isAuth: boolean,
-    photos: PhotosType | null,
-    id: number | null,
+export type AuthInfoDataType = {
+    id: number | null
+    email: string | null
+    login: string | null
 }
 
 export type LoginType = {
@@ -90,11 +88,6 @@ export type WeatherDataType = {
 }
 
 export type SearchRequestType = {
-    term: string
-    friend: boolean | undefined
-}
-
-export type fetchUsersType = {
     currentPage: number,
     pageSize: number
     term: string

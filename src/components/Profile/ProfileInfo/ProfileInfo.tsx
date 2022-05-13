@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import ProfileAvatar from './ProfileAvatar'
 import avatar from '../../../assets/images/user.svg'
 import ProfileStatus from './ProfileStatus'
@@ -8,7 +8,7 @@ import Preloader from '../../common/Preloader/Preloader'
 import { Space } from 'antd'
 import styles from '../Profile.module.scss'
 
-const ProfileInfo: FC<PropsType> = (
+const ProfileInfo: FC<PropsType> = memo((
     {
         isProfileId,
         toggleEditMode,
@@ -66,7 +66,7 @@ const ProfileInfo: FC<PropsType> = (
         </div>
         <Posts/>
     </>
-}
+})
 
 export default ProfileInfo
 

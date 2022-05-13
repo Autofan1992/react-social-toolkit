@@ -9,8 +9,7 @@ import { useNavigate } from 'react-router-dom'
 const LoginContainer: FC = memo(() => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const { captchaUrl, error, profile, isFetching } = useAppSelector(getAuthState)
-    const { isAuth } = profile
+    const { captchaUrl, error, isAuth, isFetching } = useAppSelector(getAuthState)
 
     useEffect(() => {
         if (isAuth) navigate('/', { replace: true })

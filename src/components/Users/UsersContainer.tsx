@@ -8,6 +8,7 @@ import SearchUsersForm from './SearchUsersForm'
 import { useSearchParams } from 'react-router-dom'
 import { debounce } from 'lodash'
 import { Divider } from 'antd'
+import stringToBoolean, { StringBooleanType } from '../../helpers/stringToBoolean'
 
 const UsersContainer: FC = memo(() => {
     const dispatch = useAppDispatch()
@@ -15,29 +16,37 @@ const UsersContainer: FC = memo(() => {
         isFetching,
         error,
         users,
-        currentPage,
-        pageSize,
+        usersSearchParams,
         followInProgress,
         totalUsersCount
     } = useAppSelector(getUsersState)
-    const [searchParams, setSearchParams] = useSearchParams()
-    const termParam = searchParams.get('term')
-    const friendParam = searchParams.get('friend') as string
+    const { friend, term, pageSize, currentPage } = usersSearchParams
 
-    const term = (termParam !== null) ? termParam : ''
-    const friend = friendParam === 'true' ? true : friendParam === 'false' ? false : undefined
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    const termParam = searchParams.get('term') ?? term
+    const currentPageParam = searchParams.get('page') ?? currentPage
+    const pageSizeParam = searchParams.get('count') ?? pageSize
+    const friendParam = searchParams.get('friend') as StringBooleanType
+
+    const friendBooleanParam = friendParam ? stringToBoolean(friendParam) : friend
 
     useEffect(() => {
-        dispatch(fetchUsers({ currentPage, pageSize, term, friend }))
-    }, [dispatch])
-
+        dispatch(fetchUsers({
+            currentPage: +currentPageParam,
+            pageSize: +pageSizeParam,
+            term: termParam,
+            friend: friendBooleanParam
+        }))
+    }, [dispatch, fetchUsers])
 
     const onPageChange = (currentPage: number, pageSize: number) => {
         dispatch(fetchUsers({ currentPage, pageSize, term, friend }))
+        setSearchParams({ page: `${currentPage}`, count: `${pageSize}` })
     }
 
     const handleSearch = debounce(({ friend, term }: { friend: string, term: string }) => {
-        const friendToBoolean = friend === 'true' ? true : friendParam === 'false' ? false : undefined
+        const friendToBoolean = stringToBoolean(friend as StringBooleanType)
 
         setSearchParams({ term, friend })
         dispatch(fetchUsers({ currentPage: 1, pageSize: 5, friend: friendToBoolean, term }))

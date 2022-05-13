@@ -13,14 +13,14 @@ const initialState = {
 
 export const fetchUserProfile = createAsyncThunk<ProfileType, number>(
     'profile/fetchUserProfile',
-    async (userId) => {
-        return await profileAPI.getProfile(userId)
+    async (id) => {
+        return await profileAPI.getProfile(id)
     })
 
 export const fetchUserStatus = createAsyncThunk<string, number>(
     'profile/fetchUserStatus',
-    async (userId) => {
-        return await profileAPI.getStatus(userId)
+    async (id) => {
+        return await profileAPI.getStatus(id)
     })
 
 export const setUserStatus = createAsyncThunk<string, string, { rejectValue: string }>(

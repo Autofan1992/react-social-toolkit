@@ -1,13 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { fetchUsersType, UserType } from '../../types/types'
+import { SearchRequestType, UserType } from '../../types/types'
 import { userAPI } from '../../api/users-api'
 import { ResultCodesEnum } from '../../api/api'
 
 const initialState = {
     users: [] as Array<UserType>,
     totalUsersCount: 0,
-    pageSize: 5,
-    currentPage: 1,
+    usersSearchParams: {
+        pageSize: 5,
+        currentPage: 1,
+        term: '',
+        friend: false,
+    } as SearchRequestType,
     isFetching: false,
     followInProgress: [] as Array<number>,
     error: null as string | null
@@ -23,7 +27,7 @@ export const toggleUserFollow = createAsyncThunk<number, { id: number, followed:
         return rejectWithValue(messages[0])
     })
 
-export const fetchUsers = createAsyncThunk<{ users: Array<UserType>, totalCount: number, currentPage: number }, fetchUsersType>(
+export const fetchUsers = createAsyncThunk<{ users: Array<UserType>, totalCount: number, usersSearchParams: SearchRequestType }, SearchRequestType, { rejectValue: string }>(
     'users/fetchUsers',
     async (
         {
@@ -31,10 +35,11 @@ export const fetchUsers = createAsyncThunk<{ users: Array<UserType>, totalCount:
             pageSize,
             term,
             friend
-        }) => {
-        const { items: users, totalCount } = await userAPI.getUsers(currentPage, pageSize, term, friend)
+        }, { rejectWithValue }) => {
+        const { items: users, totalCount, error } = await userAPI.getUsers(currentPage, pageSize, term, friend)
 
-        return { users, totalCount, currentPage }
+        if (error) return rejectWithValue(error)
+        return { users, totalCount, usersSearchParams: { currentPage, pageSize, term, friend } }
     })
 
 const usersSlice = createSlice({
@@ -63,7 +68,11 @@ const usersSlice = createSlice({
                 state.isFetching = false
                 state.users = payload.users
                 state.totalUsersCount = payload.totalCount
-                state.currentPage = payload.currentPage
+                state.usersSearchParams = payload.usersSearchParams
+            })
+            .addCase(fetchUsers.rejected, (state, { payload }) => {
+                state.isFetching = false
+                if (payload) state.error = payload
             })
     }
 })

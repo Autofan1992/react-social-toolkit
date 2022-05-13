@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import { UserType } from '../../types/types'
 import { Avatar, Button, List, Skeleton } from 'antd'
 import { Link } from 'react-router-dom'
@@ -6,7 +6,7 @@ import avatar from '../../assets/images/user.svg'
 import { toggleUserFollow } from '../../redux/reducers/users-reducers'
 import { useAppDispatch } from '../../redux/hooks/hooks'
 
-const Users: FC<PropsType> = ({ users, followInProgress, isFetching }) => {
+const Users: FC<PropsType> = memo(({ users, followInProgress, isFetching }) => {
     const dispatch = useAppDispatch()
 
     return <>
@@ -36,7 +36,7 @@ const Users: FC<PropsType> = ({ users, followInProgress, isFetching }) => {
             )}
         />
     </>
-}
+})
 
 export default Users
 

@@ -4,7 +4,7 @@ import { getAppState, getAuthState } from '../../redux/selectors/selectors'
 import { useNavigate } from 'react-router-dom'
 
 const useAuthRedirect = () => {
-    const { isAuth } = useAppSelector(getAuthState).profile
+    const { isAuth } = useAppSelector(getAuthState)
     const { initialized } = useAppSelector(getAppState)
     const navigate = useNavigate()
 

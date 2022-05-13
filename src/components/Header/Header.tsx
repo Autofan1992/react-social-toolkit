@@ -45,6 +45,6 @@ type PropsType = {
     id: number | null
     login: string | null
     isAuth: boolean
-    photos: PhotosType | null
+    photos: PhotosType | undefined
     handleLogout: () => void
 }

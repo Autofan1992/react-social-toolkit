@@ -1,4 +1,8 @@
 .wrapper {
   min-height: 100vh;
   overflow: hidden;
+
+  .appLayout {
+    min-height: calc(100vh - 64px);
+  }
 }

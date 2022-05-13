@@ -1,7 +1,7 @@
 import { FC, memo, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import { getAuthState, getProfileState } from '../../redux/selectors/selectors'
+import { getAppState, getAuthState, getProfileState } from '../../redux/selectors/selectors'
 import { fetchUserProfile, fetchUserStatus } from '../../redux/reducers/profile-reducer'
 import useAuthRedirect from '../hooks/useAuthRedirect'
 import ProfileForm from './ProfileForm'
@@ -11,20 +11,22 @@ import Preloader from '../common/Preloader/Preloader'
 const ProfileContainer: FC = memo(() => {
     const { userId: urlUserId } = useParams()
     const dispatch = useAppDispatch()
-    const { id: profileUserId } = useAppSelector(getAuthState).profile
+    const { initialized } = useAppSelector(getAppState)
+    const { authInfo } = useAppSelector(getAuthState)
+    const { id: authUserId } = authInfo
     const { profile, isFetching, status, error } = useAppSelector(getProfileState)
     const [editMode, setEditMode] = useState(false)
-    const isProfileId = !urlUserId || (profileUserId === +urlUserId)
+    const isProfileId = !urlUserId || (authUserId === +urlUserId)
+    const userId = urlUserId ? +urlUserId : authUserId
 
     useAuthRedirect()
 
     useEffect(() => {
-        const userId = urlUserId ? +urlUserId : profileUserId
-        if (userId) {
-            dispatch(fetchUserProfile(userId))
+        if (userId && initialized) {
+            if (profile && userId !== profile.userId) dispatch(fetchUserProfile(userId))
             dispatch(fetchUserStatus(userId))
         }
-    }, [urlUserId, profileUserId, dispatch])
+    }, [dispatch, userId, initialized])
 
     if (!profile) return <Preloader/>
 

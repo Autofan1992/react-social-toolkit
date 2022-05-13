@@ -1,31 +1,31 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AuthProfileType, LoginType } from '../../types/types'
+import { AuthInfoDataType, LoginType } from '../../types/types'
 import { CaptchaResultCode, ResultCodesEnum } from '../../api/api'
 import { authAPI } from '../../api/auth-api'
+import { fetchUserProfile } from './profile-reducer'
 
 const initialState = {
-    profile: {
-        email: null,
-        login: null,
-        isAuth: false,
-        photos: null,
+    authInfo: {
         id: null,
-    } as AuthProfileType,
+        email: null,
+        login: null
+    } as AuthInfoDataType,
+    isAuth: false,
     error: null as string | null,
     captchaUrl: null as string | null,
     isFetching: false
 }
 
-export const fetchAuthUserData = createAsyncThunk<AuthProfileType, undefined, { rejectValue: string }>(
+export const fetchAuthUserData = createAsyncThunk<AuthInfoDataType, undefined, { rejectValue: string }>(
     'auth/getAuthUserData',
-    async (_, { rejectWithValue }) => {
+    async (_, { dispatch, rejectWithValue }) => {
         const { resultCode, messages, data } = await authAPI.getAuthInfo()
 
         if (resultCode === ResultCodesEnum.Success) {
-            const { id, email, login } = data
-            const { photos } = await authAPI.getAuthProfile(id)
+            const { id } = data
 
-            return { id, email, login, photos, isAuth: true }
+            if (id) await dispatch(fetchUserProfile(id))
+            return data
         }
 
         return rejectWithValue(messages[0])
@@ -49,19 +49,13 @@ export const login = createAsyncThunk<void, LoginType, { rejectValue: string }>(
         return rejectWithValue(messages[0])
     })
 
-export const logout = createAsyncThunk<AuthProfileType, undefined, { rejectValue: string }>(
+export const logout = createAsyncThunk<AuthInfoDataType, undefined, { rejectValue: string }>(
     'auth/logout',
     async (_, { rejectWithValue }) => {
         const { messages, resultCode } = await authAPI.logoutRequest()
 
         if (resultCode === ResultCodesEnum.Success) {
-            return {
-                isAuth: false,
-                id: null,
-                email: null,
-                login: null,
-                photos: null
-            }
+            return { id: null, email: null, login: null }
         }
         return rejectWithValue(messages[0])
     })
@@ -83,7 +77,8 @@ const authSlice = createSlice({
             })
             .addCase(fetchAuthUserData.fulfilled, (state, { payload }) => {
                 state.isFetching = false
-                state.profile = payload
+                state.isAuth = true
+                state.authInfo = payload
             })
             .addCase(fetchAuthUserData.rejected, (state, { payload }) => {
                 state.isFetching = false
@@ -106,7 +101,8 @@ const authSlice = createSlice({
             })
             .addCase(logout.fulfilled, (state, { payload }) => {
                 state.isFetching = false
-                state.profile = payload
+                state.isAuth = false
+                state.authInfo = payload
             })
             .addCase(logout.rejected, (state, { payload }) => {
                 state.isFetching = false

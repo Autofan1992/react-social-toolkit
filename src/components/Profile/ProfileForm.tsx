@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import { Formik } from 'formik'
 import { Form, SubmitButton } from 'formik-antd'
 import { ProfileType } from '../../types/types'
@@ -19,7 +19,7 @@ const ProfileSchema = Yup.object().shape({
         .required('Required')
 })
 
-const ProfileForm: FC<PropsType> = (
+const ProfileForm: FC<PropsType> = memo((
     {
         profile,
         isFetching,
@@ -106,7 +106,7 @@ const ProfileForm: FC<PropsType> = (
             </Form>
         )}
     </Formik>
-}
+})
 
 export default ProfileForm
 
