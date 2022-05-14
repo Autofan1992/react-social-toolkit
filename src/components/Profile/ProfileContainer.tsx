@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useState } from 'react'
+import { FC, memo, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
 import { getAppState, getAuthState, getProfileState } from '../../redux/selectors/selectors'
@@ -9,13 +9,12 @@ import ProfileInfo from './ProfileInfo/ProfileInfo'
 import Preloader from '../common/Preloader/Preloader'
 
 const ProfileContainer: FC = memo(() => {
-    const { userId: urlUserId } = useParams()
+    const { userId: urlUserId, editProfile } = useParams()
     const dispatch = useAppDispatch()
     const { initialized } = useAppSelector(getAppState)
     const { authInfo } = useAppSelector(getAuthState)
     const { id: authUserId } = authInfo
     const { profile, isFetching, status, error } = useAppSelector(getProfileState)
-    const [editMode, setEditMode] = useState(false)
     const isProfileId = !urlUserId || (authUserId === +urlUserId)
     const userId = urlUserId ? +urlUserId : authUserId
 
@@ -30,18 +29,13 @@ const ProfileContainer: FC = memo(() => {
 
     if (!profile) return <Preloader/>
 
-    const toggleEditMode = () => {
-        setEditMode(!editMode)
-    }
-
     return (
         <>
-            {editMode
+            {editProfile
                 ? <ProfileForm
                     serverError={error}
                     isProfileId={isProfileId}
                     isFetching={isFetching}
-                    toggleEditMode={toggleEditMode}
                     profile={profile}
                 />
                 : <ProfileInfo
@@ -50,7 +44,6 @@ const ProfileContainer: FC = memo(() => {
                     profile={profile}
                     isProfileId={isProfileId}
                     status={status}
-                    toggleEditMode={toggleEditMode}
                 />}
         </>
     )

@@ -42,7 +42,7 @@ const UsersContainer: FC = memo(() => {
 
     const onPageChange = (currentPage: number, pageSize: number) => {
         dispatch(fetchUsers({ currentPage, pageSize, term, friend }))
-        setSearchParams({ page: `${currentPage}`, count: `${pageSize}` })
+        setSearchParams({ page: `${currentPage}`, count: `${pageSize}`, term: termParam, friend: friendParam })
     }
 
     const handleSearch = debounce(({ friend, term }: { friend: string, term: string }) => {
@@ -55,7 +55,7 @@ const UsersContainer: FC = memo(() => {
     return <div className="d-flex flex-column h-100">
         <SearchUsersForm
             handleSearch={handleSearch}
-            term={term} friend={friendParam}
+            term={termParam} friend={friendParam}
             serverError={error}
             isFetching={isFetching}
         />

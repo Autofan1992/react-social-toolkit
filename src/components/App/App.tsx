@@ -25,6 +25,7 @@ const App: FC<PropsType> = memo(() => {
                         <Suspense fallback={<Preloader/>}>
                             <Routes>
                                 <Route path="/" element={<ProfileContainer/>}/>
+                                <Route path="/:editProfile" element={<ProfileContainer/>}/>
                                 <Route path="login" element={<LoginContainer/>}/>
                                 <Route path="dialogs" element={<Dialogs/>}/>
                                 <Route path="users" element={<UsersContainer/>}/>

@@ -7,6 +7,7 @@ import * as Yup from 'yup'
 import { Col, Row } from 'antd'
 import { useAppDispatch } from '../../redux/hooks/hooks'
 import { saveUserProfile } from '../../redux/reducers/profile-reducer'
+import { useNavigate } from 'react-router-dom'
 
 const ProfileSchema = Yup.object().shape({
     aboutMe: Yup.string()
@@ -26,17 +27,19 @@ const ProfileForm: FC<PropsType> = memo((
         serverError,
     }) => {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
     return <Formik
         initialValues={
             profile as ProfileType
         }
         validationSchema={ProfileSchema}
-        onSubmit={(values, { setSubmitting }) => {
-            dispatch(saveUserProfile(values))
+        onSubmit={async (values, { setSubmitting }) => {
+            const res = await dispatch(saveUserProfile(values))
             setSubmitting(false)
+            if (!res.type.endsWith('rejected')) navigate('/')
         }}>
-        {({ errors, touched }) => (
+        {({ errors, touched, dirty }) => (
             <Form>
                 <Row gutter={24}>
                     <Col md={12}>
@@ -94,12 +97,11 @@ const ProfileForm: FC<PropsType> = memo((
                         </Row>
                     </Col>
                 </Row>
-                {serverError && <div className="text-center my-5">{serverError}</div>}
                 <div className="text-center mt-5">
                     <SubmitButton
                         type="primary"
                         size="large"
-                        disabled={isFetching}
+                        disabled={!dirty || isFetching }
                     >Save profile
                     </SubmitButton>
                 </div>
@@ -116,6 +118,5 @@ export type PropsType = {
     profile: ProfileType
     isProfileId: boolean
     isFetching: boolean
-    toggleEditMode: () => void
     serverError: string | null
 }

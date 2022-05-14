@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Layout, Menu } from 'antd'
 
@@ -6,9 +6,24 @@ const { Sider: SideBar } = Layout
 
 const Navbar: FC = () => {
     const { pathname } = useLocation()
+    const [collapsed, setCollapsed] = useState(false)
 
-    return <SideBar className="site-layout-background">
+    const handleSidebarCollapse = () => {
+        if (window.innerWidth < 992) setCollapsed(!collapsed)
+    }
+
+    const trigger = document.querySelector('.ant-layout-sider-zero-width-trigger-left')
+
+    if (trigger) trigger.addEventListener('click', handleSidebarCollapse)
+
+    return <SideBar
+        className="site-layout-background main-sidebar"
+        breakpoint="lg"
+        collapsedWidth="0"
+        collapsed={collapsed}
+    >
         <Menu
+            onClick={handleSidebarCollapse}
             theme="dark"
             defaultSelectedKeys={['1']}
             selectedKeys={[pathname]}
