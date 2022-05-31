@@ -1,5 +1,5 @@
 import React, { FC, lazy, memo, Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Navbar from '../Navbar/Navbar'
 import { Layout } from 'antd'
 import Preloader from '../common/Preloader/Preloader'
@@ -24,8 +24,10 @@ const App: FC<PropsType> = memo(() => {
                     <Content>
                         <Suspense fallback={<Preloader/>}>
                             <Routes>
-                                <Route path="/" element={<ProfileContainer/>}/>
-                                <Route path="/:editProfile" element={<ProfileContainer/>}/>
+                                <Route path="/" element={<Navigate to="/profile" replace />}/>
+                                <Route path="/profile"  element={<ProfileContainer/>}>
+                                    <Route path="edit" element={<ProfileContainer/>}/>
+                                </Route>
                                 <Route path="login" element={<LoginContainer/>}/>
                                 <Route path="dialogs" element={<Dialogs/>}/>
                                 <Route path="users" element={<UsersContainer/>}/>

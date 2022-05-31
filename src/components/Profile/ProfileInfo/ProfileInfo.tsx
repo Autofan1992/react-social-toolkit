@@ -31,7 +31,7 @@ const ProfileInfo: FC<PropsType> = memo((
                     />
                     {isProfileId &&
                         <div className="text-end">
-                            <Link to={'editProfile'}>Edit profile</Link>
+                            <Link to={'edit'}>Edit profile</Link>
                         </div>
                     }
                 </div>

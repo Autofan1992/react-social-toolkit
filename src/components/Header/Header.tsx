@@ -21,7 +21,7 @@ const Header: FC<PropsType> = (
                 <Skeleton avatar active paragraph={false} loading={isFetching}/>
                 {!isFetching && (isAuth
                     ? <Space>
-                        <NavLink to={`/profile/${id}`}>
+                        <NavLink to={`/profile`}>
                             <img src={photos?.small ?? avatar} alt="avatar" width="50px"/>
                         </NavLink>
                         <div className="text-center">

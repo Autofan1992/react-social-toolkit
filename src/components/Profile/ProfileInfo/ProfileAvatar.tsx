@@ -25,12 +25,10 @@ const ProfileAvatar: FC<PropsType> = ({ isProfileId, avatar, isFetching }) => {
             <div className={`${styles.profileAvatar} d-block position-relative`}>
                 <img src={avatar ?? userPhoto} alt="avatar"/>
                 {isProfileId &&
-                    <>
+                    <label className={`ant-typography-edit fs-4 ${styles.avatarLabel}`}>
                         <input type="file" onChange={handleAvatarChange} className="d-none"/>
-                        <label className={`ant-typography-edit fs-4 ${styles.avatarLabel}`} >
-                            <EditOutlined/>
-                        </label>
-                    </>
+                        <EditOutlined/>
+                    </label>
                 }
             </div>
         </div>

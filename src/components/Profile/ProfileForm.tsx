@@ -37,7 +37,7 @@ const ProfileForm: FC<PropsType> = memo((
         onSubmit={async (values, { setSubmitting }) => {
             const res = await dispatch(saveUserProfile(values))
             setSubmitting(false)
-            if (!res.type.endsWith('rejected')) navigate('/')
+            if (!res.type.endsWith('rejected')) navigate('/profile')
         }}>
         {({ errors, touched, dirty }) => (
             <Form>

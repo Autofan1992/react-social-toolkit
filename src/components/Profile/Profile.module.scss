@@ -7,6 +7,10 @@
 .profileAvatar {
   max-width: 150px;
 
+  img {
+    object-fit: cover;
+  }
+
   .avatarLabel {
     position: absolute;
     top: 10px;
