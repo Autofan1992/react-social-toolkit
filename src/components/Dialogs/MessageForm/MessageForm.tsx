@@ -1,10 +1,10 @@
 import { Formik } from 'formik'
 import { FC } from 'react'
-import { MessageType } from '../../../types/types'
 import { Form, SubmitButton } from 'formik-antd'
 import { createTextAreaField } from '../../../helpers/CustomField'
 import * as Yup from 'yup'
 import styles from './MessageForm.module.scss'
+import { MessageType } from '../../../types/dialogs-types'
 
 const MessageSchema = Yup.object().shape({
     message: Yup.string()
