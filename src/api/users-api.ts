@@ -1,22 +1,22 @@
-import { UserType } from '../types/types'
-import { instance, ResultCodesEnum } from './api'
+import { mainAxiosInstance, ResultCodesEnum } from './api'
+import { UserType } from '../types/users-types'
 
 type UsersResponseType<I = [], RC = ResultCodesEnum> = {
     resultCode: RC
     items: I
-    messages: Array<string>
+    messages: string[]
     totalCount: number
     error: string
 }
 
 export const userAPI = {
-    getUsers: (pageNum: number, pageSize: number, term: string, friend: boolean | undefined) => instance
+    getUsers: (pageNum: number, pageSize: number, term: string, friend: boolean | undefined) => mainAxiosInstance
         .get<UsersResponseType<Array<UserType>>>(`users?page=${pageNum}&count=${pageSize}${term ? `&term=${term}` : ''}${friend ? `&friend=${friend}` : ''}`)
         .then(res => res.data),
-    unfollowUserRequest: (userId: number) => instance
+    unfollowUserRequest: (userId: number) => mainAxiosInstance
         .delete<UsersResponseType>(`follow/${userId}`)
         .then(res => res.data),
-    followUserRequest: (userId: number) => instance
+    followUserRequest: (userId: number) => mainAxiosInstance
         .post<UsersResponseType>(`follow/${userId}`)
         .then(res => res.data)
 }

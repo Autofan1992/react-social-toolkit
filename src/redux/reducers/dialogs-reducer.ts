@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { DialogType, MessageType } from '../../types/types'
+import { DialogType, MessageType } from '../../types/dialogs-types'
 
 const initialState = {
     dialogs: [] as Array<DialogType>,

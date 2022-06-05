@@ -1,26 +1,30 @@
 import { FC, memo, useEffect } from 'react'
-import Users from './Users'
+import Users from '../../components/Users/Users'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import { getUsersState } from '../../redux/selectors/selectors'
 import { fetchUsers } from '../../redux/reducers/users-reducers'
-import Paginator from '../common/Paginator/Paginator'
-import SearchUsersForm from './SearchUsersForm'
+import Paginator from '../../components/common/Paginator/Paginator'
+import SearchUsersForm from '../../components/Users/SearchUsersForm'
 import { useSearchParams } from 'react-router-dom'
 import { debounce } from 'lodash'
 import { Divider } from 'antd'
 import stringToBoolean, { StringBooleanType } from '../../helpers/stringToBoolean'
+import {
+    getFollowInProgress,
+    getTotalUsersCount,
+    getUsers,
+    getUsersError,
+    getUsersIsFetching,
+    getUsersSearchParams
+} from '../../redux/selectors/users-selectors'
 
-const UsersContainer: FC = memo(() => {
+const UsersPage: FC = memo(() => {
     const dispatch = useAppDispatch()
-    const {
-        isFetching,
-        error,
-        users,
-        usersSearchParams,
-        followInProgress,
-        totalUsersCount
-    } = useAppSelector(getUsersState)
-    const { friend, term, pageSize, currentPage } = usersSearchParams
+    const isFetching = useAppSelector(getUsersIsFetching)
+    const error = useAppSelector(getUsersError)
+    const users = useAppSelector(getUsers)
+    const followInProgress = useAppSelector(getFollowInProgress)
+    const totalUsersCount = useAppSelector(getTotalUsersCount)
+    const { friend, term, pageSize, currentPage } = useAppSelector(getUsersSearchParams)
 
     const [searchParams, setSearchParams] = useSearchParams()
 
@@ -75,4 +79,4 @@ const UsersContainer: FC = memo(() => {
     </div>
 })
 
-export default UsersContainer
+export default UsersPage

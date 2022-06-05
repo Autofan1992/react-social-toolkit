@@ -1,16 +1,27 @@
+import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
+import { logout } from '../../redux/reducers/auth-reducer'
+import useAuthRedirect from '../../hooks/useAuthRedirect'
+import { FC } from 'react'
+import styles from './Header.module.scss'
 import { Button, Col, Layout, Row, Skeleton, Space, Typography } from 'antd'
 import logo from '../../assets/images/logo.svg'
 import { NavLink } from 'react-router-dom'
 import avatar from '../../assets/images/user.svg'
-import { PhotosType } from '../../types/types'
-import { FC } from 'react'
-import styles from './Header.module.scss'
+import { getProfile } from '../../redux/selectors/profile-selectors'
+import { getAuthIsFetching, getAuthLogin, getIsAuth } from '../../redux/selectors/auth-selectors'
 
 const { Header: HeaderANTD } = Layout
 const { Paragraph } = Typography
 
-const Header: FC<PropsType> = (
-    { handleLogout, isFetching, photos, isAuth, id, login }) => {
+const Header: FC = () => {
+    const dispatch = useAppDispatch()
+    const login = useAppSelector(getAuthLogin)
+    const isAuth = useAppSelector(getIsAuth)
+    const isFetching = useAppSelector(getAuthIsFetching)
+    const profile = useAppSelector(getProfile)
+    const handleLogout = () => dispatch(logout())
+
+    useAuthRedirect()
 
     return <HeaderANTD className={styles.header}>
         <Row className={styles.headerRow} justify="space-between" align="middle">
@@ -22,7 +33,7 @@ const Header: FC<PropsType> = (
                 {!isFetching && (isAuth
                     ? <Space>
                         <NavLink to={`/profile`}>
-                            <img src={photos?.small ?? avatar} alt="avatar" width="50px"/>
+                            <img src={profile?.photos?.small ?? avatar} alt="avatar" width="50px"/>
                         </NavLink>
                         <div className="text-center">
                             <Paragraph className={styles.loginTxt}>{login}</Paragraph>
@@ -39,12 +50,3 @@ const Header: FC<PropsType> = (
 }
 
 export default Header
-
-type PropsType = {
-    isFetching: boolean
-    id: number | null
-    login: string | null
-    isAuth: boolean
-    photos: PhotosType | undefined
-    handleLogout: () => void
-}

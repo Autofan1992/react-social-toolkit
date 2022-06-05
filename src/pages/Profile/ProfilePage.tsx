@@ -1,27 +1,30 @@
 import { FC, memo, useEffect } from 'react'
 import { useMatch, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import { getAppState, getAuthState, getProfileState } from '../../redux/selectors/selectors'
 import { fetchUserProfile, fetchUserStatus } from '../../redux/reducers/profile-reducer'
-import useAuthRedirect from '../hooks/useAuthRedirect'
-import ProfileForm from './ProfileForm'
-import ProfileInfo from './ProfileInfo/ProfileInfo'
-import Preloader from '../common/Preloader/Preloader'
+import useAuthRedirect from '../../hooks/useAuthRedirect'
+import ProfileForm from '../../components/Profile/ProfileForm'
+import ProfileInfo from '../../components/Profile/ProfileInfo/ProfileInfo'
+import Preloader from '../../components/common/Preloader/Preloader'
+import { getAuthUserId } from '../../redux/selectors/auth-selectors'
+import { getAppInitialized } from '../../redux/selectors/app-selectors'
+import { getError, getIsFetching, getProfile, getStatus } from '../../redux/selectors/profile-selectors'
 
-const ProfileContainer: FC = memo(({}) => {
+const ProfilePage: FC = memo(() => {
     const { userId: urlUserId } = useParams()
-    const dispatch = useAppDispatch()
-    const { initialized } = useAppSelector(getAppState)
-    const { authInfo } = useAppSelector(getAuthState)
-    const { id: authUserId } = authInfo
-    const { profile, isFetching, status, error } = useAppSelector(getProfileState)
     const editProfile = useMatch('/profile/edit')
+    const dispatch = useAppDispatch()
+    const initialized = useAppSelector(getAppInitialized)
+    const authUserId = useAppSelector(getAuthUserId)
+    const profile = useAppSelector(getProfile)
+    const isFetching = useAppSelector(getIsFetching)
+    const error = useAppSelector(getError)
+    const status = useAppSelector(getStatus)
 
+    useAuthRedirect()
 
     const isProfileId = !urlUserId || (authUserId === +urlUserId)
     const userId = urlUserId ? +urlUserId : authUserId
-
-    useAuthRedirect()
 
     useEffect(() => {
         if (userId && initialized) {
@@ -42,7 +45,6 @@ const ProfileContainer: FC = memo(({}) => {
                     profile={profile}
                 />
                 : <ProfileInfo
-                    serverError={error}
                     isFetching={isFetching}
                     profile={profile}
                     isProfileId={isProfileId}
@@ -52,4 +54,4 @@ const ProfileContainer: FC = memo(({}) => {
     )
 })
 
-export default ProfileContainer
+export default ProfilePage

@@ -1,5 +1,6 @@
-import { AuthInfoDataType, LoginType } from '../types/types'
-import { APIResponseType, CaptchaResultCode, instance, ResultCodesEnum } from './api'
+import { APIResponseType, CaptchaResultCode, mainAxiosInstance, ResultCodesEnum } from './api'
+import { AuthInfoDataType } from '../types/auth-types'
+import { LoginType } from '../types/login-types'
 
 type AuthDataType = {
     userId: number
@@ -9,16 +10,16 @@ type CaptchaResponseType = {
 }
 
 export const authAPI = {
-    getAuthInfo: () => instance
+    getAuthInfo: () => mainAxiosInstance
         .get<APIResponseType<AuthInfoDataType>>(`auth/me`)
         .then(res => res.data),
-    loginRequest: (values: LoginType) => instance
+    loginRequest: (values: LoginType) => mainAxiosInstance
         .post<APIResponseType<AuthDataType, ResultCodesEnum | CaptchaResultCode>>(`auth/login`, values)
         .then(res => res.data),
-    getCaptchaURL: () => instance
+    getCaptchaURL: () => mainAxiosInstance
         .get<CaptchaResponseType>(`security/get-captcha-url`)
         .then(res => res.data),
-    logoutRequest: () => instance
+    logoutRequest: () => mainAxiosInstance
         .delete<APIResponseType>(`auth/login`)
         .then(res => res.data)
 }

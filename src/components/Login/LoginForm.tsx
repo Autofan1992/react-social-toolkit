@@ -1,10 +1,10 @@
 import { FC } from 'react'
 import { Formik } from 'formik'
-import { LoginType } from '../../types/types'
 import { Form, SubmitButton } from 'formik-antd'
 import { createTextField } from '../../helpers/CustomField'
 import * as Yup from 'yup'
-import styles from './Login.module.scss'
+import styles from '../../pages/Login/Login.module.scss'
+import { LoginType } from '../../types/login-types'
 
 const SignupSchema = Yup.object().shape({
     password: Yup.string()

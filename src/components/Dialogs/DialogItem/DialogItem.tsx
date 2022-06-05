@@ -1,7 +1,7 @@
-import { DialogType } from '../../../types/types'
 import { FC } from 'react'
 import { List } from 'antd'
 import { NavLink } from 'react-router-dom'
+import { DialogType } from '../../../types/dialogs-types'
 
 const DialogItem: FC<DialogType> = ({ id, name }) => {
     return (

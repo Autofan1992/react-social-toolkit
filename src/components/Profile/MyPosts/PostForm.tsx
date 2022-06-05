@@ -1,9 +1,9 @@
 import { FC } from 'react'
-import { PostType } from '../../../types/types'
 import { Form, SubmitButton } from 'formik-antd'
 import { createTextAreaField } from '../../../helpers/CustomField'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import { PostType } from '../../../types/profile-types'
 
 const PostSchema = Yup.object().shape({
     post: Yup.string()

@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AuthInfoDataType, LoginType } from '../../types/types'
 import { CaptchaResultCode, ResultCodesEnum } from '../../api/api'
 import { authAPI } from '../../api/auth-api'
 import { fetchUserProfile } from './profile-reducer'
+import { AuthInfoDataType } from '../../types/auth-types'
+import { LoginType } from '../../types/login-types'
 
 const initialState = {
     authInfo: {

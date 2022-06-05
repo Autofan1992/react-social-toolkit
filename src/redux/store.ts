@@ -9,9 +9,9 @@ const store = configureStore({
     reducer: {
         app: appReducer,
         auth: authReducer,
-        dialogs: dialogsReducer,
-        users: usersReducers,
-        profile: profileReducer
+        dialogsPage: dialogsReducer,
+        usersPage: usersReducers,
+        profilePage: profileReducer
     }
 })
 

@@ -1,15 +1,18 @@
 import React, { FC, memo, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import { getAuthState } from '../../redux/selectors/selectors'
-import LoginForm from './LoginForm'
+import LoginForm from '../../components/Login/LoginForm'
 import { login } from '../../redux/reducers/auth-reducer'
-import { LoginType } from '../../types/types'
 import { useNavigate } from 'react-router-dom'
+import { LoginType } from '../../types/login-types'
+import { getAuthError, getAuthIsFetching, getIsAuth, getLoginCaptchaUrl } from '../../redux/selectors/auth-selectors'
 
-const LoginContainer: FC = memo(() => {
+const LoginPage: FC = memo(() => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-    const { captchaUrl, error, isAuth, isFetching } = useAppSelector(getAuthState)
+    const captchaUrl = useAppSelector(getLoginCaptchaUrl)
+    const error = useAppSelector(getAuthError)
+    const isAuth = useAppSelector(getIsAuth)
+    const isFetching = useAppSelector(getAuthIsFetching)
 
     useEffect(() => {
         if (isAuth) navigate('/', { replace: true })
@@ -20,4 +23,4 @@ const LoginContainer: FC = memo(() => {
     return <LoginForm captchaUrl={captchaUrl} serverError={error} isFetching={isFetching} handleLogin={handleLogin}/>
 })
 
-export default LoginContainer
+export default LoginPage

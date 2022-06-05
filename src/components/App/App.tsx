@@ -3,21 +3,21 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import Navbar from '../Navbar/Navbar'
 import { Layout } from 'antd'
 import Preloader from '../common/Preloader/Preloader'
-import HeaderContainer from '../Header/HeaderContainer'
+import Header from '../Header/Header'
 import styles from './App.module.scss'
-import LoginContainer from '../Login/LoginContainer'
-import Dialogs from '../Dialogs/Dialogs'
+import LoginPage from '../../pages/Login/LoginPage'
+import DialogsPage from '../../pages/Dialogs/DialogsPage'
 import NotFound from '../common/404/NotFound'
 
 const { Content } = Layout
 
-const ProfileContainer = lazy(() => import('../../components/Profile/ProfileContainer'))
-const UsersContainer = lazy(() => import('../../components/Users/UsersContainer'))
+const ProfileContainer = lazy(() => import('../../pages/Profile/ProfilePage'))
+const UsersContainer = lazy(() => import('../../pages/Users/UsersPage'))
 
 const App: FC<PropsType> = memo(() => {
     return <div className={styles.wrapper}>
         <Layout className="h-100">
-            <HeaderContainer/>
+            <Header/>
             <Layout className={styles.appLayout}>
                 <Navbar/>
                 <Layout className="p-4">
@@ -28,8 +28,8 @@ const App: FC<PropsType> = memo(() => {
                                 <Route path="/profile"  element={<ProfileContainer/>}>
                                     <Route path="edit" element={<ProfileContainer/>}/>
                                 </Route>
-                                <Route path="login" element={<LoginContainer/>}/>
-                                <Route path="dialogs" element={<Dialogs/>}/>
+                                <Route path="login" element={<LoginPage/>}/>
+                                <Route path="dialogs" element={<DialogsPage/>}/>
                                 <Route path="users" element={<UsersContainer/>}/>
                                 <Route path="users/:userId" element={<ProfileContainer/>}/>
                                 <Route path="*" element={<NotFound/>}/>

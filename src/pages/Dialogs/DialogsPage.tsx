@@ -1,17 +1,18 @@
-import useAuthRedirect from '../hooks/useAuthRedirect'
+import useAuthRedirect from '../../hooks/useAuthRedirect'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import { getDialogsState } from '../../redux/selectors/selectors'
 import React, { memo } from 'react'
-import MessageForm from './Message/MessageForm'
+import MessageForm from '../../components/Dialogs/MessageForm/MessageForm'
 import { Col, Layout, List, Row, Typography } from 'antd'
 import { addMessage } from '../../redux/reducers/dialogs-reducer'
 import styles from './Dialogs.module.scss'
+import { getDialogs, getMessages } from '../../redux/selectors/dialogs-selectors'
 
 const { Content } = Layout
 
-const Dialogs = memo(() => {
+const DialogsPage = memo(() => {
     const dispatch = useAppDispatch()
-    const { dialogs, messages } = useAppSelector(getDialogsState)
+    const dialogs = useAppSelector(getDialogs)
+    const messages = useAppSelector(getMessages)
 
     useAuthRedirect()
 
@@ -23,7 +24,7 @@ const Dialogs = memo(() => {
         <Row gutter={24}>
             <Col md={6}>
                 <List
-                    header="Dialogs"
+                    header="DialogsPage"
                     bordered
                     dataSource={dialogs}
                     renderItem={item => (
@@ -49,4 +50,4 @@ const Dialogs = memo(() => {
     </Content>
 })
 
-export default Dialogs
+export default DialogsPage

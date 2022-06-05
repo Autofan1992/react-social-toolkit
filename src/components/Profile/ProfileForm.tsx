@@ -1,13 +1,13 @@
 import { FC, memo } from 'react'
 import { Formik } from 'formik'
 import { Form, SubmitButton } from 'formik-antd'
-import { ProfileType } from '../../types/types'
 import { createCheckbox, createTextAreaField, createTextField } from '../../helpers/CustomField'
 import * as Yup from 'yup'
 import { Col, Row } from 'antd'
 import { useAppDispatch } from '../../redux/hooks/hooks'
 import { saveUserProfile } from '../../redux/reducers/profile-reducer'
 import { useNavigate } from 'react-router-dom'
+import { ProfileType } from '../../types/profile-types'
 
 const ProfileSchema = Yup.object().shape({
     aboutMe: Yup.string()

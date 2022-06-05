@@ -1,10 +1,10 @@
 import { FC } from 'react'
 import { Formik } from 'formik'
-import { SearchRequestType } from '../../types/types'
 import { createSelectField, createTextField } from '../../helpers/CustomField'
 import { Form, SubmitButton } from 'formik-antd'
 import { Col, Row } from 'antd'
-import styles from './Users.module.scss'
+import styles from '../../pages/Users/Users.module.scss'
+import { UsersSearchRequestType } from '../../types/users-types'
 
 const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching, serverError }) => {
     return <Formik
@@ -52,7 +52,7 @@ const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching
 
 export default SearchUsersForm
 
-type InputNames = keyof SearchRequestType
+type InputNames = keyof UsersSearchRequestType
 
 type PropsType = {
     isFetching: boolean,

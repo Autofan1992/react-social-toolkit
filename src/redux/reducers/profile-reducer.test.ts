@@ -1,5 +1,5 @@
-import { PostType, ProfileType } from '../../types/types'
 import profileReducer, { addPost, deletePost, likePost } from './profile-reducer'
+import { PostType, ProfileType } from '../../types/profile-types'
 
 test('should like post with id = 0', () => {
     const previousState = {

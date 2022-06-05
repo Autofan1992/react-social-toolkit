@@ -4,7 +4,7 @@ import { Typography } from 'antd'
 import { useAppDispatch } from '../../../redux/hooks/hooks'
 import { setUserStatus } from '../../../redux/reducers/profile-reducer'
 
-const { Paragraph} = Typography
+const { Paragraph } = Typography
 
 const ProfileStatus: FC<PropsType> = ({ status, isProfileId }) => {
     const dispatch = useAppDispatch()
@@ -18,19 +18,15 @@ const ProfileStatus: FC<PropsType> = ({ status, isProfileId }) => {
         if (text !== status) dispatch(setUserStatus(text))
     }
 
-    return (
-        <>
-            <div>
-                <Paragraph
-                    editable={isProfileId && {
-                        icon: <EditOutlined/>,
-                        onChange: (text) => handleStatusUpdate(text)
-                    }}
-                >{currentStatus}
-                </Paragraph>
-            </div>
-        </>
-    )
+    return <div>
+        <Paragraph
+            editable={isProfileId && {
+                icon: <EditOutlined/>,
+                onChange: (text) => handleStatusUpdate(text)
+            }}
+        >{currentStatus}
+        </Paragraph>
+    </div>
 }
 
 export default ProfileStatus

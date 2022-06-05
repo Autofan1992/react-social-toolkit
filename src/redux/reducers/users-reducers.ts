@@ -1,19 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { SearchRequestType, UserType } from '../../types/types'
 import { userAPI } from '../../api/users-api'
 import { ResultCodesEnum } from '../../api/api'
+import { UsersSearchRequestType, UserType } from '../../types/users-types'
 
 const initialState = {
-    users: [] as Array<UserType>,
+    users: [] as UserType[],
     totalUsersCount: 0,
     usersSearchParams: {
         pageSize: 5,
         currentPage: 1,
         term: '',
         friend: false,
-    } as SearchRequestType,
+    } as UsersSearchRequestType,
     isFetching: false,
-    followInProgress: [] as Array<number>,
+    followInProgress: [] as number[],
     error: null as string | null
 }
 
@@ -27,7 +27,7 @@ export const toggleUserFollow = createAsyncThunk<number, { id: number, followed:
         return rejectWithValue(messages[0])
     })
 
-export const fetchUsers = createAsyncThunk<{ users: Array<UserType>, totalCount: number, usersSearchParams: SearchRequestType }, SearchRequestType, { rejectValue: string }>(
+export const fetchUsers = createAsyncThunk<{ users: UserType[], totalCount: number, usersSearchParams: UsersSearchRequestType }, UsersSearchRequestType, { rejectValue: string }>(
     'users/fetchUsers',
     async (
         {

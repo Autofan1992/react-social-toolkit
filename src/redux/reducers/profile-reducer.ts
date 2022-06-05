@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { PhotosType, PostType, ProfileType } from '../../types/types'
 import { profileAPI } from '../../api/profile-api'
 import { ResultCodesEnum } from '../../api/api'
+import { PhotosType, PostType, ProfileType } from '../../types/profile-types'
 
 const initialState = {
-    posts: [] as Array<PostType>,
+    posts: [] as PostType[],
     profile: null as ProfileType | null,
     status: null as string | null,
     isFetching: false as boolean,

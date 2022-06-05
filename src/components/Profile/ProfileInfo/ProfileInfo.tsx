@@ -2,12 +2,12 @@ import { FC, memo } from 'react'
 import ProfileAvatar from './ProfileAvatar'
 import avatar from '../../../assets/images/user.svg'
 import ProfileStatus from './ProfileStatus'
-import { ProfileType } from '../../../types/types'
 import Posts from '../MyPosts/Posts'
 import Preloader from '../../common/Preloader/Preloader'
 import { Space } from 'antd'
-import styles from '../Profile.module.scss'
+import styles from '../../../pages/Profile/Profile.module.scss'
 import { Link } from 'react-router-dom'
+import { ProfileType } from '../../../types/profile-types'
 
 const ProfileInfo: FC<PropsType> = memo((
     {
@@ -75,5 +75,4 @@ export type PropsType = {
     status: string | null
     isProfileId: boolean
     isFetching: boolean
-    serverError: string | null
 }
