@@ -1,53 +1,81 @@
 import useAuthRedirect from '../../hooks/useAuthRedirect'
-import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import React, { memo } from 'react'
+import { useAppDispatch } from '../../redux/hooks/hooks'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import MessageForm from '../../components/Dialogs/MessageForm/MessageForm'
-import { Col, Layout, List, Row, Typography } from 'antd'
-import { addMessage } from '../../redux/reducers/dialogs-reducer'
+import { List } from 'antd'
 import styles from './Dialogs.module.scss'
-import { selectDialogs, selectMessages } from '../../redux/selectors/dialogs-selectors'
+import DialogItem from '../../components/Dialogs/DialogItem/DialogItem'
+import { v4 as createId } from 'uuid'
+import { MessageType } from '../../types/dialogs-types'
 
-const { Content } = Layout
+const ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx')
 
 const DialogsPage = memo(() => {
     const dispatch = useAppDispatch()
-    const dialogs = useAppSelector(selectDialogs)
-    const messages = useAppSelector(selectMessages)
+    const chatBlockRef = useRef<HTMLDivElement>(null)
+    const chatListBlock = chatBlockRef.current?.firstChild as HTMLDivElement
+    const chatBlock = chatBlockRef.current
+
+    const [messages, setMessages] = useState<MessageType[]>([])
+    const [chatListHeight, setChatListHeight] = useState(0)
 
     useAuthRedirect()
 
+    useEffect(() => {
+        ws.addEventListener('message', e => {
+            const newMessages = JSON.parse(e.data)
+
+            setMessages((prevState) => [...prevState, ...newMessages])
+        })
+        return () => ws.removeEventListener('message', () => {
+            setMessages([])
+        })
+    }, [])
+
+    useEffect(() => {
+        if (chatBlock) {
+            const chatBlockScrollBottom = chatBlock.scrollTop + chatBlock.clientHeight
+
+            if (chatBlock.scrollTop === 0) {
+                chatBlock.scrollTop = chatListBlock.clientHeight
+            }
+
+            if (chatBlockScrollBottom === chatListHeight) {
+                chatBlock.scrollTo({
+                    behavior: 'smooth',
+                    top: chatListHeight
+                })
+            }
+
+            setChatListHeight(chatListBlock.clientHeight)
+        }
+    }, [messages])
+
     const handleAddMessage = (message: string) => {
-        dispatch(addMessage(message))
+        ws.send(message)
     }
 
-    return <Content className={styles.dialogsContent}>
-        <Row gutter={24}>
-            <Col md={6}>
-                <List
-                    header="DialogsPage"
-                    bordered
-                    dataSource={dialogs}
-                    renderItem={item => (
-                        <List.Item>
-                            <Typography.Text mark>Message:</Typography.Text> {item.name}
-                        </List.Item>
-                    )}/>
-            </Col>
-            <Col md={10}>
-                <>
-                    <List
-                        bordered
-                        dataSource={messages}
-                        renderItem={item => (
-                            <List.Item>
-                                <Typography.Text mark>Message:</Typography.Text> {item.message}
-                            </List.Item>
-                        )}/>
-                    <MessageForm handleAddMessage={handleAddMessage}/>
-                </>
-            </Col>
-        </Row>
-    </Content>
+    return <div className={'h-100 d-flex flex-column'}>
+        <div
+            className={`${styles.chatBlock} mb-4 flex-grow-1`}
+            ref={chatBlockRef}
+        >
+            <List
+                className={'p-3'}
+                dataSource={messages}
+                renderItem={item => (
+                    <DialogItem
+                        userId={item.userId}
+                        message={item.message}
+                        photo={item.photo}
+                        userName={item.userName}
+                        key={createId()}
+                    />
+                )}
+            />
+        </div>
+        <MessageForm handleAddMessage={handleAddMessage}/>
+    </div>
 })
 
 export default DialogsPage

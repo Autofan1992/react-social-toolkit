@@ -12,9 +12,7 @@ const dialogsSlice = createSlice({
     name: 'dialogs',
     initialState,
     reducers: {
-        addMessage: (state, { payload }: PayloadAction<string>) => {
-            state.messages.push({message: payload, id: state.messages.length + 1})
-        }
+        addMessage: (state, { payload }: PayloadAction<string>) => {}
     }
 })
 

@@ -1,6 +1,9 @@
 export type MessageType = {
-    id: number
     message: string
+    photo: string | null
+    userId: number
+    userName: string
+    id: string
 }
 
 export type DialogType = {

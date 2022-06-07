@@ -1,9 +1,8 @@
 import { Formik } from 'formik'
 import { FC } from 'react'
 import { Form, SubmitButton } from 'formik-antd'
-import { createTextAreaField } from '../../../helpers/CustomField'
+import { createTextField } from '../../../helpers/CustomField'
 import * as Yup from 'yup'
-import styles from './MessageForm.module.scss'
 import { MessageType } from '../../../types/dialogs-types'
 
 const MessageSchema = Yup.object().shape({
@@ -19,21 +18,24 @@ const MessageForm: FC<PropsType> = ({ handleAddMessage }) => {
             message: ''
         } as MessageType}
         validationSchema={MessageSchema}
-        onSubmit={({ message }, { setSubmitting }) => {
+        onSubmit={({ message }, { setSubmitting, resetForm }) => {
             handleAddMessage(message)
+            resetForm()
             setSubmitting(false)
         }}>
         {({ errors, touched, isSubmitting }) => (
-            <Form>
-                {createTextAreaField<InputNames>('Type your message', 'message', {
+            <Form
+                className={'flex-nowrap'}
+                layout="inline"
+            >
+                {createTextField<InputNames>(undefined, 'message', 'text', {
                     status: (touched.message && errors.message) && 'error',
-                    placeholder: errors.message
+                    placeholder: errors.message ?? 'Type your message',
+                    className: 'flex-1'
                 })}
-                <div className={styles.forBtn}>
-                    <SubmitButton size="large" type="primary" htmlType="submit" disabled={isSubmitting}>
-                        Add message
-                    </SubmitButton>
-                </div>
+                <SubmitButton size="large" type="primary" htmlType="submit" disabled={isSubmitting}>
+                    Add message
+                </SubmitButton>
             </Form>
         )}
     </Formik>

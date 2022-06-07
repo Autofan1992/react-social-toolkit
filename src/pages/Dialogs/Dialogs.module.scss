@@ -1,3 +1,16 @@
-.dialogsContent {
-  padding: 50px 0;
+.chatBlock {
+  height: 300px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: #CECECE;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #40a9ff;
+  }
 }
