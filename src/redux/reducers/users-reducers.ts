@@ -1,17 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { userAPI } from '../../api/users-api'
 import { ResultCodesEnum } from '../../api/api'
-import { UsersSearchRequestType, UserType } from '../../types/users-types'
+import { UsersSearchFiltersType, UserType } from '../../types/users-types'
 
 const initialState = {
     users: [] as UserType[],
     totalUsersCount: 0,
-    usersSearchParams: {
+    usersSearchFilters: {
         pageSize: 5,
         currentPage: 1,
         term: '',
-        friend: false,
-    } as UsersSearchRequestType,
+        friend: null,
+    } as UsersSearchFiltersType,
     isFetching: false,
     followInProgress: [] as number[],
     error: null as string | null
@@ -27,7 +27,7 @@ export const toggleUserFollow = createAsyncThunk<number, { id: number, followed:
         return rejectWithValue(messages[0])
     })
 
-export const fetchUsers = createAsyncThunk<{ users: UserType[], totalCount: number, usersSearchParams: UsersSearchRequestType }, UsersSearchRequestType, { rejectValue: string }>(
+export const fetchUsers = createAsyncThunk<{ users: UserType[], totalCount: number, usersSearchParams: UsersSearchFiltersType }, UsersSearchFiltersType, { rejectValue: string }>(
     'users/fetchUsers',
     async (
         {
@@ -68,7 +68,7 @@ const usersSlice = createSlice({
                 state.isFetching = false
                 state.users = payload.users
                 state.totalUsersCount = payload.totalCount
-                state.usersSearchParams = payload.usersSearchParams
+                state.usersSearchFilters = payload.usersSearchParams
             })
             .addCase(fetchUsers.rejected, (state, { payload }) => {
                 state.isFetching = false

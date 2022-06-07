@@ -1,4 +1,4 @@
 import { RootStateType } from '../store'
 
-export const getDialogs = (state: RootStateType) => state.dialogsPage.dialogs
-export const getMessages = (state: RootStateType) => state.dialogsPage.messages
+export const selectDialogs = (state: RootStateType) => state.dialogsPage.dialogs
+export const selectMessages = (state: RootStateType) => state.dialogsPage.messages

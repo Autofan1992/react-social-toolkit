@@ -1,8 +1,8 @@
 import { RootStateType } from '../store'
 
-export const getUsersIsFetching = (state: RootStateType) => state.usersPage.isFetching
-export const getUsersError = (state: RootStateType) => state.usersPage.error
-export const getUsers = (state: RootStateType) => state.usersPage.users
-export const getUsersSearchParams = (state: RootStateType) => state.usersPage.usersSearchParams
-export const getFollowInProgress = (state: RootStateType) => state.usersPage.followInProgress
-export const getTotalUsersCount = (state: RootStateType) => state.usersPage.totalUsersCount
+export const selectUsersIsFetching = (state: RootStateType) => state.usersPage.isFetching
+export const selectUsersError = (state: RootStateType) => state.usersPage.error
+export const selectUsers = (state: RootStateType) => state.usersPage.users
+export const selectUsersSearchFilters = (state: RootStateType) => state.usersPage.usersSearchFilters
+export const selectFollowInProgress = (state: RootStateType) => state.usersPage.followInProgress
+export const selectTotalUsersCount = (state: RootStateType) => state.usersPage.totalUsersCount

@@ -5,14 +5,14 @@ import MessageForm from '../../components/Dialogs/MessageForm/MessageForm'
 import { Col, Layout, List, Row, Typography } from 'antd'
 import { addMessage } from '../../redux/reducers/dialogs-reducer'
 import styles from './Dialogs.module.scss'
-import { getDialogs, getMessages } from '../../redux/selectors/dialogs-selectors'
+import { selectDialogs, selectMessages } from '../../redux/selectors/dialogs-selectors'
 
 const { Content } = Layout
 
 const DialogsPage = memo(() => {
     const dispatch = useAppDispatch()
-    const dialogs = useAppSelector(getDialogs)
-    const messages = useAppSelector(getMessages)
+    const dialogs = useAppSelector(selectDialogs)
+    const messages = useAppSelector(selectMessages)
 
     useAuthRedirect()
 

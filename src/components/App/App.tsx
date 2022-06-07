@@ -7,7 +7,7 @@ import Header from '../Header/Header'
 import styles from './App.module.scss'
 import LoginPage from '../../pages/Login/LoginPage'
 import DialogsPage from '../../pages/Dialogs/DialogsPage'
-import NotFound from '../common/404/NotFound'
+import NotFound from '../../pages/404/NotFound'
 
 const { Content } = Layout
 

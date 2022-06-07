@@ -1,3 +1,3 @@
 import { RootStateType } from '../store'
 
-export const getAppInitialized = (state: RootStateType) => state.app.initialized
+export const selectAppInitialized = (state: RootStateType) => state.app.initialized

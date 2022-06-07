@@ -9,22 +9,22 @@ import { debounce } from 'lodash'
 import { Divider } from 'antd'
 import stringToBoolean, { StringBooleanType } from '../../helpers/stringToBoolean'
 import {
-    getFollowInProgress,
-    getTotalUsersCount,
-    getUsers,
-    getUsersError,
-    getUsersIsFetching,
-    getUsersSearchParams
+    selectFollowInProgress,
+    selectTotalUsersCount,
+    selectUsers,
+    selectUsersError,
+    selectUsersIsFetching,
+    selectUsersSearchFilters
 } from '../../redux/selectors/users-selectors'
 
 const UsersPage: FC = memo(() => {
     const dispatch = useAppDispatch()
-    const isFetching = useAppSelector(getUsersIsFetching)
-    const error = useAppSelector(getUsersError)
-    const users = useAppSelector(getUsers)
-    const followInProgress = useAppSelector(getFollowInProgress)
-    const totalUsersCount = useAppSelector(getTotalUsersCount)
-    const { friend, term, pageSize, currentPage } = useAppSelector(getUsersSearchParams)
+    const isFetching = useAppSelector(selectUsersIsFetching)
+    const error = useAppSelector(selectUsersError)
+    const users = useAppSelector(selectUsers)
+    const followInProgress = useAppSelector(selectFollowInProgress)
+    const totalUsersCount = useAppSelector(selectTotalUsersCount)
+    const { friend, term, pageSize, currentPage } = useAppSelector(selectUsersSearchFilters)
 
     const [searchParams, setSearchParams] = useSearchParams()
 
@@ -32,8 +32,20 @@ const UsersPage: FC = memo(() => {
     const currentPageParam = searchParams.get('page') ?? currentPage
     const pageSizeParam = searchParams.get('count') ?? pageSize
     const friendParam = searchParams.get('friend') as StringBooleanType
-
     const friendBooleanParam = friendParam ? stringToBoolean(friendParam) : friend
+
+    useEffect(() => {
+        searchParams.set('page', `${currentPage}`)
+        searchParams.set('count', `${pageSize}`)
+        if (term) searchParams.set('term', term)
+        if (friend !== null) {
+            searchParams.set('friend', `${friend}`)
+        } else {
+            searchParams.delete('friend')
+        }
+
+        setSearchParams(searchParams)
+    }, [currentPage, pageSize, term, friend])
 
     useEffect(() => {
         dispatch(fetchUsers({
@@ -42,17 +54,15 @@ const UsersPage: FC = memo(() => {
             term: termParam,
             friend: friendBooleanParam
         }))
-    }, [dispatch, fetchUsers])
+    }, [dispatch])
 
     const onPageChange = (currentPage: number, pageSize: number) => {
         dispatch(fetchUsers({ currentPage, pageSize, term, friend }))
-        setSearchParams({ page: `${currentPage}`, count: `${pageSize}`, term: termParam, friend: friendParam })
     }
 
     const handleSearch = debounce(({ friend, term }: { friend: string, term: string }) => {
         const friendToBoolean = stringToBoolean(friend as StringBooleanType)
 
-        setSearchParams({ term, friend })
         dispatch(fetchUsers({ currentPage: 1, pageSize: 5, friend: friendToBoolean, term }))
     }, 1000)
 

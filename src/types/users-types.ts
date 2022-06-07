@@ -1,10 +1,10 @@
 import { PhotosType } from './profile-types'
 
-export type UsersSearchRequestType = {
+export type UsersSearchFiltersType = {
     currentPage: number,
     pageSize: number
     term: string
-    friend: boolean | undefined
+    friend: boolean | null
 }
 
 export type UserType = {

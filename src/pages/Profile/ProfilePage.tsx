@@ -6,20 +6,20 @@ import useAuthRedirect from '../../hooks/useAuthRedirect'
 import ProfileForm from '../../components/Profile/ProfileForm'
 import ProfileInfo from '../../components/Profile/ProfileInfo/ProfileInfo'
 import Preloader from '../../components/common/Preloader/Preloader'
-import { getAuthUserId } from '../../redux/selectors/auth-selectors'
-import { getAppInitialized } from '../../redux/selectors/app-selectors'
-import { getError, getIsFetching, getProfile, getStatus } from '../../redux/selectors/profile-selectors'
+import { selectAuthUserId } from '../../redux/selectors/auth-selectors'
+import { selectAppInitialized } from '../../redux/selectors/app-selectors'
+import { selectProfileError, selectProfileIsFetching, selectProfile, selectProfileStatus } from '../../redux/selectors/profile-selectors'
 
 const ProfilePage: FC = memo(() => {
     const { userId: urlUserId } = useParams()
     const editProfile = useMatch('/profile/edit')
     const dispatch = useAppDispatch()
-    const initialized = useAppSelector(getAppInitialized)
-    const authUserId = useAppSelector(getAuthUserId)
-    const profile = useAppSelector(getProfile)
-    const isFetching = useAppSelector(getIsFetching)
-    const error = useAppSelector(getError)
-    const status = useAppSelector(getStatus)
+    const initialized = useAppSelector(selectAppInitialized)
+    const authUserId = useAppSelector(selectAuthUserId)
+    const profile = useAppSelector(selectProfile)
+    const isFetching = useAppSelector(selectProfileIsFetching)
+    const error = useAppSelector(selectProfileError)
+    const status = useAppSelector(selectProfileStatus)
 
     useAuthRedirect()
 

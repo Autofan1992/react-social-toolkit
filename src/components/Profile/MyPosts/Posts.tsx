@@ -3,11 +3,11 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks/hooks'
 import { addPost, deletePost, likePost } from '../../../redux/reducers/profile-reducer'
 import PostForm from './PostForm'
 import Post from './Post/Post'
-import { getPosts } from '../../../redux/selectors/profile-selectors'
+import { selectPosts } from '../../../redux/selectors/profile-selectors'
 
 const Posts: FC = () => {
     const dispatch = useAppDispatch()
-    const posts = useAppSelector(getPosts)
+    const posts = useAppSelector(selectPosts)
 
     const handleAddPost = (post: string) => dispatch(addPost(post))
     const handleDeletePost = (id: number) => dispatch(deletePost(id))

@@ -7,18 +7,18 @@ import { Button, Col, Layout, Row, Skeleton, Space, Typography } from 'antd'
 import logo from '../../assets/images/logo.svg'
 import { NavLink } from 'react-router-dom'
 import avatar from '../../assets/images/user.svg'
-import { getProfile } from '../../redux/selectors/profile-selectors'
-import { getAuthIsFetching, getAuthLogin, getIsAuth } from '../../redux/selectors/auth-selectors'
+import { selectProfile } from '../../redux/selectors/profile-selectors'
+import { selectAuthIsFetching, selectAuthLogin, selectIsAuth } from '../../redux/selectors/auth-selectors'
 
 const { Header: HeaderANTD } = Layout
 const { Paragraph } = Typography
 
 const Header: FC = () => {
     const dispatch = useAppDispatch()
-    const login = useAppSelector(getAuthLogin)
-    const isAuth = useAppSelector(getIsAuth)
-    const isFetching = useAppSelector(getAuthIsFetching)
-    const profile = useAppSelector(getProfile)
+    const login = useAppSelector(selectAuthLogin)
+    const isAuth = useAppSelector(selectIsAuth)
+    const isFetching = useAppSelector(selectAuthIsFetching)
+    const profile = useAppSelector(selectProfile)
     const handleLogout = () => dispatch(logout())
 
     useAuthRedirect()
