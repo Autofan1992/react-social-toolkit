@@ -12,7 +12,7 @@ const MessageSchema = Yup.object().shape({
         .required('Required'),
 })
 
-const MessageForm: FC<PropsType> = ({ handleAddMessage }) => {
+const MessageForm: FC<PropsType> = ({ handleAddMessage, isSocketConnected }) => {
     return <Formik
         initialValues={{
             message: ''
@@ -33,7 +33,7 @@ const MessageForm: FC<PropsType> = ({ handleAddMessage }) => {
                     placeholder: errors.message ?? 'Type your message',
                     className: 'flex-1'
                 })}
-                <SubmitButton size="large" type="primary" htmlType="submit" disabled={isSubmitting}>
+                <SubmitButton size="large" type="primary" htmlType="submit" disabled={isSubmitting || isSocketConnected !== WebSocket.OPEN}>
                     Add message
                 </SubmitButton>
             </Form>
@@ -46,6 +46,7 @@ export default MessageForm
 type InputNames = keyof MessageType
 
 type PropsType = {
+    isSocketConnected: number
     handleAddMessage: (message: string) => void
 }
 

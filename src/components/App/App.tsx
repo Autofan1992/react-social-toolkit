@@ -24,8 +24,8 @@ const App: FC<PropsType> = memo(() => {
                     <Content>
                         <Suspense fallback={<Preloader/>}>
                             <Routes>
-                                <Route path="/" element={<Navigate to="/profile" replace />}/>
-                                <Route path="/profile"  element={<ProfileContainer/>}>
+                                <Route path="/" element={<Navigate to="/profile" replace/>}/>
+                                <Route path="/profile" element={<ProfileContainer/>}>
                                     <Route path="edit" element={<ProfileContainer/>}/>
                                 </Route>
                                 <Route path="login" element={<LoginPage/>}/>

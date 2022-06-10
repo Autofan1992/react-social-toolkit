@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import store from './redux/store'
@@ -12,13 +11,11 @@ const root = ReactDOM.createRoot(
 )
 
 root.render(
-    <StrictMode>
-        <BrowserRouter>
-            <Provider store={store}>
-                <AppContainer/>
-            </Provider>
-        </BrowserRouter>
-    </StrictMode>
+    <BrowserRouter>
+        <Provider store={store}>
+            <AppContainer/>
+        </Provider>
+    </BrowserRouter>
 )
 
 // If you want to start measuring performance in your app, pass a function
