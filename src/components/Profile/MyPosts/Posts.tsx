@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks/hooks'
-import { addPost, deletePost, likePost } from '../../../redux/reducers/profile-reducer'
+import { addPost, deletePost, likePost } from '../../../redux/slices/profile-slice'
 import PostForm from './PostForm'
 import Post from './Post/Post'
 import { selectPosts } from '../../../redux/selectors/profile-selectors'

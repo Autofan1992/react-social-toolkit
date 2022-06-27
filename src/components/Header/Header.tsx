@@ -1,11 +1,11 @@
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import { logout } from '../../redux/reducers/auth-reducer'
+import { logout } from '../../redux/slices/auth-slice'
 import useAuthRedirect from '../../hooks/useAuthRedirect'
 import { FC } from 'react'
 import styles from './Header.module.scss'
 import { Button, Col, Layout, Row, Skeleton, Space, Typography } from 'antd'
 import logo from '../../assets/images/logo.svg'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import avatar from '../../assets/images/user.svg'
 import { selectProfile } from '../../redux/selectors/profile-selectors'
 import { selectAuthIsFetching, selectAuthLogin, selectIsAuth } from '../../redux/selectors/auth-selectors'
@@ -33,16 +33,16 @@ const Header: FC = () => {
                     <Skeleton avatar active paragraph={false} loading={isFetching}/>
                     {!isFetching && (isAuth
                         ? <Space>
-                            <NavLink to={`/profile`}>
+                            <Link to={`/profile`}>
                                 <img src={profile?.photos?.small ?? avatar} alt="avatar" width="50px"/>
-                            </NavLink>
+                            </Link>
                             <div className="text-center">
                                 <Paragraph className={styles.loginTxt}>{login}</Paragraph>
                                 <Button size="small" onClick={handleLogout}>Logout</Button>
                             </div>
                         </Space>
                         : <div className="text-center">
-                            <NavLink to="/login">Login</NavLink>
+                            <Link to="/login">Login</Link>
                         </div>)
                     }
                 </Col>

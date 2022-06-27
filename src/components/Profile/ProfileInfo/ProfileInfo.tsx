@@ -5,7 +5,7 @@ import ProfileStatus from './ProfileStatus'
 import Posts from '../MyPosts/Posts'
 import Preloader from '../../common/Preloader/Preloader'
 import { Space } from 'antd'
-import styles from '../../../pages/Profile/Profile.module.scss'
+import styles from '../../../pages/Profile/ProfilePage.module.scss'
 import { Link } from 'react-router-dom'
 import { ProfileType } from '../../../types/profile-types'
 

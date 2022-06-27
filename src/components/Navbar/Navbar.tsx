@@ -38,9 +38,9 @@ const Navbar: FC = () => {
                 <Link
                     to="/profile">Profile</Link>
             </Menu.Item>
-            <Menu.Item key={currentMenuKey('/dialogs')}>
+            <Menu.Item key={currentMenuKey('/chat')}>
                 <Link
-                    to="/dialogs">Messages</Link>
+                    to="/chat">Messages</Link>
             </Menu.Item>
             <Menu.Item key={currentMenuKey('/news')}>
                 <Link to="/news">News</Link>

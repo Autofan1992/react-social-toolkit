@@ -3,8 +3,8 @@ import Preloader from '../../common/Preloader/Preloader'
 import userPhoto from '../../../assets/images/user.svg'
 import { EditOutlined } from '@ant-design/icons'
 import { useAppDispatch } from '../../../redux/hooks/hooks'
-import { setUserAvatar } from '../../../redux/reducers/profile-reducer'
-import styles from '../../../pages/Profile/Profile.module.scss'
+import { setUserAvatar } from '../../../redux/slices/profile-slice'
+import styles from '../../../pages/Profile/ProfilePage.module.scss'
 
 type PropsType = {
     isProfileId: boolean

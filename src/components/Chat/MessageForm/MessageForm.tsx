@@ -3,7 +3,7 @@ import { FC } from 'react'
 import { Form, SubmitButton } from 'formik-antd'
 import { createTextField } from '../../../helpers/CustomField'
 import * as Yup from 'yup'
-import { MessageType } from '../../../types/dialogs-types'
+import { ChatConnectionStatus, MessageType } from '../../../types/chat-types'
 
 const MessageSchema = Yup.object().shape({
     message: Yup.string()
@@ -12,14 +12,14 @@ const MessageSchema = Yup.object().shape({
         .required('Required'),
 })
 
-const MessageForm: FC<PropsType> = ({ handleAddMessage, isSocketConnected }) => {
+const MessageForm: FC<PropsType> = ({ handleSendMessage, connectionStatus }) => {
     return <Formik
         initialValues={{
             message: ''
         } as MessageType}
         validationSchema={MessageSchema}
         onSubmit={({ message }, { setSubmitting, resetForm }) => {
-            handleAddMessage(message)
+            handleSendMessage(message)
             resetForm()
             setSubmitting(false)
         }}>
@@ -33,7 +33,7 @@ const MessageForm: FC<PropsType> = ({ handleAddMessage, isSocketConnected }) => 
                     placeholder: errors.message ?? 'Type your message',
                     className: 'flex-1'
                 })}
-                <SubmitButton size="large" type="primary" htmlType="submit" disabled={isSubmitting || isSocketConnected !== WebSocket.OPEN}>
+                <SubmitButton size="large" type="primary" htmlType="submit" disabled={isSubmitting || connectionStatus === ChatConnectionStatus.Disconnected}>
                     Add message
                 </SubmitButton>
             </Form>
@@ -46,7 +46,7 @@ export default MessageForm
 type InputNames = keyof MessageType
 
 type PropsType = {
-    isSocketConnected: number
-    handleAddMessage: (message: string) => void
+    connectionStatus: ChatConnectionStatus
+    handleSendMessage: (message: string) => void
 }
 

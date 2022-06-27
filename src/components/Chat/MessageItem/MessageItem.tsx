@@ -1,18 +1,20 @@
-import React, { FC } from 'react'
+import React, { FC, memo } from 'react'
 import { Avatar, List, Space } from 'antd'
 import userPhoto from '../../../assets/images/user.svg'
-import { MessageType } from '../../../types/dialogs-types'
+import { MessageType } from '../../../types/chat-types'
 import { useAppSelector } from '../../../redux/hooks/hooks'
 import { selectAuthUserId } from '../../../redux/selectors/auth-selectors'
-import styles from './DialogItem.module.scss'
+import styles from './MessageItem.module.scss'
 
-const DialogItem: FC<Omit<MessageType, 'id'>> = ({ message, photo, userName, userId }) => {
+const MessageItem: FC<Omit<MessageType, 'id'>> = memo(({ message, photo, userName, userId }) => {
     const authUserId = useAppSelector(selectAuthUserId)
-    const isAuthUserId = (userId === authUserId) ? true : ''
+    const isAuthUserId = (userId === authUserId) ? true : ``
+
+    console.log('>>>>>>message')
 
     return (
         <List.Item
-            className={`${isAuthUserId && 'justify-content-end'}`}
+            className={`${isAuthUserId && 'justify-content-end pe-3'}`}
         >
             <Space
                 className={`ant-space-align-start ${isAuthUserId && 'flex-row-reverse'}`}
@@ -25,6 +27,6 @@ const DialogItem: FC<Omit<MessageType, 'id'>> = ({ message, photo, userName, use
             </Space>
         </List.Item>
     )
-}
+})
 
-export default DialogItem
+export default MessageItem

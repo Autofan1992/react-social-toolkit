@@ -1,4 +1,4 @@
-import profileReducer, { addPost, deletePost, likePost } from './profile-reducer'
+import profileReducer, { addPost, deletePost, likePost } from './profile-slice'
 import { PostType, ProfileType } from '../../types/profile-types'
 
 test('should like post with id = 0', () => {

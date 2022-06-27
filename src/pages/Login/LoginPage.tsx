@@ -1,7 +1,7 @@
 import React, { FC, memo, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
 import LoginForm from '../../components/Login/LoginForm'
-import { login } from '../../redux/reducers/auth-reducer'
+import { login } from '../../redux/slices/auth-slice'
 import { useNavigate } from 'react-router-dom'
 import { LoginType } from '../../types/login-types'
 import { selectAuthError, selectAuthIsFetching, selectIsAuth, selectLoginCaptchaUrl } from '../../redux/selectors/auth-selectors'

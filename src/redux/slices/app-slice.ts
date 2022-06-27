@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { AppThunkType } from '../store'
-import { fetchAuthUserData } from './auth-reducer'
+import { fetchAuthUserData } from './auth-slice'
 
 const initialState = {
     initialized: false as boolean,

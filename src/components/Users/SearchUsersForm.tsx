@@ -3,7 +3,7 @@ import { Formik } from 'formik'
 import { createSelectField, createTextField } from '../../helpers/CustomField'
 import { Form, SubmitButton } from 'formik-antd'
 import { Col, Row } from 'antd'
-import styles from '../../pages/Users/Users.module.scss'
+import styles from '../../pages/Users/UsersPage.module.scss'
 import { UsersSearchFiltersType } from '../../types/users-types'
 
 const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching, serverError }) => {

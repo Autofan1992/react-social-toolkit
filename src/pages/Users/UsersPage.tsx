@@ -1,7 +1,7 @@
 import { FC, memo, useEffect } from 'react'
 import Users from '../../components/Users/Users'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import { fetchUsers } from '../../redux/reducers/users-reducers'
+import { fetchUsers } from '../../redux/slices/users-slice'
 import Paginator from '../../components/common/Paginator/Paginator'
 import SearchUsersForm from '../../components/Users/SearchUsersForm'
 import { useSearchParams } from 'react-router-dom'

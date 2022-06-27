@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react'
 import { EditOutlined } from '@ant-design/icons'
 import { Typography } from 'antd'
 import { useAppDispatch } from '../../../redux/hooks/hooks'
-import { setUserStatus } from '../../../redux/reducers/profile-reducer'
+import { setUserStatus } from '../../../redux/slices/profile-slice'
 
 const { Paragraph } = Typography
 

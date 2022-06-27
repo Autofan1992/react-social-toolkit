@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CaptchaResultCode, ResultCodesEnum } from '../../api/api'
 import { authAPI } from '../../api/auth-api'
-import { fetchUserProfile } from './profile-reducer'
+import { fetchUserProfile } from './profile-slice'
 import { AuthInfoDataType } from '../../types/auth-types'
 import { LoginType } from '../../types/login-types'
 

@@ -5,7 +5,7 @@ import { createCheckbox, createTextAreaField, createTextField } from '../../help
 import * as Yup from 'yup'
 import { Col, Row } from 'antd'
 import { useAppDispatch } from '../../redux/hooks/hooks'
-import { saveUserProfile } from '../../redux/reducers/profile-reducer'
+import { saveUserProfile } from '../../redux/slices/profile-slice'
 import { useNavigate } from 'react-router-dom'
 import { ProfileType } from '../../types/profile-types'
 
