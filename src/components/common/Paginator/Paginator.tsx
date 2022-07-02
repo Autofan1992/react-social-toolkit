@@ -14,8 +14,6 @@ const Paginator: FC<PropsType> = ({ onPageChange, currentPage, totalItemsCount, 
     />
 }
 
-export default Paginator
-
 type PropsType = {
     pageSize: number
     currentPage: number
@@ -24,3 +22,5 @@ type PropsType = {
     totalItemsCount: number
     onPageChange: (pageNum: number, pageSize: number) => void
 }
+
+export default Paginator

@@ -29,9 +29,9 @@ const ProfileStatus: FC<PropsType> = ({ status, isProfileId }) => {
     </div>
 }
 
-export default ProfileStatus
-
 type PropsType = {
     status: string | null
     isProfileId: boolean
 }
+
+export default ProfileStatus

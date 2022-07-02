@@ -1,17 +1,18 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { userAPI } from '../../api/users-api'
 import { ResultCodesEnum } from '../../api/api'
-import { UsersSearchFiltersType, UserType } from '../../types/users-types'
+import { UsersSearchParamsType, UserType } from '../../types/users-types'
+import { RootStateType } from '../store'
 
 const initialState = {
     users: [] as UserType[],
     totalUsersCount: 0,
-    usersSearchFilters: {
+    usersSearchParams: {
         pageSize: 5,
         currentPage: 1,
         term: '',
         friend: null,
-    } as UsersSearchFiltersType,
+    } as UsersSearchParamsType,
     isFetching: false,
     followInProgress: [] as number[],
     error: null as string | null
@@ -27,25 +28,27 @@ export const toggleUserFollow = createAsyncThunk<number, { id: number, followed:
         return rejectWithValue(messages[0])
     })
 
-export const fetchUsers = createAsyncThunk<{ users: UserType[], totalCount: number, usersSearchParams: UsersSearchFiltersType }, UsersSearchFiltersType, { rejectValue: string }>(
+export const fetchUsers = createAsyncThunk<{ users: UserType[], totalCount: number }, undefined, { rejectValue: string, state: RootStateType }>(
     'users/fetchUsers',
-    async (
-        {
-            currentPage,
-            pageSize,
-            term,
-            friend
-        }, { rejectWithValue }) => {
+    async (_, { rejectWithValue, getState }) => {
+        const { usersPage: { usersSearchParams: {currentPage, pageSize, term, friend} } } = getState()
         const { items: users, totalCount, error } = await userAPI.getUsers(currentPage, pageSize, term, friend)
 
         if (error) return rejectWithValue(error)
-        return { users, totalCount, usersSearchParams: { currentPage, pageSize, term, friend } }
+        return { users, totalCount }
     })
 
 const usersSlice = createSlice({
     name: 'users',
     initialState,
-    reducers: {},
+    reducers: {
+        setUsersSearchParams: (state, {payload}: PayloadAction<UsersSearchParamsType>) => {
+            state.usersSearchParams = {
+                ...state.usersSearchParams,
+                ...payload
+            }
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(toggleUserFollow.pending, (state, { meta }) => {
@@ -68,7 +71,6 @@ const usersSlice = createSlice({
                 state.isFetching = false
                 state.users = payload.users
                 state.totalUsersCount = payload.totalCount
-                state.usersSearchFilters = payload.usersSearchParams
             })
             .addCase(fetchUsers.rejected, (state, { payload }) => {
                 state.isFetching = false
@@ -76,5 +78,7 @@ const usersSlice = createSlice({
             })
     }
 })
+
+export const {setUsersSearchParams} = usersSlice.actions
 
 export default usersSlice.reducer

@@ -9,9 +9,15 @@ const Posts: FC = () => {
     const dispatch = useAppDispatch()
     const posts = useAppSelector(selectPosts)
 
-    const handleAddPost = (post: string) => dispatch(addPost(post))
-    const handleDeletePost = (id: number) => dispatch(deletePost(id))
-    const handleLikePost = (id: number) => dispatch(likePost(id))
+    const handleAddPost = (post: string) => {
+        dispatch(addPost(post))
+    }
+    const handleDeletePost = (id: number) => {
+        dispatch(deletePost(id))
+    }
+    const handleLikePost = (id: number) => {
+        dispatch(likePost(id))
+    }
 
     return <div>
         <h2>My posts</h2>

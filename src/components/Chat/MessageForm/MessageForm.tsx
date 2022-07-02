@@ -41,8 +41,6 @@ const MessageForm: FC<PropsType> = ({ handleSendMessage, connectionStatus }) => 
     </Formik>
 }
 
-export default MessageForm
-
 type InputNames = keyof MessageType
 
 type PropsType = {
@@ -50,3 +48,4 @@ type PropsType = {
     handleSendMessage: (message: string) => void
 }
 
+export default MessageForm

@@ -17,7 +17,9 @@ const ProfileContainer = lazy(() => import('../../pages/Profile/ProfilePage'))
 const UsersContainer = lazy(() => import('../../pages/Users/UsersPage'))
 
 const App: FC = memo(() => {
-    const handleAllUnhandledErrors = (reason: any) => alert(reason.reason)
+    const handleAllUnhandledErrors = (reason: any) => {
+        alert(reason.reason)
+    }
     const dispatch = useAppDispatch()
 
     useEffect(() => {

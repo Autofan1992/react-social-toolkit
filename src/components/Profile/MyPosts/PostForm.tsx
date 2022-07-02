@@ -39,10 +39,10 @@ const PostForm: FC<PropsType> = (
     </Formik>
 }
 
-export default PostForm
-
 type InputNames = keyof PostType
 
 type PropsType = {
     addPost: (post: string) => void
 }
+
+export default PostForm

@@ -6,14 +6,9 @@ import { useAppDispatch } from '../../../redux/hooks/hooks'
 import { setUserAvatar } from '../../../redux/slices/profile-slice'
 import styles from '../../../pages/Profile/ProfilePage.module.scss'
 
-type PropsType = {
-    isProfileId: boolean
-    avatar: string
-    isFetching: boolean
-}
-
 const ProfileAvatar: FC<PropsType> = ({ isProfileId, avatar, isFetching }) => {
     const dispatch = useAppDispatch()
+
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return
         dispatch(setUserAvatar(e.target.files[0]))
@@ -33,6 +28,12 @@ const ProfileAvatar: FC<PropsType> = ({ isProfileId, avatar, isFetching }) => {
             </div>
         </div>
     )
+}
+
+type PropsType = {
+    isProfileId: boolean
+    avatar: string
+    isFetching: boolean
 }
 
 export default ProfileAvatar

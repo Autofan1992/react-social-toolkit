@@ -1,6 +1,6 @@
 import { PhotosType } from './profile-types'
 
-export type UsersSearchFiltersType = {
+export type UsersSearchParamsType = {
     currentPage: number,
     pageSize: number
     term: string

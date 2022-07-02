@@ -68,11 +68,11 @@ const ProfileInfo: FC<PropsType> = memo((
     </>
 })
 
-export default ProfileInfo
-
-export type PropsType = {
+type PropsType = {
     profile: ProfileType
     status: string | null
     isProfileId: boolean
     isFetching: boolean
 }
+
+export default ProfileInfo

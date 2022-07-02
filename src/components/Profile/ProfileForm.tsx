@@ -110,13 +110,13 @@ const ProfileForm: FC<PropsType> = memo((
     </Formik>
 })
 
-export default ProfileForm
-
 type InputNames = keyof ProfileType
 
-export type PropsType = {
+type PropsType = {
     profile: ProfileType
     isProfileId: boolean
     isFetching: boolean
     serverError: string | null
 }
+
+export default ProfileForm

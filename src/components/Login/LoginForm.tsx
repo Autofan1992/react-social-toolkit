@@ -83,8 +83,6 @@ const LoginForm: FC<PropsType> = (
     </div>
 }
 
-export default LoginForm
-
 type InputNames = keyof LoginType
 
 type PropsType = {
@@ -93,3 +91,5 @@ type PropsType = {
     isFetching: boolean
     serverError: string | null
 }
+
+export default LoginForm

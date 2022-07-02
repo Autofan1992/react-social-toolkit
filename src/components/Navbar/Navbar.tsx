@@ -1,34 +1,19 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Layout, Menu } from 'antd'
 
-const { Sider: SideBar } = Layout
+const { Sider: Sidebar } = Layout
 
 const Navbar: FC = () => {
     const { pathname } = useLocation()
-    const [collapsed, setCollapsed] = useState(false)
+    const currentMenuKey = (key: string) => pathname.search(key) >= 0 ? pathname : key
 
-    const currentMenuKey = (key: string) => {
-        if (pathname.search(key) >= 0) return pathname
-        return key
-    }
-
-    const handleSidebarCollapse = () => {
-        if (window.innerWidth < 992) setCollapsed(!collapsed)
-    }
-
-    const trigger = document.querySelector('.ant-layout-sider-zero-width-trigger-left')
-
-    if (trigger) trigger.addEventListener('click', handleSidebarCollapse)
-
-    return <SideBar
+    return <Sidebar
         className="site-layout-background main-sidebar"
         breakpoint="lg"
         collapsedWidth="0"
-        collapsed={collapsed}
     >
         <Menu
-            onClick={handleSidebarCollapse}
             theme="dark"
             defaultSelectedKeys={['1']}
             selectedKeys={[pathname]}
@@ -61,7 +46,7 @@ const Navbar: FC = () => {
                     to="/weather">Weather</Link>
             </Menu.Item>
         </Menu>
-    </SideBar>
+    </Sidebar>
 }
 
 export default Navbar

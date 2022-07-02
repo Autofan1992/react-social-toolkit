@@ -26,8 +26,6 @@ const Post: FC<PropsType> = ({ post, id, likePost, deletePost, likesCount }) => 
     )
 }
 
-export default Post
-
 type PropsType = {
     post: string
     id: number
@@ -35,3 +33,5 @@ type PropsType = {
     likePost: (id: number) => void
     likesCount: number
 }
+
+export default Post

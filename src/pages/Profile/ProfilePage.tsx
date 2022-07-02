@@ -12,7 +12,7 @@ import { selectProfileError, selectProfileIsFetching, selectProfile, selectProfi
 
 const ProfilePage: FC = memo(() => {
     const { userId: urlUserId } = useParams()
-    const editProfile = useMatch('/profile/edit')
+    const editProfilePath = useMatch('/profile/edit')
     const dispatch = useAppDispatch()
     const initialized = useAppSelector(selectAppInitialized)
     const authUserId = useAppSelector(selectAuthUserId)
@@ -37,7 +37,7 @@ const ProfilePage: FC = memo(() => {
 
     return (
         <>
-            {editProfile
+            {editProfilePath
                 ? <ProfileForm
                     serverError={error}
                     isProfileId={isProfileId}

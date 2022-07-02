@@ -39,10 +39,10 @@ const Users: FC<PropsType> = memo(({ users, followInProgress, isFetching }) => {
     </>
 })
 
-export default Users
-
 type PropsType = {
     users: Array<UserType>
     isFetching: boolean
     followInProgress: Array<number>
 }
+
+export default Users

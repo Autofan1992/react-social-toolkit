@@ -11,7 +11,7 @@ type UsersResponseType<I = [], RC = ResultCodesEnum> = {
 
 export const userAPI = {
     getUsers: (pageNum: number, pageSize: number, term: string, friend: boolean | null) => mainAxiosInstance
-        .get<UsersResponseType<Array<UserType>>>(`users?page=${pageNum}&count=${pageSize}${term ? `&term=${term}` : ''}${friend ? `&friend=${friend}` : ''}`)
+        .get<UsersResponseType<Array<UserType>>>(`users?page=${pageNum}&count=${pageSize}${term ? `&term=${term}` : ''}&friend=${friend}`)
         .then(res => res.data),
     unfollowUserRequest: (userId: number) => mainAxiosInstance
         .delete<UsersResponseType>(`follow/${userId}`)

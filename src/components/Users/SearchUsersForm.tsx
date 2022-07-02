@@ -4,7 +4,7 @@ import { createSelectField, createTextField } from '../../helpers/CustomField'
 import { Form, SubmitButton } from 'formik-antd'
 import { Col, Row } from 'antd'
 import styles from '../../pages/Users/UsersPage.module.scss'
-import { UsersSearchFiltersType } from '../../types/users-types'
+import { UsersSearchParamsType } from '../../types/users-types'
 
 const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching, serverError }) => {
     return <Formik
@@ -23,15 +23,15 @@ const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching
                     <Col md={3}>{createSelectField<InputNames>('Search all users', 'friend', [
                             {
                                 name: 'Search all users',
-                                value: 'null'
+                                value: null
                             },
                             {
                                 name: 'Search friends only',
-                                value: 'true',
+                                value: true,
                             },
                             {
                                 name: 'Search only not friends',
-                                value: 'false'
+                                value: false
                             }
                         ],
                         {
@@ -50,14 +50,14 @@ const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching
     </Formik>
 }
 
-export default SearchUsersForm
-
-type InputNames = keyof UsersSearchFiltersType
+type InputNames = keyof UsersSearchParamsType
 
 type PropsType = {
     isFetching: boolean,
     serverError: string | null
     term: string
-    friend: string
-    handleSearch: ({ friend, term }: { friend: string, term: string }) => void
+    friend: boolean | null
+    handleSearch: ({ friend, term }: { friend: boolean | null, term: string }) => void
 }
+
+export default SearchUsersForm
