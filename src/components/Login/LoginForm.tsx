@@ -40,11 +40,13 @@ const LoginForm: FC<PropsType> = (
             {({ touched, errors }) => (
                 <Form>
                     {createTextField<InputNames>('Type your email', 'email', 'email', {
+                        disabled: isFetching,
                         status: (touched.email && errors.email) && 'error',
                         placeholder: errors.email
                     })}
 
                     {createTextField<InputNames>('Type your password', 'password', 'password', {
+                        disabled: isFetching,
                         status: (touched.password && errors.password) && 'error',
                         placeholder: errors.password,
                         style: {
@@ -58,6 +60,7 @@ const LoginForm: FC<PropsType> = (
                                 <img src={captchaUrl} alt="captcha"/>
                             </div>
                             {createTextField<InputNames>('Type symbols from image', 'captcha', undefined, {
+                                disabled: isFetching,
                                 status: (touched.captcha && errors.captcha) && 'error'
                             })}
                         </>
@@ -70,6 +73,7 @@ const LoginForm: FC<PropsType> = (
                     <SubmitButton
                         size="large"
                         type="primary"
+                        loading={isFetching}
                         disabled={isFetching}
                         className="w-100">Submit
                     </SubmitButton>

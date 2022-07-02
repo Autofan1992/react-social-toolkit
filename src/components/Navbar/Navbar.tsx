@@ -4,7 +4,6 @@ import { Layout, Menu } from 'antd'
 
 const { Sider: SideBar } = Layout
 
-
 const Navbar: FC = () => {
     const { pathname } = useLocation()
     const [collapsed, setCollapsed] = useState(false)

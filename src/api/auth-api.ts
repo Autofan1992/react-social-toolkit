@@ -5,6 +5,7 @@ import { LoginType } from '../types/login-types'
 type AuthDataType = {
     userId: number
 }
+
 type CaptchaResponseType = {
     url: string
 }

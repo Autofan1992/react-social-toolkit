@@ -7,7 +7,7 @@ import { v4 as createId } from 'uuid'
 const initialState = {
     messages: [] as MessageType[],
     chatConnectionStatus: ChatConnectionStatus.Disconnected,
-    chatScrollTop: 0,
+    lastScrollTop: 0,
     isFetching: false,
     error: null as string | null
 }
@@ -50,8 +50,8 @@ const chatSlice = createSlice({
     name: 'chat',
     initialState,
     reducers: {
-        setChatScrollTop: (state, { payload }: PayloadAction<number>) => {
-            state.chatScrollTop = payload
+        setLastScrollTop: (state, { payload }: PayloadAction<number>) => {
+            state.lastScrollTop = payload
         },
         setMessages: (state, { payload }: PayloadAction<MessageType[]>) => {
             if (state.messages.length !== payload.length) {
@@ -68,5 +68,5 @@ const chatSlice = createSlice({
     }
 })
 
-export const { setMessages, setConnectionStatus, setChatScrollTop } = chatSlice.actions
+export const { setMessages, setConnectionStatus, setLastScrollTop } = chatSlice.actions
 export default chatSlice.reducer

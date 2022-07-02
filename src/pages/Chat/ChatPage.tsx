@@ -6,53 +6,43 @@ import styles from './ChatPage.module.scss'
 import MessageItem from '../../components/Chat/MessageItem/MessageItem'
 import { ChatConnectionStatus } from '../../types/chat-types'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import { selectChatConnectionStatus, selectChatScrollTop, selectMessages } from '../../redux/selectors/chat-selectors'
-import { connectChat, disconnectChat, sendMessage, setChatScrollTop } from '../../redux/slices/chat-slice'
+import { selectChatConnectionStatus, selectMessages } from '../../redux/selectors/chat-selectors'
+import { connectChat, disconnectChat, sendMessage } from '../../redux/slices/chat-slice'
 
 const ChatPage = memo(() => {
     const dispatch = useAppDispatch()
     const connectionStatus = useAppSelector(selectChatConnectionStatus)
     const messages = useAppSelector(selectMessages)
-    const chatLastScrollTop = useAppSelector(selectChatScrollTop)
-    const chatBlockRef = useRef<HTMLDivElement>(null)
-    const [chatListHeight, setChatListHeight] = useState(0)
-    const scrollCheckRef = useRef(0)
+    const [autoScrollBottomOnMessage, setAutoScrollBottomOnMessage] = useState(false)
+    const messagesEnd = useRef<HTMLDivElement>(null)
 
     useAuthRedirect()
 
     useEffect(() => {
-        let interval: NodeJS.Timer
         dispatch(connectChat())
 
-        interval = setInterval(() => {
-            scrollCheckRef.current = chatBlockRef.current?.scrollTop as number
-        }, 1000)
-
-        if (chatBlockRef.current) {
-            const chatScrollTop = chatBlockRef.current.scrollTop
-            const chatScrollHeight = chatBlockRef.current.scrollHeight
-            const chatClientHeight = chatBlockRef.current.clientHeight
-
-            if (chatScrollTop !== 0 && chatScrollTop === chatListHeight) {
-                chatBlockRef.current.scrollTo({
-                    top: chatScrollHeight - chatClientHeight,
-                    behavior: 'smooth'
-                })
-            } else if (chatLastScrollTop) {
-                chatBlockRef.current.scrollTop = chatLastScrollTop
-            }
-
-            setChatListHeight(chatScrollHeight - chatClientHeight)
-        }
         return () => {
-            clearInterval(interval)
-            dispatch(setChatScrollTop(scrollCheckRef.current))
             dispatch(disconnectChat())
         }
-    }, [messages, dispatch])
+    }, [dispatch])
+
+    useEffect(() => {
+        if (autoScrollBottomOnMessage && messagesEnd.current) messagesEnd.current.scrollIntoView({ behavior: 'smooth' })
+    }, [messages, autoScrollBottomOnMessage])
 
     const handleSendMessage = (message: string) => {
         dispatch(sendMessage(message))
+    }
+
+    const handleChatScroll = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+        const scrollTop = e.currentTarget.scrollTop
+        const chatHeight = e.currentTarget.scrollHeight - e.currentTarget.clientHeight
+
+        if (!autoScrollBottomOnMessage && scrollTop === chatHeight) {
+            setAutoScrollBottomOnMessage(true)
+        } else {
+            setAutoScrollBottomOnMessage(false)
+        }
     }
 
     return <div className={'h-100 p-5 d-flex flex-column'}>
@@ -60,11 +50,12 @@ const ChatPage = memo(() => {
         <>
             <div
                 className={`${styles.chatBlock} mb-4 flex-grow-1`}
-                ref={chatBlockRef}>
+                onScroll={handleChatScroll}
+            >
                 <List
                     loading={connectionStatus === ChatConnectionStatus.Disconnected}
                     dataSource={messages}
-                    renderItem={item => (
+                    renderItem={item => <>
                         <MessageItem
                             userId={item.userId}
                             message={item.message}
@@ -72,7 +63,8 @@ const ChatPage = memo(() => {
                             userName={item.userName}
                             key={item.id}
                         />
-                    )}
+                        <div ref={messagesEnd}></div>
+                    </>}
                 />
             </div>
             <MessageForm connectionStatus={connectionStatus} handleSendMessage={handleSendMessage}/>

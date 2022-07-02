@@ -18,7 +18,9 @@ const LoginPage: FC = memo(() => {
         if (isAuth) navigate('/', { replace: true })
     }, [isAuth, navigate])
 
-    const handleLogin = (values: LoginType) => dispatch(login(values))
+    const handleLogin = (values: LoginType) => {
+        dispatch(login(values))
+    }
 
     return <LoginForm captchaUrl={captchaUrl} serverError={error} isFetching={isFetching} handleLogin={handleLogin}/>
 })

@@ -10,8 +10,6 @@ const MessageItem: FC<Omit<MessageType, 'id'>> = memo(({ message, photo, userNam
     const authUserId = useAppSelector(selectAuthUserId)
     const isAuthUserId = (userId === authUserId) ? true : ``
 
-    console.log('>>>>>>message')
-
     return (
         <List.Item
             className={`${isAuthUserId && 'justify-content-end pe-3'}`}
