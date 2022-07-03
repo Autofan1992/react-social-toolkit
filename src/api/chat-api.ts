@@ -59,13 +59,20 @@ export const chatAPI = {
         ws?.close()
     },
     subscribe(eventName: SubscribersTypesNames, callback: MessagesSubscriberType | StatusSubscriberType) {
-        // @ts-ignore
-        subscribers[eventName].push(callback)
+        if (eventName === 'status-change') {
+            subscribers[eventName].push(callback as StatusSubscriberType)
+        } else {
+            subscribers[eventName].push(callback as MessagesSubscriberType)
+        }
+
 
         return () => {
             removeAllListeners()
-            // @ts-ignore
-            subscribers[eventName] = subscribers[eventName].filter((sub) => sub !== callback)
+            if (eventName === 'status-change') {
+                subscribers[eventName] = subscribers[eventName].filter((sub) => sub !== callback)
+            } else {
+                subscribers[eventName] = subscribers[eventName].filter((sub) => sub !== callback)
+            }
         }
     },
     sendMessage(message: string) {
