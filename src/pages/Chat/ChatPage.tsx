@@ -39,9 +39,9 @@ const ChatPage = memo(() => {
         const chatHeight = e.currentTarget.scrollHeight - e.currentTarget.clientHeight
 
         if (!autoScrollBottomOnMessage && scrollTop === chatHeight) {
-            setAutoScrollBottomOnMessage(true)
+            !autoScrollBottomOnMessage && setAutoScrollBottomOnMessage(true)
         } else {
-            setAutoScrollBottomOnMessage(false)
+            autoScrollBottomOnMessage && setAutoScrollBottomOnMessage(false)
         }
     }
 

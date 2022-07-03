@@ -1,12 +1,21 @@
 import React, { FC } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Layout, Menu } from 'antd'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { Layout, Menu, MenuProps } from 'antd'
 
 const { Sider: Sidebar } = Layout
 
 const Navbar: FC = () => {
     const { pathname } = useLocation()
+    const navigate = useNavigate()
     const currentMenuKey = (key: string) => pathname.search(key) >= 0 ? pathname : key
+
+    const onClick: MenuProps['onClick'] = e => navigate(e.key)
+
+    const menuItems = [
+        { label: 'Profile', key: currentMenuKey('/profile') },
+        { label: 'Messages', key: currentMenuKey('/chat') },
+        { label: 'Users', key: currentMenuKey('/users') },
+    ]
 
     return <Sidebar
         className="site-layout-background main-sidebar"
@@ -14,38 +23,11 @@ const Navbar: FC = () => {
         collapsedWidth="0"
     >
         <Menu
+            onClick={onClick}
             theme="dark"
-            defaultSelectedKeys={['1']}
             selectedKeys={[pathname]}
-        >
-            <Menu.Item key={currentMenuKey('/profile')} className="mt-0">
-                <Link
-                    to="/profile">Profile</Link>
-            </Menu.Item>
-            <Menu.Item key={currentMenuKey('/chat')}>
-                <Link
-                    to="/chat">Messages</Link>
-            </Menu.Item>
-            <Menu.Item key={currentMenuKey('/news')}>
-                <Link to="/news">News</Link>
-            </Menu.Item>
-            <Menu.Item key={currentMenuKey('/music')}>
-                <Link
-                    to="/music">Music</Link>
-            </Menu.Item>
-            <Menu.Item key={currentMenuKey('/settings')}>
-                <Link
-                    to="/settings">Settings</Link>
-            </Menu.Item>
-            <Menu.Item key={currentMenuKey('/users')}>
-                <Link
-                    to="/users">Users</Link>
-            </Menu.Item>
-            <Menu.Item key={currentMenuKey('/weather')}>
-                <Link
-                    to="/weather">Weather</Link>
-            </Menu.Item>
-        </Menu>
+            items={menuItems}
+        />
     </Sidebar>
 }
 

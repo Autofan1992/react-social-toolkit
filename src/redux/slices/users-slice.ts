@@ -31,7 +31,7 @@ export const toggleUserFollow = createAsyncThunk<number, { id: number, followed:
 export const fetchUsers = createAsyncThunk<{ users: UserType[], totalCount: number }, undefined, { rejectValue: string, state: RootStateType }>(
     'users/fetchUsers',
     async (_, { rejectWithValue, getState }) => {
-        const { usersPage: { usersSearchParams: {currentPage, pageSize, term, friend} } } = getState()
+        const { usersPage: { usersSearchParams: { currentPage, pageSize, term, friend } } } = getState()
         const { items: users, totalCount, error } = await userAPI.getUsers(currentPage, pageSize, term, friend)
 
         if (error) return rejectWithValue(error)
@@ -42,7 +42,7 @@ const usersSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
-        setUsersSearchParams: (state, {payload}: PayloadAction<UsersSearchParamsType>) => {
+        setUsersSearchParams: (state, { payload }: PayloadAction<UsersSearchParamsType>) => {
             state.usersSearchParams = {
                 ...state.usersSearchParams,
                 ...payload
@@ -79,6 +79,6 @@ const usersSlice = createSlice({
     }
 })
 
-export const {setUsersSearchParams} = usersSlice.actions
+export const { setUsersSearchParams } = usersSlice.actions
 
 export default usersSlice.reducer
