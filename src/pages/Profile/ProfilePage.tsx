@@ -7,14 +7,18 @@ import ProfileForm from '../../components/Profile/ProfileForm'
 import ProfileInfo from '../../components/Profile/ProfileInfo/ProfileInfo'
 import Preloader from '../../components/common/Preloader/Preloader'
 import { selectAuthUserId } from '../../redux/selectors/auth-selectors'
-import { selectAppInitialized } from '../../redux/selectors/app-selectors'
-import { selectProfileError, selectProfileIsFetching, selectProfile, selectProfileStatus } from '../../redux/selectors/profile-selectors'
+import {
+    selectProfile,
+    selectProfileError,
+    selectProfileIsFetching,
+    selectProfileStatus
+} from '../../redux/selectors/profile-selectors'
 
 const ProfilePage: FC = memo(() => {
     const { userId: urlUserId } = useParams()
+    const profilePath = useMatch('/profile')
     const editProfilePath = useMatch('/profile/edit')
     const dispatch = useAppDispatch()
-    const initialized = useAppSelector(selectAppInitialized)
     const authUserId = useAppSelector(selectAuthUserId)
     const profile = useAppSelector(selectProfile)
     const isFetching = useAppSelector(selectProfileIsFetching)
@@ -24,19 +28,24 @@ const ProfilePage: FC = memo(() => {
     useAuthRedirect()
 
     const isProfileId = !urlUserId || (authUserId === +urlUserId)
-    const userId = urlUserId ? +urlUserId : authUserId
 
     useEffect(() => {
-        if (userId && initialized) {
-            if (profile && userId !== profile.userId) dispatch(fetchUserProfile(userId))
-            dispatch(fetchUserStatus(userId))
+        if (authUserId) {
+            if (profilePath) {
+                dispatch(fetchUserProfile(authUserId))
+                dispatch(fetchUserStatus(authUserId))
+            }
+            if (!profilePath && urlUserId) {
+                dispatch(fetchUserProfile(+urlUserId))
+                dispatch(fetchUserStatus(+urlUserId))
+            }
         }
-    }, [dispatch, initialized, profile, userId])
+    }, [authUserId, dispatch, profilePath, urlUserId])
 
     if (!profile) return <Preloader/>
 
     return (
-        <>
+        <div className="container">
             {editProfilePath
                 ? <ProfileForm
                     serverError={error}
@@ -50,7 +59,7 @@ const ProfilePage: FC = memo(() => {
                     isProfileId={isProfileId}
                     status={status}
                 />}
-        </>
+        </div>
     )
 })
 

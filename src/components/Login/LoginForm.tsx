@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 import { Formik } from 'formik'
 import { Form, SubmitButton } from 'formik-antd'
 import { createTextField } from '../../helpers/CustomField'
@@ -25,6 +25,7 @@ const LoginForm: FC<PropsType> = (
     }) => {
 
     return <div className={styles.loginFormBlock}>
+        <h2 className="mb-5">Please login to proceed</h2>
         <Formik
             initialValues={{
                 email: '',

@@ -15,12 +15,12 @@ const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching
     >
         {({ handleSubmit, isSubmitting }) => (
             <Form>
-                <Row gutter={12}>
-                    <Col md={4}>{createTextField<InputNames>('Type user name to start search', 'term', undefined, {
+                <Row gutter={15}>
+                    <Col md={8}>{createTextField<InputNames>('Type user name to start search', 'term', undefined, {
                         onInput: handleSubmit
                     })}</Col>
 
-                    <Col md={3}>{createSelectField<InputNames>('Search all users', 'friend', [
+                    <Col md={8}>{createSelectField<InputNames>('Search all users', 'friend', [
                             {
                                 name: 'Search all users',
                                 value: null
@@ -38,8 +38,12 @@ const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching
                             className: styles.searchInput
                         }
                     )}</Col>
-                    <Col>
-                        <SubmitButton type="primary" loading={isSubmitting && isFetching}>Search</SubmitButton>
+                    <Col md={8}>
+                        <SubmitButton
+                            type="primary"
+                            className="w-100"
+                            loading={isSubmitting && isFetching}
+                        >Search</SubmitButton>
                     </Col>
                 </Row>
 

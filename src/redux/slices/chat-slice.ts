@@ -55,11 +55,7 @@ const chatSlice = createSlice({
         },
         setMessages: (state, { payload }: PayloadAction<MessageType[]>) => {
             if (state.messages.length !== payload.length) {
-                const newMessages = payload
-                    .map(message => ({ ...message, id: createId() }))
-                    .filter((_, idx, arr) => idx >= arr.length - 100)
-
-                state.messages.push(...newMessages)
+                state.messages.push(...payload.map(message => ({ ...message, id: createId() })))
             }
         },
         setConnectionStatus: (state, { payload }: PayloadAction<ChatConnectionStatus>) => {

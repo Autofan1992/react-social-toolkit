@@ -7,9 +7,11 @@ import styles from './App.module.scss'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import LoginPage from '../../pages/Login/LoginPage'
 import ChatPage from '../../pages/Chat/ChatPage'
-import NotFound from '../../pages/404/NotFound'
-import { useAppDispatch } from '../../redux/hooks/hooks'
+import NotFoundPage from '../../pages/404/NotFoundPage'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
 import { initializeApp } from '../../redux/slices/app-slice'
+import { selectIsDarkTheme } from '../../redux/selectors/app-selectors'
+import { Footer } from '../Footer/Footer'
 
 const { Content } = Layout
 
@@ -21,6 +23,15 @@ const App: FC = memo(() => {
         alert(reason.reason)
     }
     const dispatch = useAppDispatch()
+    const isDarkTheme = useAppSelector(selectIsDarkTheme)
+
+    useEffect(() => {
+        const bgColor = isDarkTheme ? '#1d2226' : '#f0f2f5'
+        const textColor = isDarkTheme ? '#fff' : '#000000d9'
+
+        document.documentElement.style.setProperty('--app-bg-color', bgColor)
+        document.documentElement.style.setProperty('--app-text-color', textColor)
+    }, [isDarkTheme])
 
     useEffect(() => {
         dispatch(initializeApp())
@@ -47,10 +58,11 @@ const App: FC = memo(() => {
                                 <Route path="chat" element={<ChatPage/>}/>
                                 <Route path="users" element={<UsersContainer/>}/>
                                 <Route path="users/:userId" element={<ProfileContainer/>}/>
-                                <Route path="*" element={<NotFound/>}/>
+                                <Route path="*" element={<NotFoundPage/>}/>
                             </Routes>
                         </Suspense>
                     </Content>
+                    <Footer/>
                 </Layout>
             </Layout>
         </Layout>

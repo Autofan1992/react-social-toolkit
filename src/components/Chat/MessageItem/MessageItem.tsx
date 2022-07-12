@@ -12,7 +12,7 @@ const MessageItem: FC<Omit<MessageType, 'id'>> = memo(({ message, photo, userNam
 
     return (
         <List.Item
-            className={`${isAuthUserId && 'justify-content-end pe-3'}`}
+            className={`${isAuthUserId && 'justify-content-end'}`}
         >
             <Space
                 className={`ant-space-align-start ${isAuthUserId && 'flex-row-reverse'}`}

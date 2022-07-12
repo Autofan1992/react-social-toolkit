@@ -26,9 +26,10 @@ export const fetchUserStatus = createAsyncThunk<string, number>(
 export const setUserStatus = createAsyncThunk<string, string, { rejectValue: string }>(
     'profile/setUserStatus',
     async (status, { rejectWithValue }) => {
-        const { data, resultCode, messages } = await profileAPI.setStatus(status)
+        const { resultCode, messages } = await profileAPI.setStatus(status)
 
-        if (resultCode === ResultCodesEnum.Success) return data
+        if (resultCode === ResultCodesEnum.Success) return status
+
         return rejectWithValue(messages[0])
     })
 

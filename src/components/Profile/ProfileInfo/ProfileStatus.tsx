@@ -4,9 +4,7 @@ import { Typography } from 'antd'
 import { useAppDispatch } from '../../../redux/hooks/hooks'
 import { setUserStatus } from '../../../redux/slices/profile-slice'
 
-const { Paragraph } = Typography
-
-const ProfileStatus: FC<PropsType> = ({ status, isProfileId }) => {
+const ProfileStatus: FC<PropsType> = ({ status, isProfileId, isFetching }) => {
     const dispatch = useAppDispatch()
     const [currentStatus, setStatus] = useState(status)
 
@@ -19,19 +17,22 @@ const ProfileStatus: FC<PropsType> = ({ status, isProfileId }) => {
     }
 
     return <div>
-        <Paragraph
+        <Typography.Title
+            level={5}
+            disabled={isFetching}
             editable={isProfileId && {
                 icon: <EditOutlined/>,
                 onChange: (text) => handleStatusUpdate(text)
             }}
         >{currentStatus}
-        </Paragraph>
+        </Typography.Title>
     </div>
 }
 
 type PropsType = {
     status: string | null
     isProfileId: boolean
+    isFetching: boolean
 }
 
 export default ProfileStatus

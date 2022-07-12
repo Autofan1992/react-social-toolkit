@@ -1,10 +1,59 @@
-@import 'antd/dist/antd.min.css';
-@import './assets/plugins/bootstrap/bootstrap-utilities.min.css';
+@import 'antd/dist/antd.variable.min.css';
+@import './assets/plugins/bootstrap/css/bootstrap-utilities.min.css';
+@import './assets/plugins/bootstrap/css/bootstrap-grid.min.css';
+
+html {
+    --app-bg-color: #f0f2f5;
+    --app-text-color: #000000d9;
+    --bs-white-rgb: 255, 255, 255;
+}
+
+body {
+    background-color: var(--app-bg-color);
+    color: var(--app-text-color);
+}
 
 img {
-  max-width: 100%;
+    max-width: 100%;
+}
+
+p {
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--app-text-color) !important;
+}
+
+.ant-typography {
+    color: var(--app-text-color);
 }
 
 .ant-layout {
-  position: relative;
+    background-color: var(--app-bg-color);
+    position: relative;
+    -webkit-transition: .2s;
+    -moz-transition: .2s;
+    -ms-transition: .2s;
+    -o-transition: .2s;
+    transition: .2s;
+}
+
+.ant-card {
+    border-radius: 5px;
+    color: var(--app-text-color);
+}
+
+.card-dark {
+    background: #000;
+}
+
+.ant-layout-footer {
+    -webkit-transition: .2s;
+    -moz-transition: .2s;
+    -ms-transition: .2s;
+    -o-transition: .2s;
+    transition: .2s;
+    color: var(--app-text-color);
+    background-color: var(--app-bg-color);
 }

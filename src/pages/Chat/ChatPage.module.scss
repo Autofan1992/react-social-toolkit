@@ -1,5 +1,8 @@
 .chatBlock {
+  background-color: #fff;
   height: 300px;
+  border-radius: 3px;
+  padding: 10px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -12,5 +15,9 @@
   &::-webkit-scrollbar-thumb {
     border-radius: 8px;
     background: #40a9ff;
+  }
+
+  &.chatDark {
+    background-color: #000;
   }
 }

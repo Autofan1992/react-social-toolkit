@@ -4,7 +4,12 @@ import LoginForm from '../../components/Login/LoginForm'
 import { login } from '../../redux/slices/auth-slice'
 import { useNavigate } from 'react-router-dom'
 import { LoginType } from '../../types/login-types'
-import { selectAuthError, selectAuthIsFetching, selectIsAuth, selectLoginCaptchaUrl } from '../../redux/selectors/auth-selectors'
+import {
+    selectAuthError,
+    selectAuthIsFetching,
+    selectIsAuth,
+    selectLoginCaptchaUrl
+} from '../../redux/selectors/auth-selectors'
 
 const LoginPage: FC = memo(() => {
     const dispatch = useAppDispatch()

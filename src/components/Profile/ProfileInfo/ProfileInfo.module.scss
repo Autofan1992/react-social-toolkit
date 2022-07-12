@@ -1,0 +1,41 @@
+.profileCard {
+  margin-top: 75px;
+
+  .profileInfo {
+    padding-top: 40px;
+  }
+}
+
+.profileAvatar {
+  top: -75px;
+  left: 15px;
+  position: absolute;
+  max-width: 150px;
+  border-radius: 50%;
+  color: var(--app-bg-color);
+  border: 4px solid;
+  overflow: hidden;
+  -webkit-transition: .2s;
+  -moz-transition: .2s;
+  -ms-transition: .2s;
+  -o-transition: .2s;
+  transition: .2s;
+
+  &:hover {
+    border-color: var(--ant-primary-color);
+  }
+
+  img {
+    object-fit: cover;
+  }
+
+  .avatarLabel {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+  }
+}
+
+.postAvatar {
+  border: 2px solid var(--ant-primary-color)
+}

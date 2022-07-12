@@ -3,13 +3,17 @@ import { AppThunkType } from '../store'
 import { fetchAuthUserData } from './auth-slice'
 
 const initialState = {
-    initialized: false as boolean,
+    initialized: false,
+    darkTheme: false
 }
 
 const appSlice = createSlice({
     name: 'app',
     initialState,
     reducers: {
+        setAppTheme: (state) => {
+            state.darkTheme = !state.darkTheme
+        },
         setInitializingSuccess: (state) => {
             state.initialized = true
         },
@@ -21,5 +25,5 @@ export const initializeApp = (): AppThunkType => async dispatch => {
     dispatch(setInitializingSuccess())
 }
 
-export const { setInitializingSuccess } = appSlice.actions
+export const { setInitializingSuccess, setAppTheme } = appSlice.actions
 export default appSlice.reducer

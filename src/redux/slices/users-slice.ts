@@ -3,12 +3,13 @@ import { userAPI } from '../../api/users-api'
 import { ResultCodesEnum } from '../../api/api'
 import { UsersSearchParamsType, UserType } from '../../types/users-types'
 import { RootStateType } from '../store'
+import { DEFAULT_USERS_PER_PAGE } from '../constants/user-constants'
 
 const initialState = {
     users: [] as UserType[],
     totalUsersCount: 0,
     usersSearchParams: {
-        pageSize: 5,
+        pageSize: DEFAULT_USERS_PER_PAGE,
         currentPage: 1,
         term: '',
         friend: null,
@@ -52,16 +53,13 @@ const usersSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(toggleUserFollow.pending, (state, { meta }) => {
-                state.isFetching = true
                 state.followInProgress.push(meta.arg.id)
             })
             .addCase(toggleUserFollow.fulfilled, (state, { payload }) => {
-                state.isFetching = false
                 state.followInProgress = state.followInProgress.filter(id => id !== payload)
                 state.users.map(user => user.id === payload ? user.followed = !user.followed : user)
             })
             .addCase(toggleUserFollow.rejected, (state, { payload }) => {
-                state.isFetching = false
                 if (payload) state.error = payload
             })
             .addCase(fetchUsers.pending, (state) => {

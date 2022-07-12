@@ -1,48 +1,30 @@
 import { FC, memo } from 'react'
-import { Avatar, Button, List, Skeleton } from 'antd'
-import { Link } from 'react-router-dom'
-import avatar from '../../assets/images/user.svg'
-import { toggleUserFollow } from '../../redux/slices/users-slice'
-import { useAppDispatch } from '../../redux/hooks/hooks'
+import { Col, Row } from 'antd'
+import { useAppSelector } from '../../redux/hooks/hooks'
 import { UserType } from '../../types/users-types'
+import { selectFollowInProgress, selectUsersIsFetching } from '../../redux/selectors/users-selectors'
+import { UserItem } from '../../pages/Users/UserItem'
 
-const Users: FC<PropsType> = memo(({ users, followInProgress, isFetching }) => {
-    const dispatch = useAppDispatch()
+const Users: FC<PropsType> = memo(({ users }) => {
+    const followInProgress = useAppSelector(selectFollowInProgress)
+    const isFetching = useAppSelector(selectUsersIsFetching)
 
-    return <>
-        <List
-            className="flex-grow-1"
-            itemLayout="horizontal"
-            loading={isFetching}
-            dataSource={users}
-            renderItem={user => (
-                <List.Item
-                    actions={[<Button
-                        type="primary"
-                        size="large"
-                        loading={followInProgress.some(id => id === user.id)}
-                        onClick={() => dispatch(toggleUserFollow({ id: user.id, followed: user.followed }))}
-                    >
-                        {!user.followed ? 'Follow' : 'Unfollow'}
-                    </Button>]}
-                >
-                    <Skeleton avatar title={false} loading={isFetching} active>
-                        <List.Item.Meta
-                            avatar={<Avatar src={user.photos.small ?? avatar}/>}
-                            title={<Link to={`${user.id}`}>{user.name}</Link>}
-                            description={user.status}
-                        />
-                    </Skeleton>
-                </List.Item>
-            )}
-        />
-    </>
+    return <Row gutter={[15, 15]}>
+        {users.map(user => (
+            <Col key={user.id} md={12} lg={8}>
+                <UserItem
+                    followInProgress={followInProgress}
+                    isFetching={isFetching}
+                    user={user}
+                />
+            </Col>
+        ))}
+    </Row>
 })
 
 type PropsType = {
     users: Array<UserType>
     isFetching: boolean
-    followInProgress: Array<number>
 }
 
 export default Users

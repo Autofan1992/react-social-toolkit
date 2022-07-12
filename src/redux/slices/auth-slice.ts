@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CaptchaResultCode, ResultCodesEnum } from '../../api/api'
 import { authAPI } from '../../api/auth-api'
-import { fetchUserProfile } from './profile-slice'
 import { AuthInfoDataType } from '../../types/auth-types'
 import { LoginType } from '../../types/login-types'
 
@@ -19,13 +18,10 @@ const initialState = {
 
 export const fetchAuthUserData = createAsyncThunk<AuthInfoDataType, undefined, { rejectValue: string }>(
     'auth/getAuthUserData',
-    async (_, { dispatch, rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         const { resultCode, messages, data } = await authAPI.getAuthInfo()
 
         if (resultCode === ResultCodesEnum.Success) {
-            const { id } = data
-
-            if (id) await dispatch(fetchUserProfile(id))
             return data
         }
 

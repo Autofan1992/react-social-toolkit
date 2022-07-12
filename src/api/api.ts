@@ -10,7 +10,7 @@ export const mainAxiosInstance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
     withCredentials: true,
     headers: {
-        'API-KEY': 'cb233b84-2199-4231-8a72-d5a32fccbd92'
+        'API-KEY': process.env.REACT_APP_API_KEY as string
     }
 })
 
@@ -18,6 +18,7 @@ export enum ResultCodesEnum {
     Success = 0,
     Error = 1
 }
+
 export enum CaptchaResultCode {
     CaptchaIsRequired = 10
 }

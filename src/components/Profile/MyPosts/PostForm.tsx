@@ -19,19 +19,21 @@ const PostForm: FC<PropsType> = (
             post: ''
         } as PostType}
         validationSchema={PostSchema}
-        onSubmit={({ post }, { setSubmitting }) => {
+        onSubmit={({ post }, { setSubmitting, resetForm }) => {
             addPost(post)
+            resetForm()
             setSubmitting(false)
         }}>
         {({ errors, touched, isSubmitting }) => (
             <Form>
+                <h4 className="mb-2">New post</h4>
                 {createTextAreaField<InputNames>('Type some text', 'post', {
                     status: (touched.post && errors.post) && 'error',
                     placeholder: errors.post
                 })}
-                <div className='text-center mt-5'>
+                <div className="text-end mt-3">
                     <SubmitButton size="large" type="primary" htmlType="submit" disabled={isSubmitting}>
-                        Add message
+                        Add post
                     </SubmitButton>
                 </div>
             </Form>

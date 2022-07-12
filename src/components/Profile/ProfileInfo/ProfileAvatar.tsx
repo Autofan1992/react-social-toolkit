@@ -1,12 +1,10 @@
 import { ChangeEvent, FC } from 'react'
-import Preloader from '../../common/Preloader/Preloader'
 import userPhoto from '../../../assets/images/user.svg'
-import { EditOutlined } from '@ant-design/icons'
 import { useAppDispatch } from '../../../redux/hooks/hooks'
 import { setUserAvatar } from '../../../redux/slices/profile-slice'
-import styles from '../../../pages/Profile/ProfilePage.module.scss'
+import styles from './ProfileInfo.module.scss'
 
-const ProfileAvatar: FC<PropsType> = ({ isProfileId, avatar, isFetching }) => {
+const ProfileAvatar: FC<PropsType> = ({ isProfileId, avatar }) => {
     const dispatch = useAppDispatch()
 
     const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -15,17 +13,14 @@ const ProfileAvatar: FC<PropsType> = ({ isProfileId, avatar, isFetching }) => {
     }
 
     return (
-        <div>
-            {isFetching && <Preloader/>}
-            <div className={`${styles.profileAvatar} d-block position-relative`}>
-                <img src={avatar ?? userPhoto} alt="avatar"/>
-                {isProfileId &&
+        <div className={styles.profileAvatar}>
+            <img src={avatar ?? userPhoto} alt="avatar"/>
+            {
+                isProfileId && (
                     <label className={`ant-typography-edit fs-4 ${styles.avatarLabel}`}>
                         <input type="file" onChange={handleAvatarChange} className="d-none"/>
-                        <EditOutlined/>
                     </label>
-                }
-            </div>
+                )}
         </div>
     )
 }
@@ -33,7 +28,6 @@ const ProfileAvatar: FC<PropsType> = ({ isProfileId, avatar, isFetching }) => {
 type PropsType = {
     isProfileId: boolean
     avatar: string
-    isFetching: boolean
 }
 
 export default ProfileAvatar

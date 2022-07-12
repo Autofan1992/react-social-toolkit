@@ -9,6 +9,7 @@ const Posts: FC = () => {
     const dispatch = useAppDispatch()
     const posts = useAppSelector(selectPosts)
 
+
     const handleAddPost = (post: string) => {
         dispatch(addPost(post))
     }
@@ -19,12 +20,9 @@ const Posts: FC = () => {
         dispatch(likePost(id))
     }
 
-    return <div>
-        <h2>My posts</h2>
-        <div>
-            <PostForm addPost={handleAddPost}/>
-        </div>
-        <ul>
+    return <>
+        <h2 className="mb-3">My posts</h2>
+        <div className="mb-3">
             {posts
                 .map((p) => <Post
                     key={p.id} id={p.id}
@@ -34,8 +32,11 @@ const Posts: FC = () => {
                     deletePost={handleDeletePost}
                 />)
             }
-        </ul>
-    </div>
+        </div>
+        <div>
+            <PostForm addPost={handleAddPost}/>
+        </div>
+    </>
 }
 
 export default Posts
