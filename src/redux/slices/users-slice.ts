@@ -4,6 +4,7 @@ import { ResultCodesEnum } from '../../api/api'
 import { UsersSearchParamsType, UserType } from '../../types/users-types'
 import { RootStateType } from '../store'
 import { DEFAULT_USERS_PER_PAGE } from '../constants/user-constants'
+import { showNotification } from '../helpers/showNotification'
 
 const initialState = {
     users: [] as UserType[],
@@ -16,7 +17,6 @@ const initialState = {
     } as UsersSearchParamsType,
     isFetching: false,
     followInProgress: [] as number[],
-    error: null as string | null
 }
 
 export const toggleUserFollow = createAsyncThunk<number, { id: number, followed: boolean }, { rejectValue: string }>(
@@ -60,7 +60,7 @@ const usersSlice = createSlice({
                 state.users.map(user => user.id === payload ? user.followed = !user.followed : user)
             })
             .addCase(toggleUserFollow.rejected, (state, { payload }) => {
-                if (payload) state.error = payload
+                if (payload) showNotification({ type: 'error', title: payload })
             })
             .addCase(fetchUsers.pending, (state) => {
                 state.isFetching = true
@@ -72,7 +72,7 @@ const usersSlice = createSlice({
             })
             .addCase(fetchUsers.rejected, (state, { payload }) => {
                 state.isFetching = false
-                if (payload) state.error = payload
+                if (payload) showNotification({ type: 'error', title: payload })
             })
     }
 })

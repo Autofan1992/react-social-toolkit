@@ -25,7 +25,8 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--app-text-color) !important;
 }
 
-.ant-typography {
+.ant-typography,
+.ant-form {
     color: var(--app-text-color);
 }
 

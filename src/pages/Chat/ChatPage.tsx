@@ -22,10 +22,8 @@ const ChatPage = memo(() => {
 
     useEffect(() => {
         dispatch(connectChat())
-        console.log('connected')
 
         return () => {
-            console.log('disconnected')
             dispatch(disconnectChat())
         }
     }, [dispatch])
@@ -62,17 +60,17 @@ const ChatPage = memo(() => {
                         <List
                             loading={connectionStatus === ChatConnectionStatus.Disconnected}
                             dataSource={messages}
-                            renderItem={item => <>
+                            renderItem={item => (
                                 <MessageItem
                                     userId={item.userId}
                                     message={item.message}
                                     photo={item.photo}
                                     userName={item.userName}
                                     key={item.id}
-                                />
-                                <div ref={messagesEnd}></div>
-                            </>}
+                                />)
+                            }
                         />
+                        <div ref={messagesEnd}></div>
                     </div>
                     <MessageForm connectionStatus={connectionStatus} handleSendMessage={handleSendMessage}/>
                 </>

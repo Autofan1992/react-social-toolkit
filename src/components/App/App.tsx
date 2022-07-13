@@ -19,9 +19,6 @@ const ProfileContainer = lazy(() => import('../../pages/Profile/ProfilePage'))
 const UsersContainer = lazy(() => import('../../pages/Users/UsersPage'))
 
 const App: FC = memo(() => {
-    const handleAllUnhandledErrors = (reason: any) => {
-        alert(reason.reason)
-    }
     const dispatch = useAppDispatch()
     const isDarkTheme = useAppSelector(selectIsDarkTheme)
 
@@ -35,11 +32,6 @@ const App: FC = memo(() => {
 
     useEffect(() => {
         dispatch(initializeApp())
-        window.addEventListener('unhandledrejection', handleAllUnhandledErrors)
-
-        return () => {
-            window.removeEventListener('unhandledrejection', handleAllUnhandledErrors)
-        }
     }, [dispatch])
 
     return <div className={styles.wrapper}>
@@ -47,7 +39,7 @@ const App: FC = memo(() => {
             <Header/>
             <Layout className={styles.appLayout}>
                 <Navbar/>
-                <Layout className="p-4">
+                <Layout className="p-3 px-2 p-xl-4">
                     <Content>
                         <Suspense fallback={<Preloader/>}>
                             <Routes>

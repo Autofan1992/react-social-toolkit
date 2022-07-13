@@ -1,10 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunkType } from '../store'
 import { fetchAuthUserData } from './auth-slice'
 
 const initialState = {
     initialized: false,
-    darkTheme: false
+    darkTheme: false,
+    appWindowWidth: 0
 }
 
 const appSlice = createSlice({
@@ -13,6 +14,9 @@ const appSlice = createSlice({
     reducers: {
         setAppTheme: (state) => {
             state.darkTheme = !state.darkTheme
+        },
+        setAppWindowWidth: (state, { payload }: PayloadAction<number>) => {
+            state.appWindowWidth = payload
         },
         setInitializingSuccess: (state) => {
             state.initialized = true
@@ -25,5 +29,5 @@ export const initializeApp = (): AppThunkType => async dispatch => {
     dispatch(setInitializingSuccess())
 }
 
-export const { setInitializingSuccess, setAppTheme } = appSlice.actions
+export const { setInitializingSuccess, setAppTheme, setAppWindowWidth } = appSlice.actions
 export default appSlice.reducer

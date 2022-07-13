@@ -6,7 +6,7 @@ import { Col, Row } from 'antd'
 import styles from '../../pages/Users/UsersPage.module.scss'
 import { UsersSearchParamsType } from '../../types/users-types'
 
-const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching, serverError }) => {
+const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching }) => {
     return <Formik
         initialValues={{ term, friend }}
         onSubmit={({ friend, term }) => {
@@ -16,11 +16,12 @@ const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching
         {({ handleSubmit, isSubmitting }) => (
             <Form>
                 <Row gutter={15}>
-                    <Col md={8}>{createTextField<InputNames>('Type user name to start search', 'term', undefined, {
+                    <Col xs={24} className="mb-2 mb-md-0"
+                         md={8}>{createTextField<InputNames>('Type user name to start search', 'term', undefined, {
                         onInput: handleSubmit
                     })}</Col>
 
-                    <Col md={8}>{createSelectField<InputNames>('Search all users', 'friend', [
+                    <Col xs={12} md={8}>{createSelectField<InputNames>('Search all users', 'friend', [
                             {
                                 name: 'Search all users',
                                 value: null
@@ -38,7 +39,7 @@ const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching
                             className: styles.searchInput
                         }
                     )}</Col>
-                    <Col md={8}>
+                    <Col xs={12} md={8}>
                         <SubmitButton
                             type="primary"
                             className="w-100"
@@ -46,10 +47,6 @@ const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching
                         >Search</SubmitButton>
                     </Col>
                 </Row>
-
-                {serverError &&
-                    <div className="text-center my-5">{serverError}</div>
-                }
             </Form>)}
     </Formik>
 }
@@ -58,7 +55,6 @@ type InputNames = keyof UsersSearchParamsType
 
 type PropsType = {
     isFetching: boolean,
-    serverError: string | null
     term: string
     friend: boolean | null
     handleSearch: ({ friend, term }: { friend: boolean | null, term: string }) => void

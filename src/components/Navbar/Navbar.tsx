@@ -22,7 +22,7 @@ const Navbar: FC = () => {
     ]
 
     return <Sidebar
-        className="site-layout-background main-sidebar"
+        className={`${styles.sidebar} site-layout-background main-sidebar`}
         breakpoint="lg"
         collapsedWidth="0"
     >

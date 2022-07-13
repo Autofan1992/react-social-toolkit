@@ -23,7 +23,7 @@ export const UserItem: FC<PropsType> = ({ user, followInProgress, isFetching }) 
                 <Link to={`${user.id}`}>
                     <img src={user.photos.small ?? avatar} alt=""/>
                 </Link>
-                <h3 className="my-3">
+                <h3 className="my-3 text-wrap">
                     <Link to={`${user.id}`}>{user.name}</Link>
                 </h3>
             </Skeleton>

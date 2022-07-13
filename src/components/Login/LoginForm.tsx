@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Formik } from 'formik'
 import { Form, SubmitButton } from 'formik-antd'
-import { createTextField } from '../../helpers/CustomField'
+import { createCheckbox, createTextField } from '../../helpers/CustomField'
 import * as Yup from 'yup'
 import styles from '../../pages/Login/LoginPage.module.scss'
 import { LoginType } from '../../types/login-types'
@@ -20,7 +20,6 @@ const LoginForm: FC<PropsType> = (
     {
         handleLogin,
         captchaUrl,
-        serverError,
         isFetching
     }) => {
 
@@ -39,36 +38,38 @@ const LoginForm: FC<PropsType> = (
                 setSubmitting(false)
             }}>
             {({ touched, errors }) => (
-                <Form>
-                    {createTextField<InputNames>('Type your email', 'email', 'email', {
-                        disabled: isFetching,
-                        status: (touched.email && errors.email) && 'error',
-                        placeholder: errors.email
-                    })}
+                <Form className="w-100">
+                    <div className="mb-3">
+                        {createTextField<InputNames>('Type your email', 'email', 'email', {
+                            disabled: isFetching,
+                            status: (touched.email && errors.email) && 'error',
+                            placeholder: errors.email
+                        })}
+                    </div>
 
-                    {createTextField<InputNames>('Type your password', 'password', 'password', {
-                        disabled: isFetching,
-                        status: (touched.password && errors.password) && 'error',
-                        placeholder: errors.password,
-                        style: {
-                            margin: '15px 0'
-                        }
-                    })}
+                    <div className="mb-3">
+                        {createTextField<InputNames>('Type your password', 'password', 'password', {
+                            disabled: isFetching,
+                            status: (touched.password && errors.password) && 'error',
+                            placeholder: errors.password,
+                        })}
+                    </div>
+
+                    <label className="d-flex justify-content-center mb-3">
+                        <span className="me-2">Remember me</span>
+                        {createCheckbox<InputNames>('rememberMe')}
+                    </label>
 
                     {captchaUrl &&
-                        <>
-                            <div className="text-center">
+                        <div className="mb-3 text-center">
+                            <div className="mb-3">
                                 <img src={captchaUrl} alt="captcha"/>
                             </div>
                             {createTextField<InputNames>('Type symbols from image', 'captcha', undefined, {
                                 disabled: isFetching,
                                 status: (touched.captcha && errors.captcha) && 'error'
                             })}
-                        </>
-                    }
-
-                    {serverError &&
-                        <div className="text-center my-3">{serverError}</div>
+                        </div>
                     }
 
                     <SubmitButton
@@ -90,7 +91,6 @@ type PropsType = {
     handleLogin: (values: LoginType) => void
     captchaUrl: string | null
     isFetching: boolean
-    serverError: string | null
 }
 
 export default LoginForm

@@ -10,7 +10,6 @@ import { Col, Divider, Row } from 'antd'
 import {
     selectTotalUsersCount,
     selectUsers,
-    selectUsersError,
     selectUsersIsFetching,
     selectUsersSearchParams
 } from '../../redux/selectors/users-selectors'
@@ -23,7 +22,6 @@ import Preloader from '../../components/common/Preloader/Preloader'
 const UsersPage: FC = memo(() => {
     const dispatch = useAppDispatch()
     const isFetching = useAppSelector(selectUsersIsFetching)
-    const error = useAppSelector(selectUsersError)
     const users = useAppSelector(selectUsers)
     const totalUsersCount = useAppSelector(selectTotalUsersCount)
     const { friend, term, pageSize, currentPage } = useAppSelector(selectUsersSearchParams)
@@ -77,21 +75,18 @@ const UsersPage: FC = memo(() => {
                     handleSearch={handleSearch}
                     term={termParam}
                     friend={stringToBoolOrNull(friendParam as BoolOrNullToStringType)}
-                    serverError={error}
                     isFetching={isFetching}
                 />
                 <Divider/>
                 <div className="flex-grow-1 d-flex flex-column justify-content-center">
-                    {
-                        users ? (
-                            <Users
-                                users={users}
-                                isFetching={isFetching}
-                            />
-                        ) : (
-                            <Preloader/>
-                        )
-                    }
+                    {users ? (
+                        <Users
+                            users={users}
+                            isFetching={isFetching}
+                        />
+                    ) : (
+                        <Preloader/>
+                    )}
                 </div>
                 <Paginator
                     onPageChange={onPageChange}

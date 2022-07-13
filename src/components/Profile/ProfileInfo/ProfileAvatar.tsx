@@ -13,7 +13,7 @@ const ProfileAvatar: FC<PropsType> = ({ isProfileId, avatar }) => {
     }
 
     return (
-        <div className={styles.profileAvatar}>
+        <div className={`${styles.profileAvatar} ${isProfileId ? `${styles.isProfile}` : ``}`}>
             <img src={avatar ?? userPhoto} alt="avatar"/>
             {
                 isProfileId && (

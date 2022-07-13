@@ -1,26 +1,35 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { profileAPI } from '../../api/profile-api'
-import { ResultCodesEnum } from '../../api/api'
+import { AxiosResponseErrorType, ResultCodesEnum } from '../../api/api'
 import { PhotosType, PostType, ProfileType } from '../../types/profile-types'
+import { showNotification } from '../helpers/showNotification'
 
 const initialState = {
     posts: [] as PostType[],
     profile: null as ProfileType | null,
     status: null as string | null,
-    isFetching: false as boolean,
     error: null as string | null,
+    isFetching: false as boolean,
 }
 
-export const fetchUserProfile = createAsyncThunk<ProfileType, number>(
+export const fetchUserProfile = createAsyncThunk<ProfileType, number, { rejectValue: string }>(
     'profile/fetchUserProfile',
-    async (id) => {
-        return await profileAPI.getProfile(id)
+    async (id, { rejectWithValue }) => {
+        try {
+            return await profileAPI.getProfile(id)
+        } catch (e) {
+            return rejectWithValue((e as AxiosResponseErrorType).response.data.error)
+        }
     })
 
-export const fetchUserStatus = createAsyncThunk<string, number>(
+export const fetchUserStatus = createAsyncThunk<string, number, { rejectValue: string }>(
     'profile/fetchUserStatus',
-    async (id) => {
-        return await profileAPI.getStatus(id)
+    async (id, { rejectWithValue }) => {
+        try {
+            return await profileAPI.getStatus(id)
+        } catch (e) {
+            return rejectWithValue((e as AxiosResponseErrorType).response.data.error)
+        }
     })
 
 export const setUserStatus = createAsyncThunk<string, string, { rejectValue: string }>(
@@ -72,24 +81,30 @@ const profileSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchUserProfile.pending, (state) => {
+                state.profile = null
                 state.isFetching = true
-                state.error = null
             })
             .addCase(fetchUserProfile.fulfilled, (state, { payload }) => {
                 state.isFetching = false
                 state.profile = payload
             })
+            .addCase(fetchUserProfile.rejected, (state, { payload }) => {
+                state.isFetching = false
+                if (payload) showNotification({ type: 'error', title: payload })
+            })
             .addCase(fetchUserStatus.pending, (state) => {
                 state.isFetching = true
-                state.error = null
             })
             .addCase(fetchUserStatus.fulfilled, (state, { payload }) => {
                 state.isFetching = false
                 state.status = payload
             })
+            .addCase(fetchUserStatus.rejected, (state, { payload }) => {
+                state.isFetching = false
+                if (payload) showNotification({ type: 'error', title: payload })
+            })
             .addCase(setUserStatus.pending, (state) => {
                 state.isFetching = true
-                state.error = null
             })
             .addCase(setUserStatus.fulfilled, (state, { payload }) => {
                 state.isFetching = false
@@ -97,11 +112,10 @@ const profileSlice = createSlice({
             })
             .addCase(setUserStatus.rejected, (state, { payload }) => {
                 state.isFetching = false
-                if (payload) state.error = payload
+                if (payload) showNotification({ type: 'error', title: payload })
             })
             .addCase(setUserAvatar.pending, (state) => {
                 state.isFetching = true
-                state.error = null
             })
             .addCase(setUserAvatar.fulfilled, (state, { payload }) => {
                 state.isFetching = false
@@ -109,7 +123,7 @@ const profileSlice = createSlice({
             })
             .addCase(setUserAvatar.rejected, (state, { payload }) => {
                 state.isFetching = false
-                if (payload) state.error = payload
+                if (payload) showNotification({ type: 'error', title: payload })
             })
             .addCase(saveUserProfile.pending, (state) => {
                 state.isFetching = true
@@ -117,11 +131,13 @@ const profileSlice = createSlice({
             })
             .addCase(saveUserProfile.fulfilled, (state) => {
                 state.isFetching = false
-                state.error = null
             })
             .addCase(saveUserProfile.rejected, (state, { payload }) => {
                 state.isFetching = false
-                if (payload) state.error = payload
+                if (payload) {
+                    state.error = payload
+                    showNotification({ type: 'error', title: payload })
+                }
             })
     }
 })

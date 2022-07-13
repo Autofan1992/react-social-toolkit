@@ -9,7 +9,6 @@ const initialState = {
     chatConnectionStatus: ChatConnectionStatus.Disconnected,
     lastScrollTop: 0,
     isFetching: false,
-    error: null as string | null
 }
 
 let unsubscribeFromMessages: () => void
@@ -37,7 +36,8 @@ export const connectChat = (): AppThunkType => async dispatch => {
     unsubscribeFromStatusChange = chatAPI.subscribe('status-change', statusChangeHandlerHandlerCreator(dispatch))
 }
 
-export const disconnectChat = (): AppThunkType => async () => {
+export const disconnectChat = (): AppThunkType => async dispatch => {
+    dispatch(setMessages([]))
     unsubscribeFromMessages()
     unsubscribeFromStatusChange()
 }
@@ -54,9 +54,8 @@ const chatSlice = createSlice({
             state.lastScrollTop = payload
         },
         setMessages: (state, { payload }: PayloadAction<MessageType[]>) => {
-            if (state.messages.length !== payload.length) {
-                state.messages.push(...payload.map(message => ({ ...message, id: createId() })))
-            }
+            if (payload.length === 0) state.messages = []
+            state.messages.push(...payload.map(message => ({ ...message, id: createId() })))
         },
         setConnectionStatus: (state, { payload }: PayloadAction<ChatConnectionStatus>) => {
             state.chatConnectionStatus = payload

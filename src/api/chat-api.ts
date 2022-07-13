@@ -64,8 +64,6 @@ export const chatAPI = {
         } else {
             subscribers[eventName].push(callback as MessagesSubscriberType)
         }
-
-
         return () => {
             removeAllListeners()
             if (eventName === 'status-change') {

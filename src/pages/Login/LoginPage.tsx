@@ -5,7 +5,6 @@ import { login } from '../../redux/slices/auth-slice'
 import { useNavigate } from 'react-router-dom'
 import { LoginType } from '../../types/login-types'
 import {
-    selectAuthError,
     selectAuthIsFetching,
     selectIsAuth,
     selectLoginCaptchaUrl
@@ -15,7 +14,6 @@ const LoginPage: FC = memo(() => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const captchaUrl = useAppSelector(selectLoginCaptchaUrl)
-    const error = useAppSelector(selectAuthError)
     const isAuth = useAppSelector(selectIsAuth)
     const isFetching = useAppSelector(selectAuthIsFetching)
 
@@ -27,7 +25,7 @@ const LoginPage: FC = memo(() => {
         dispatch(login(values))
     }
 
-    return <LoginForm captchaUrl={captchaUrl} serverError={error} isFetching={isFetching} handleLogin={handleLogin}/>
+    return <LoginForm captchaUrl={captchaUrl} isFetching={isFetching} handleLogin={handleLogin}/>
 })
 
 export default LoginPage

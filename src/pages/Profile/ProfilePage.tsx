@@ -31,14 +31,14 @@ const ProfilePage: FC = memo(() => {
 
     useEffect(() => {
         if (authUserId) {
-            if (profilePath) {
-                dispatch(fetchUserProfile(authUserId))
-                dispatch(fetchUserStatus(authUserId))
-            }
             if (!profilePath && urlUserId) {
                 dispatch(fetchUserProfile(+urlUserId))
                 dispatch(fetchUserStatus(+urlUserId))
+                return
             }
+
+            dispatch(fetchUserProfile(authUserId))
+            dispatch(fetchUserStatus(authUserId))
         }
     }, [authUserId, dispatch, profilePath, urlUserId])
 

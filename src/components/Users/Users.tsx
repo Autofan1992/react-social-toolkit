@@ -11,7 +11,7 @@ const Users: FC<PropsType> = memo(({ users }) => {
 
     return <Row gutter={[15, 15]}>
         {users.map(user => (
-            <Col key={user.id} md={12} lg={8}>
+            <Col key={user.id} xs={24} md={12} lg={8}>
                 <UserItem
                     followInProgress={followInProgress}
                     isFetching={isFetching}

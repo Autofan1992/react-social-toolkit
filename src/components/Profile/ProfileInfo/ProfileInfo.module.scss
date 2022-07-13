@@ -21,8 +21,11 @@
   -o-transition: .2s;
   transition: .2s;
 
-  &:hover {
-    border-color: var(--ant-primary-color);
+  &.isProfile {
+    &:hover {
+      border-color: var(--ant-primary-color);
+    }
+
   }
 
   img {

@@ -6,6 +6,14 @@ export type APIResponseType<D = {}, RC = ResultCodesEnum> = {
     messages: string[]
 }
 
+export type AxiosResponseErrorType = {
+    response: {
+        data: {
+            error: string
+        }
+    }
+}
+
 export const mainAxiosInstance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
     withCredentials: true,
@@ -21,13 +29,5 @@ export enum ResultCodesEnum {
 
 export enum CaptchaResultCode {
     CaptchaIsRequired = 10
-}
-
-export const weatherAxiosInstance = axios.create({
-    baseURL: 'https://api.openweathermap.org/data/2.5/'
-})
-
-export enum WeatherResultCodes {
-    Success = 200
 }
 

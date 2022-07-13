@@ -3,6 +3,7 @@ import { CaptchaResultCode, ResultCodesEnum } from '../../api/api'
 import { authAPI } from '../../api/auth-api'
 import { AuthInfoDataType } from '../../types/auth-types'
 import { LoginType } from '../../types/login-types'
+import { showNotification } from '../helpers/showNotification'
 
 const initialState = {
     authInfo: {
@@ -11,7 +12,6 @@ const initialState = {
         login: null
     } as AuthInfoDataType,
     isAuth: false,
-    error: null as string | null,
     captchaUrl: null as string | null,
     isFetching: false
 }
@@ -36,7 +36,9 @@ export const login = createAsyncThunk<void, LoginType, { rejectValue: string }>(
         if (resultCode === ResultCodesEnum.Success) {
             await dispatch(fetchAuthUserData())
             return
-        } else if (resultCode === CaptchaResultCode.CaptchaIsRequired) {
+        }
+
+        if (resultCode === CaptchaResultCode.CaptchaIsRequired) {
             const { url } = await authAPI.getCaptchaURL()
 
             dispatch(setCaptcha(url))
@@ -62,7 +64,6 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         setCaptcha: (state, { payload }: PayloadAction<string>) => {
-            state.error = null
             state.captchaUrl = payload
         }
     },
@@ -70,7 +71,6 @@ const authSlice = createSlice({
         builder
             .addCase(fetchAuthUserData.pending, (state) => {
                 state.isFetching = true
-                state.error = null
             })
             .addCase(fetchAuthUserData.fulfilled, (state, { payload }) => {
                 state.isFetching = false
@@ -79,22 +79,20 @@ const authSlice = createSlice({
             })
             .addCase(fetchAuthUserData.rejected, (state, { payload }) => {
                 state.isFetching = false
-                if (payload) state.error = payload
+                if (payload) showNotification({ type: 'warning', title: payload })
             })
             .addCase(login.pending, (state) => {
                 state.isFetching = true
-                state.error = null
             })
             .addCase(login.fulfilled, (state) => {
                 state.isFetching = false
             })
             .addCase(login.rejected, (state, { payload }) => {
                 state.isFetching = false
-                if (payload) state.error = payload
+                if (payload) showNotification({ type: 'error', title: payload })
             })
             .addCase(logout.pending, (state) => {
                 state.isFetching = true
-                state.error = null
             })
             .addCase(logout.fulfilled, (state, { payload }) => {
                 state.isFetching = false
@@ -103,7 +101,7 @@ const authSlice = createSlice({
             })
             .addCase(logout.rejected, (state, { payload }) => {
                 state.isFetching = false
-                if (payload) state.error = payload
+                if (payload) showNotification({ type: 'warning', title: payload })
             })
     }
 })
