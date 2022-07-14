@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Layout, Menu, MenuProps, Space, Switch } from 'antd'
-import { useAppDispatch } from '../../redux/hooks/hooks'
-import { setAppTheme } from '../../redux/slices/app-slice'
+import { useAppDispatch } from '../../../redux/hooks/hooks'
+import { setAppTheme } from '../../../redux/slices/app-slice'
 import styles from './Navbar.module.scss'
 
 const { Sider: Sidebar } = Layout

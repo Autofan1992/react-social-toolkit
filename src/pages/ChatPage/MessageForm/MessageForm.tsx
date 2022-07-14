@@ -1,7 +1,7 @@
 import { Formik } from 'formik'
 import { FC } from 'react'
 import { Form, SubmitButton } from 'formik-antd'
-import { createTextField } from '../../../helpers/CustomField'
+import { createTextField } from '../../../components/forms/CustomField'
 import * as Yup from 'yup'
 import { ChatConnectionStatus, MessageType } from '../../../types/chat-types'
 
@@ -33,7 +33,8 @@ const MessageForm: FC<PropsType> = ({ handleSendMessage, connectionStatus }) => 
                     placeholder: errors.message ?? 'Type your message',
                     className: 'flex-1'
                 })}
-                <SubmitButton size="large" type="primary" htmlType="submit" disabled={isSubmitting || connectionStatus === ChatConnectionStatus.Disconnected}>
+                <SubmitButton size="large" type="primary" htmlType="submit"
+                              disabled={isSubmitting || connectionStatus === ChatConnectionStatus.Disconnected}>
                     Add message
                 </SubmitButton>
             </Form>

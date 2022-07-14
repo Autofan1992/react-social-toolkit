@@ -1,6 +1,6 @@
 import React, { FC, memo, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import LoginForm from '../../components/Login/LoginForm'
+import LoginForm from './LoginForm'
 import { login } from '../../redux/slices/auth-slice'
 import { useNavigate } from 'react-router-dom'
 import { LoginType } from '../../types/login-types'

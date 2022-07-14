@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { Formik } from 'formik'
 import { Form, SubmitButton } from 'formik-antd'
-import { createCheckbox, createTextField } from '../../helpers/CustomField'
+import { createCheckbox, createTextField } from '../../components/forms/CustomField'
 import * as Yup from 'yup'
-import styles from '../../pages/Login/LoginPage.module.scss'
+import styles from './LoginPage.module.scss'
 import { LoginType } from '../../types/login-types'
 
 const SignupSchema = Yup.object().shape({

@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Form, SubmitButton } from 'formik-antd'
-import { createTextAreaField } from '../../../helpers/CustomField'
+import { createTextAreaField } from '../../../components/forms/CustomField'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { PostType } from '../../../types/profile-types'

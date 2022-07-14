@@ -1,12 +1,12 @@
-import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import { logout } from '../../redux/slices/auth-slice'
-import useAuthRedirect from '../../hooks/useAuthRedirect'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks/hooks'
+import { logout } from '../../../redux/slices/auth-slice'
+import useAuthRedirect from '../../../hooks/useAuthRedirect'
 import { FC } from 'react'
 import styles from './Header.module.scss'
 import { Button, Col, Layout, Row, Skeleton, Space, Typography } from 'antd'
-import logo from '../../assets/images/logo.svg'
+import logo from '../../../assets/images/logo.svg'
 import { Link } from 'react-router-dom'
-import { selectAuthIsFetching, selectAuthLogin, selectIsAuth } from '../../redux/selectors/auth-selectors'
+import { selectAuthIsFetching, selectAuthLogin, selectIsAuth } from '../../../redux/selectors/auth-selectors'
 
 const { Header: HeaderANTD } = Layout
 const { Paragraph } = Typography

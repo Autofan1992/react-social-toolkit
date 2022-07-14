@@ -3,9 +3,9 @@ import { Col, Row } from 'antd'
 import { useAppSelector } from '../../redux/hooks/hooks'
 import { UserType } from '../../types/users-types'
 import { selectFollowInProgress, selectUsersIsFetching } from '../../redux/selectors/users-selectors'
-import { UserItem } from '../../pages/Users/UserItem'
+import { UserItem } from './UserItem/UserItem'
 
-const Users: FC<PropsType> = memo(({ users }) => {
+const UsersList: FC<PropsType> = memo(({ users }) => {
     const followInProgress = useAppSelector(selectFollowInProgress)
     const isFetching = useAppSelector(selectUsersIsFetching)
 
@@ -27,4 +27,4 @@ type PropsType = {
     isFetching: boolean
 }
 
-export default Users
+export default UsersList

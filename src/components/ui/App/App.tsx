@@ -1,22 +1,22 @@
 import React, { FC, lazy, memo, Suspense, useEffect } from 'react'
 import Navbar from '../Navbar/Navbar'
 import { Layout } from 'antd'
-import Preloader from '../common/Preloader/Preloader'
+import Preloader from '../Preloader/Preloader'
 import Header from '../Header/Header'
 import styles from './App.module.scss'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import LoginPage from '../../pages/Login/LoginPage'
-import ChatPage from '../../pages/Chat/ChatPage'
-import NotFoundPage from '../../pages/404/NotFoundPage'
-import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import { initializeApp } from '../../redux/slices/app-slice'
-import { selectIsDarkTheme } from '../../redux/selectors/app-selectors'
+import LoginPage from '../../../pages/LoginPage/LoginPage'
+import ChatPage from '../../../pages/ChatPage/ChatPage'
+import NotFoundPage from '../../../pages/404/NotFoundPage'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks/hooks'
+import { initializeApp } from '../../../redux/slices/app-slice'
+import { selectIsDarkTheme } from '../../../redux/selectors/app-selectors'
 import { Footer } from '../Footer/Footer'
 
 const { Content } = Layout
 
-const ProfileContainer = lazy(() => import('../../pages/Profile/ProfilePage'))
-const UsersContainer = lazy(() => import('../../pages/Users/UsersPage'))
+const ProfileContainer = lazy(() => import('../../../pages/ProfilePage/ProfilePage'))
+const UsersContainer = lazy(() => import('../../../pages/UsersPage/UsersPage'))
 
 const App: FC = memo(() => {
     const dispatch = useAppDispatch()

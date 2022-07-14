@@ -1,9 +1,9 @@
 import { FC, memo, useEffect } from 'react'
-import Users from '../../components/Users/Users'
+import UsersList from './UsersList'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
 import { fetchUsers, setUsersSearchParams } from '../../redux/slices/users-slice'
-import Paginator from '../../components/common/Paginator/Paginator'
-import SearchUsersForm from '../../components/Users/SearchUsersForm'
+import Paginator from '../../components/ui/Paginator/Paginator'
+import SearchUsersForm from './SearchUsersForm'
 import { useSearchParams } from 'react-router-dom'
 import { debounce } from 'lodash'
 import { Col, Divider, Row } from 'antd'
@@ -13,11 +13,11 @@ import {
     selectUsersIsFetching,
     selectUsersSearchParams
 } from '../../redux/selectors/users-selectors'
-import boolOrNullToString, { BoolOrNullToStringType } from '../../helpers/boolOrNullToStringType'
+import boolOrNullToString, { BoolOrNullToStringType } from '../../utils/boolOrNullToStringType'
 import { UsersSearchParamsType } from '../../types/users-types'
-import stringToBoolOrNull from '../../helpers/stringToBoolOrNull'
+import stringToBoolOrNull from '../../utils/stringToBoolOrNull'
 import { DEFAULT_USERS_PER_PAGE } from '../../redux/constants/user-constants'
-import Preloader from '../../components/common/Preloader/Preloader'
+import Preloader from '../../components/ui/Preloader/Preloader'
 
 const UsersPage: FC = memo(() => {
     const dispatch = useAppDispatch()
@@ -80,7 +80,7 @@ const UsersPage: FC = memo(() => {
                 <Divider/>
                 <div className="flex-grow-1 d-flex flex-column justify-content-center">
                     {users ? (
-                        <Users
+                        <UsersList
                             users={users}
                             isFetching={isFetching}
                         />

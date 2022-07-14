@@ -3,9 +3,9 @@ import { useMatch, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
 import { fetchUserProfile, fetchUserStatus } from '../../redux/slices/profile-slice'
 import useAuthRedirect from '../../hooks/useAuthRedirect'
-import ProfileForm from '../../components/Profile/ProfileForm'
-import ProfileInfo from '../../components/Profile/ProfileInfo/ProfileInfo'
-import Preloader from '../../components/common/Preloader/Preloader'
+import ProfileForm from './ProfileForm'
+import ProfileInfo from './ProfileInfo/ProfileInfo'
+import Preloader from '../../components/ui/Preloader/Preloader'
 import { selectAuthUserId } from '../../redux/selectors/auth-selectors'
 import {
     selectProfile,

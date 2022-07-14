@@ -1,9 +1,9 @@
 import { FC } from 'react'
 import { Formik } from 'formik'
-import { createSelectField, createTextField } from '../../helpers/CustomField'
+import { createSelectField, createTextField } from '../../components/forms/CustomField'
 import { Form, SubmitButton } from 'formik-antd'
 import { Col, Row } from 'antd'
-import styles from '../../pages/Users/UsersPage.module.scss'
+import styles from './UsersPage.module.scss'
 import { UsersSearchParamsType } from '../../types/users-types'
 
 const SearchUsersForm: FC<PropsType> = ({ handleSearch, term, friend, isFetching }) => {

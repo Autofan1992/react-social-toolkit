@@ -1,9 +1,9 @@
 import useAuthRedirect from '../../hooks/useAuthRedirect'
 import React, { memo, useEffect, useRef, useState } from 'react'
-import MessageForm from '../../components/Chat/MessageForm/MessageForm'
+import MessageForm from './MessageForm/MessageForm'
 import { Col, List, Row } from 'antd'
 import styles from './ChatPage.module.scss'
-import MessageItem from '../../components/Chat/MessageItem/MessageItem'
+import MessageItem from './MessageItem/MessageItem'
 import { ChatConnectionStatus } from '../../types/chat-types'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
 import { selectChatConnectionStatus, selectMessages } from '../../redux/selectors/chat-selectors'
@@ -49,7 +49,7 @@ const ChatPage = memo(() => {
 
     return <div className="container h-100">
         <Row justify="center" className="h-100">
-            <Col lg={20} xl={16} className="h-100 d-flex flex-column">
+            <Col xs={24} md={22} lg={20} xl={16} className="h-100 d-flex flex-column">
                 {connectionStatus === ChatConnectionStatus.Error &&
                     <h2>Some error occurred. Please reload the page</h2>}
                 <>

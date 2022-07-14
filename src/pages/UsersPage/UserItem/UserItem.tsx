@@ -1,11 +1,11 @@
 import { Button, Card, Skeleton } from 'antd'
-import { toggleUserFollow } from '../../redux/slices/users-slice'
-import avatar from '../../assets/images/user.svg'
+import { toggleUserFollow } from '../../../redux/slices/users-slice'
+import avatar from '../../../assets/images/user.svg'
 import { Link } from 'react-router-dom'
-import { UserType } from '../../types/users-types'
+import { UserType } from '../../../types/users-types'
 import { FC } from 'react'
-import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
-import { selectIsDarkTheme } from '../../redux/selectors/app-selectors'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks/hooks'
+import { selectIsDarkTheme } from '../../../redux/selectors/app-selectors'
 
 type PropsType = {
     user: UserType
