@@ -1,7 +1,7 @@
 import { FC, memo } from 'react'
 import { Formik } from 'formik'
 import { Form, SubmitButton } from 'formik-antd'
-import { createCheckbox, createTextAreaField, createTextField } from '../../helpers/CustomField'
+import { createCheckbox, createTextAreaField, createTextField } from '../../components/forms/CustomField'
 import * as Yup from 'yup'
 import { Button, Card, Col, Row } from 'antd'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
