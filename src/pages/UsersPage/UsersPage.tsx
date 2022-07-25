@@ -1,4 +1,4 @@
-import { FC, memo, useEffect } from 'react'
+import { FC, memo, useCallback, useEffect } from 'react'
 import UsersList from './UsersList'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks/hooks'
 import { fetchUsers, setUsersSearchParams } from '../../redux/slices/users-slice'
@@ -47,7 +47,7 @@ const UsersPage: FC = memo(() => {
         dispatch(fetchUsers())
     }, [searchParams, dispatch])
 
-    const handleSearchParams = ({ currentPage, pageSize, friend, term }: UsersSearchParamsType) => {
+    const handleSearchParams = useCallback(({ currentPage, pageSize, friend, term }: UsersSearchParamsType) => {
         searchParams.set('page', `${currentPage}`)
         searchParams.set('count', `${pageSize}`)
         if (term) searchParams.set('term', term)
@@ -58,7 +58,7 @@ const UsersPage: FC = memo(() => {
         }
 
         setSearchParams(searchParams)
-    }
+    }, [searchParams, setSearchParams])
 
     const onPageChange = (currentPage: number, pageSize: number) => {
         handleSearchParams({ currentPage, pageSize, friend, term })
@@ -68,36 +68,38 @@ const UsersPage: FC = memo(() => {
         handleSearchParams({ currentPage: 1, pageSize: DEFAULT_USERS_PER_PAGE, friend, term })
     }, 1000)
 
-    return <div className="container h-100">
-        <Row justify="center" className="h-100">
-            <Col lg={20} xl={16} className="h-100 d-flex flex-column">
-                <SearchUsersForm
-                    handleSearch={handleSearch}
-                    term={termParam}
-                    friend={stringToBoolOrNull(friendParam as BoolOrNullToStringType)}
-                    isFetching={isFetching}
-                />
-                <Divider/>
-                <div className="flex-grow-1 d-flex flex-column justify-content-center">
-                    {users ? (
-                        <UsersList
-                            users={users}
-                            isFetching={isFetching}
-                        />
-                    ) : (
-                        <Preloader/>
-                    )}
-                </div>
-                <Paginator
-                    onPageChange={onPageChange}
-                    totalItemsCount={totalUsersCount}
-                    currentPage={currentPage}
-                    pageSize={pageSize}
-                    disabled={isFetching}
-                />
-            </Col>
-        </Row>
-    </div>
+    return (
+        <div className="container h-100">
+            <Row justify="center" className="h-100">
+                <Col lg={20} xl={16} className="h-100 d-flex flex-column">
+                    <SearchUsersForm
+                        handleSearch={handleSearch}
+                        term={termParam}
+                        friend={stringToBoolOrNull(friendParam as BoolOrNullToStringType)}
+                        isFetching={isFetching}
+                    />
+                    <Divider/>
+                    <div className="flex-grow-1 d-flex flex-column justify-content-center">
+                        {users ? (
+                            <UsersList
+                                users={users}
+                                isFetching={isFetching}
+                            />
+                        ) : (
+                            <Preloader/>
+                        )}
+                    </div>
+                    <Paginator
+                        onPageChange={onPageChange}
+                        totalItemsCount={totalUsersCount}
+                        currentPage={currentPage}
+                        pageSize={pageSize}
+                        disabled={isFetching}
+                    />
+                </Col>
+            </Row>
+        </div>
+    )
 })
 
 export default UsersPage

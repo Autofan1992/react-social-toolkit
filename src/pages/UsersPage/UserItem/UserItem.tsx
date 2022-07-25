@@ -3,7 +3,7 @@ import { toggleUserFollow } from '../../../redux/slices/users-slice'
 import avatar from '../../../assets/images/user.svg'
 import { Link } from 'react-router-dom'
 import { UserType } from '../../../types/users-types'
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks/hooks'
 import { selectIsDarkTheme } from '../../../redux/selectors/app-selectors'
 
@@ -13,7 +13,7 @@ type PropsType = {
     isFetching: boolean
 }
 
-export const UserItem: FC<PropsType> = ({ user, followInProgress, isFetching }) => {
+export const UserItem: FC<PropsType> = memo(({ user, followInProgress, isFetching }) => {
     const dispatch = useAppDispatch()
     const isDarkTheme = useAppSelector(selectIsDarkTheme)
 
@@ -37,4 +37,4 @@ export const UserItem: FC<PropsType> = ({ user, followInProgress, isFetching }) 
             </Button>
         </Card>
     )
-}
+})

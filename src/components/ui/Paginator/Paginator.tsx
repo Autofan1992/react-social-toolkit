@@ -1,8 +1,8 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import { Pagination } from 'antd'
 import styles from './Paginator.module.scss'
 
-const Paginator: FC<PropsType> = ({ onPageChange, currentPage, totalItemsCount, pageSize, disabled }) => {
+const Paginator: FC<PropsType> = memo(({ onPageChange, currentPage, totalItemsCount, pageSize, disabled }) => {
     return <Pagination
         className={styles.paginator}
         defaultPageSize={pageSize}
@@ -12,7 +12,7 @@ const Paginator: FC<PropsType> = ({ onPageChange, currentPage, totalItemsCount, 
         disabled={disabled}
         pageSizeOptions={[5, 10, 15, 20]}
     />
-}
+})
 
 type PropsType = {
     pageSize: number

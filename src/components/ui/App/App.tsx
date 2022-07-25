@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks/hooks'
 import { initializeApp } from '../../../redux/slices/app-slice'
 import { selectIsDarkTheme } from '../../../redux/selectors/app-selectors'
 import { Footer } from '../Footer/Footer'
+import { SettingsPage } from '../../../pages/SettingsPage/SettingsPage'
 
 const { Content } = Layout
 
@@ -50,6 +51,7 @@ const App: FC = memo(() => {
                                 <Route path="chat" element={<ChatPage/>}/>
                                 <Route path="users" element={<UsersContainer/>}/>
                                 <Route path="users/:userId" element={<ProfileContainer/>}/>
+                                <Route path="settings" element={<SettingsPage/>}/>
                                 <Route path="*" element={<NotFoundPage/>}/>
                             </Routes>
                         </Suspense>
